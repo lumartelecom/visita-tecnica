@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Indicadores da Equipe de Manutenção - Lumar</title>
+<!-- Ajuste: layout limpo sem resumo executivo, sem Node Top, sem balão de produção e Performance logo abaixo dos KPIs. -->
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -170,14 +171,14 @@ select option{color:#111}
 
 .kpis{
   display:grid;
-  grid-template-columns:repeat(6, minmax(170px, 1fr));
+  grid-template-columns:repeat(4, minmax(150px, 1fr));
   gap:12px;
   margin-bottom:14px;
 }
 .kpis .card{min-width:0;position:relative;overflow:hidden;border-left:4px solid var(--blue)}
-.kpis .card:nth-child(4){border-left-color:var(--orange)}
-.kpis .card:nth-child(5){border-left-color:var(--green)}
-.kpis .card:nth-child(6){border-left-color:var(--navy2)}
+.kpis .card:nth-child(2){border-left-color:var(--navy2)}
+.kpis .card:nth-child(3){border-left-color:var(--orange)}
+.kpis .card:nth-child(4){border-left-color:var(--green)}
 .kpis .card:after{
   content:"";
   position:absolute;
@@ -229,6 +230,36 @@ th{
 tbody tr:hover td{background:#f8fbff}
 tbody tr:last-child td{border-bottom:0}
 .badge{display:inline-block;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:900;color:white;letter-spacing:.2px}
+
+.meta-note{
+  margin:-6px 0 12px;
+  color:#66788f;
+  font-size:12px;
+  line-height:1.45;
+  font-weight:700;
+}
+.meta-vt{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:58px;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.1px;
+  background:#eaf7ef;
+  color:#146c43;
+  border:1px solid #bddfc9;
+  white-space:nowrap;
+}
+.meta-vt.need{
+  background:#fff4e5;
+  color:#92400e;
+  border-color:#fed7aa;
+}
+.export-capture-shell .meta-note{font-size:11px;margin:-4px 0 10px}
+.export-capture-shell .meta-vt{font-size:10px;padding:4px 6px;min-width:48px}
 .green{background:var(--green)}.yellow{background:var(--yellow);color:#2a2100}.orange{background:var(--orange)}.red{background:var(--red)}
 .empty{text-align:center;color:#7b8da3;padding:30px;font-weight:700}
 .bar-row{margin:12px 0}
@@ -617,6 +648,127 @@ tbody tr:last-child td{border-bottom:0}
   background:transparent;
 }
 
+
+
+/* =========================================================
+   MODO COMPACTO - BALÕES, CARDS E TABELAS MENORES
+   ========================================================= */
+@media screen{
+  :root{
+    --shadow:0 8px 20px rgba(10,32,64,.07);
+    --shadow-soft:0 4px 12px rgba(10,32,64,.055);
+  }
+  .container{padding:10px;max-width:1360px}
+  .hero{padding:15px;border-radius:16px;margin-bottom:10px}
+  .hero:before{width:220px;height:220px;inset:-70px -90px auto auto}
+  .hero-top{gap:12px}
+  .brand-wrap{gap:12px}
+  .logo-card{width:66px;height:66px;border-radius:14px;padding:6px}
+  .logo-card img{border-radius:9px}
+  .title-block h1{font-size:28px;line-height:1.05;letter-spacing:-.4px}
+  .sub1{font-size:14px;margin-top:5px}
+  .sub2{font-size:10.5px;margin-top:4px;letter-spacing:.55px}
+
+  .toolbar-card{margin-top:12px;padding:9px;border-radius:13px}
+  .import-area{gap:7px}
+  input[type=file]{padding:8px 10px;min-height:34px;border-radius:10px;font-size:11.5px}
+  button,.btn{padding:7px 10px;border-radius:10px;font-size:11px;box-shadow:0 4px 10px rgba(10,32,64,.08)}
+  .status{margin-top:9px;padding:9px 11px;border-radius:11px;font-size:11.5px;line-height:1.35}
+
+  .tabs{gap:5px;margin-bottom:9px;padding:3px;border-radius:12px}
+  .tab-btn{padding:6px 10px;border-radius:9px;font-size:10px;letter-spacing:.35px}
+
+  .filters{gap:7px;margin-bottom:9px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}
+  .filter-card{padding:8px;border-radius:12px}
+  .filter-card label{font-size:9px;margin-bottom:5px;letter-spacing:.55px}
+  select,input[type=date]{padding:7px 8px;border-radius:8px;font-size:11px}
+  .filter-card div[style]{gap:5px!important}
+
+  .export-row{gap:6px;margin-bottom:9px}
+
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:7px;margin-bottom:9px}
+  .kpis .card{border-left-width:3px}
+  .kpis .card:after{width:52px;height:52px;right:-22px;top:-22px}
+  .card{padding:9px;border-radius:12px}
+  .label{font-size:8.4px;letter-spacing:.45px}
+  .value{font-size:18px;margin-top:3px;letter-spacing:-.25px}
+  .sub{font-size:9px;margin-top:2px;line-height:1.22}
+
+  .grid{gap:9px;margin-bottom:9px}
+  .grid2{gap:9px;margin-bottom:9px}
+  .grid3{gap:8px;margin-bottom:9px}
+  h2{font-size:15px;margin-bottom:8px;letter-spacing:-.1px}
+  h3{font-size:13.5px;margin-bottom:7px;letter-spacing:0}
+
+  .table-wrap{border-radius:10px}
+  table{font-size:11px;min-width:min(600px,100%)}
+  th,td{padding:7px 8px;max-width:190px;line-height:1.22}
+  th{font-size:9.5px;letter-spacing:.25px}
+  .badge{padding:3px 7px;font-size:9.5px}
+  .tech-name{font-size:11.5px}
+  .tech-code{font-size:9.2px;margin-top:1px}
+  .meta-vt{min-width:44px;padding:3px 6px;font-size:9.5px}
+
+  .empty{padding:16px;font-size:11px}
+  .bar-row{margin:8px 0}
+  .bar-title{font-size:11.5px;margin-bottom:5px;gap:6px}
+  .bar-bg{height:7px}
+  .alert-list{gap:6px}
+  .alert{padding:8px 10px;border-radius:10px;font-size:11.5px;line-height:1.3}
+  .alert.redline,.alert.orangeline,.alert.greenline,.alert.blueline{border-left-width:4px}
+  .action-card{min-height:auto}
+  .action-card p{font-size:11.5px;line-height:1.32}
+  .small-note{font-size:10.5px;margin-top:6px}
+}
+
+@media screen and (max-width:720px){
+  .container{padding:5px}
+  .hero{padding:9px;border-radius:11px;margin-bottom:7px}
+  .brand-wrap{gap:7px}
+  .logo-card{width:42px;height:42px;padding:4px;border-radius:10px}
+  .title-block h1{font-size:16px;line-height:1.05}
+  .sub1{font-size:11px;margin-top:3px}
+  .sub2{font-size:8px;margin-top:2px;letter-spacing:.25px}
+  .toolbar-card{padding:7px;margin-top:8px;border-radius:10px}
+  input[type=file]{min-height:32px;font-size:10.5px;padding:7px 8px}
+  button,.btn{padding:7px 8px;font-size:10.5px;border-radius:8px}
+  .status{font-size:10.5px;padding:7px 8px;margin-top:7px}
+  .tab-btn{padding:6px 8px;font-size:9px}
+  .filter-card{padding:7px}
+  .export-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .card{padding:7px;border-radius:10px}
+  .label{font-size:7.5px}
+  .value{font-size:14.5px;margin-top:2px}
+  .sub{font-size:7.8px}
+  h2{font-size:13px;margin-bottom:6px}
+  h3{font-size:12px;margin-bottom:6px}
+  table{font-size:9.4px;min-width:0}
+  th,td{padding:5px 4px;max-width:92px;line-height:1.15}
+  th{font-size:7.8px;letter-spacing:.05px}
+  .badge{font-size:8px;padding:3px 5px}
+  .tech-name{font-size:9.5px}
+  .tech-code{font-size:7.5px}
+  .meta-vt{min-width:34px;padding:2px 4px;font-size:8px}
+  .alert{font-size:10.3px;padding:7px 8px}
+  .empty{padding:12px;font-size:10px}
+  .bar-title{font-size:10px}
+}
+
+@media screen and (max-width:430px){
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .export-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .export-row button{font-size:9.5px;padding:6px 5px}
+  .value{font-size:13px}
+  th,td{padding:4px 3px;max-width:78px}
+}
+
+.export-capture-shell .card{padding:10px;border-radius:12px;margin-bottom:10px}
+.export-capture-shell .export-report-header{padding:12px 14px;border-radius:12px;margin-bottom:10px}
+.export-capture-shell .export-report-header h1{font-size:19px}
+.export-capture-shell table{font-size:10.5px}
+.export-capture-shell th,.export-capture-shell td{padding:6px 7px}
+
 @media print{
   .toolbar-card,.tabs,.filters,.export-row,#status{display:none!important}
   body{background:#fff;color:#111}
@@ -626,6 +778,166 @@ tbody tr:last-child td{border-bottom:0}
   .sub2{color:#555}
   .table-wrap{overflow:visible}
 }
+
+
+/* =========================================================
+   DASHBOARD COMPLETO - MODELOS EXECUTIVO, OPERACIONAL,
+   PLANO DE AÇÃO, MOBILE FIRST E EXPORTAÇÃO FORMAL
+   ========================================================= */
+.executive-strip{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:0 0 9px;
+}
+.exec-chip{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:9px 10px;
+  box-shadow:var(--shadow-soft);
+  min-width:0;
+}
+.exec-chip .exec-label{
+  font-size:8.5px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.55px;
+  color:#66788f;
+  margin-bottom:3px;
+}
+.exec-chip .exec-value{
+  font-size:12px;
+  font-weight:900;
+  color:#0b1f3a;
+  line-height:1.25;
+  overflow-wrap:anywhere;
+}
+.section-title-line{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.section-title-line h2{margin:0}
+.section-caption{
+  font-size:10.5px;
+  color:#66788f;
+  font-weight:800;
+  text-align:right;
+}
+.mini-ranking{display:grid;gap:7px}
+.rank-item{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:8px;
+  border:1px solid #e4eaf3;
+  border-radius:10px;
+  background:#fff;
+}
+.rank-pos{
+  width:24px;height:24px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  background:#eef5ff;color:#123b68;font-weight:900;font-size:11px;
+}
+.rank-main{min-width:0}
+.rank-title{font-size:11.5px;font-weight:900;color:#172033;line-height:1.2;overflow-wrap:anywhere}
+.rank-sub{font-size:9.5px;color:#718399;font-weight:700;margin-top:2px;line-height:1.25}
+.rank-score{text-align:right;font-size:10px;font-weight:900;color:#123b68;white-space:nowrap}
+.rank-score.warn{color:#9a5b00}
+.rank-score.good{color:#0f684d}
+.mobile-tech-cards{display:none;margin-top:8px;gap:8px}
+.tech-mobile-card{
+  border:1px solid #dce4ef;
+  border-radius:12px;
+  background:#fff;
+  padding:10px;
+  box-shadow:0 4px 10px rgba(10,32,64,.04);
+}
+.tech-mobile-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;
+}
+.tech-mobile-head .tech-name{font-size:13px}
+.mobile-metrics{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+.metric-box{
+  border:1px solid #edf1f6;
+  border-radius:10px;
+  padding:7px;
+  background:#f8fbff;
+  min-width:0;
+}
+.metric-box span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.4px;color:#6f8299;font-weight:900;margin-bottom:2px}
+.metric-box strong{display:block;font-size:12px;color:#0b1f3a;font-weight:900;overflow-wrap:anywhere}
+.action-priority-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:10px;
+}
+.priority-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  background:#fff;
+}
+.priority-card strong{display:block;font-size:12px;color:#0b1f3a;margin-bottom:4px}
+.priority-card span{display:block;font-size:10.5px;color:#5f7289;font-weight:700;line-height:1.32}
+.priority-card.redline{border-left:4px solid var(--red);background:#fff7f8}
+.priority-card.orangeline{border-left:4px solid var(--orange);background:#fff9f2}
+.priority-card.greenline{border-left:4px solid var(--green);background:#f2fbf7}
+.action-table-wrap{margin-top:8px}
+.action-table-wrap table{min-width:680px}
+.action-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:3px 7px;border-radius:999px;font-size:9.5px;font-weight:900;white-space:nowrap;
+  background:#eef5ff;color:#123b68;border:1px solid #cbd8e8;
+}
+.action-pill.high{background:#fff0f2;color:#9c2634;border-color:#f1b9c1}
+.action-pill.mid{background:#fff8e8;color:#8a5500;border-color:#f4d59a}
+.action-pill.ok{background:#ecfdf6;color:#0f684d;border-color:#bfe9d7}
+.export-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:12px;
+}
+.export-summary-grid .exec-chip{box-shadow:none;border-color:#dce4ef;background:#fff}
+@media screen and (max-width:900px){
+  .executive-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .action-priority-grid{grid-template-columns:1fr}
+}
+@media screen and (max-width:720px){
+  .section-title-line{align-items:flex-start;flex-direction:column;gap:3px}
+  .section-caption{text-align:left;font-size:9.5px}
+  #secPerformanceTecnico .table-wrap{display:none}
+  .mobile-tech-cards{display:grid}
+  .mobile-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .executive-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .exec-chip{padding:8px;border-radius:10px}
+  .exec-chip .exec-value{font-size:11px}
+  .rank-item{grid-template-columns:auto minmax(0,1fr);align-items:flex-start}
+  .rank-score{grid-column:2;text-align:left}
+}
+@media screen and (max-width:430px){
+  .executive-strip{grid-template-columns:1fr}
+  .mobile-metrics{grid-template-columns:1fr 1fr}
+  .tech-mobile-card{padding:8px;border-radius:10px}
+  .metric-box{padding:6px}
+  .metric-box strong{font-size:11px}
+}
+.export-capture-shell .executive-strip,
+.export-capture-shell .mobile-tech-cards,
+.export-capture-shell .section-caption{display:none!important}
+.export-capture-shell .section-title-line{display:block;margin-bottom:8px}
+.export-capture-shell .export-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 12px}
+
 </style>
 </head>
 
@@ -674,12 +986,13 @@ tbody tr:last-child td{border-bottom:0}
     <select id="filtroNode"><option value="">Todos</option></select>
   </div>
   <div class="filter-card">
-    <label>Status</label>
+    <label>Situação</label>
     <select id="filtroStatus">
       <option value="">Todos</option>
       <option value="revisita">Com revisita</option>
-      <option value="tec1baixo">TEC1 abaixo de 95%</option>
-      <option value="ok">No padrão</option>
+      <option value="acompanhamento">Em acompanhamento</option>
+      <option value="tec1baixo">TEC1 30d abaixo de 96%</option>
+      <option value="ok">Dentro da meta</option>
     </select>
   </div>
   <div class="filter-card">
@@ -698,13 +1011,30 @@ tbody tr:last-child td{border-bottom:0}
 </div>
 
 <section class="kpis">
-  <div class="card"><div class="label">Produção</div><div class="value" id="kpiProducao">0</div><div class="sub">QT_REVISITA = 0</div></div>
   <div class="card"><div class="label">Base Manutenção</div><div class="value" id="kpiBase">0</div><div class="sub">Linhas filtradas</div></div>
   <div class="card"><div class="label">Técnicos</div><div class="value" id="kpiTecnicos">0</div><div class="sub">LOGIN_TECNICO únicos</div></div>
-  <div class="card"><div class="label">Revisitas</div><div class="value" id="kpiRev">0</div><div class="sub" id="kpiRevPct">0%</div></div>
-  <div class="card"><div class="label">TEC1 Geral</div><div class="value" id="kpiTec1">0%</div><div class="sub">TOTAL_OS_TEC1_PADRAO / QTD_TOTAL_OS_TEC1</div></div>
-  <div class="card"><div class="label">Node Top</div><div class="value" id="kpiNode" style="font-size:24px">-</div><div class="sub">Maior recorrência</div></div>
+  <div class="card"><div class="label">Revisitas 10d</div><div class="value" id="kpiRev">0</div><div class="sub" id="kpiRevPct">0%</div></div>
+  <div class="card"><div class="label">TEC1 30d</div><div class="value" id="kpiTec1">0%</div><div class="sub">Dentro do horário programado</div></div>
 </section>
+
+<section class="grid" id="secPerformanceTecnico">
+  <div class="card">
+    <div class="section-title-line"><h2>Performance por Técnico</h2><span class="section-caption">Desktop em tabela · celular em cards</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Técnico</th><th>Produção</th><th>Revisitas 10d</th><th>% Rev. 10d</th><th>VT p/ Meta Rev.</th><th>Fora Janela 30d</th><th>TEC1 30d</th><th>VT p/ Meta TEC1</th><th>Situação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaTecnicos"><tr><td colspan="9"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
+      </table>
+    </div>
+    <div id="cardsTecnicosMobile" class="mobile-tech-cards"><div class="empty">Carregue a base para visualizar.</div></div>
+  </div>
+</section>
+
+
 
 <section class="grid3" id="alertasArea">
   <div class="card action-card"><h3>Alertas automáticos</h3><div id="alertasResumo" class="alert-list"><div class="empty">Carregue uma base.</div></div></div>
@@ -712,48 +1042,36 @@ tbody tr:last-child td{border-bottom:0}
   <div class="card action-card"><h3>Destaque positivo</h3><p id="destaquePositivo">Aguardando dados.</p></div>
 </section>
 
-<section class="grid" id="secPerformanceTecnico">
+<section class="grid2" id="secRankingOperacional">
   <div class="card">
-    <h2>Performance por Técnico</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Técnico</th><th>Produção</th><th>Revisitas</th><th>% Revisita</th><th>Fora Janela</th><th>TEC1</th><th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaTecnicos"><tr><td colspan="7"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
-      </table>
-    </div>
+    <div class="section-title-line"><h2>Ranking Operacional</h2><span class="section-caption">Melhores resultados no filtro atual</span></div>
+    <div id="rankingOperacional" class="mini-ranking"><div class="empty">Aguardando base.</div></div>
+  </div>
+  <div class="card">
+    <div class="section-title-line"><h2>Técnicos em Acompanhamento</h2><span class="section-caption">Revisita &gt; 6% ou TEC1 &lt; 96%</span></div>
+    <div id="rankingAcompanhamento" class="mini-ranking"><div class="empty">Aguardando base.</div></div>
   </div>
 </section>
 
+
+
 <section class="grid2">
   <div class="card">
-    <h2>Ranking NODE</h2>
+    <div class="section-title-line"><h2>Ranking NODE</h2><span class="section-caption">Maior recorrência</span></div>
     <div id="rankingNode"><div class="empty">Aguardando base.</div></div>
   </div>
   <div class="card">
-    <h2>Ranking Revisita</h2>
+    <div class="section-title-line"><h2>Ranking Revisita 10d</h2><span class="section-caption">Maior percentual</span></div>
     <div id="rankingRevisita"><div class="empty">Aguardando base.</div></div>
   </div>
 </section>
 
-<section class="grid2">
-  <div class="card">
-    <h2>Participação na Produção</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Técnico</th><th>Produção</th><th>% Participação</th></tr></thead>
-        <tbody id="tabelaProducao"><tr><td colspan="3"><div class="empty">Aguardando base.</div></td></tr></tbody>
-      </table>
-    </div>
-  </div>
+<section class="grid">
   <div class="card" id="secContratosRevisita">
-    <h2>Contratos com Revisita</h2>
+    <div class="section-title-line"><h2>Contratos com Revisita 10d</h2><span class="section-caption">Agrupado por técnico</span></div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Contrato</th><th>Técnico</th><th>QT Revisita</th><th>Tipo Serviço</th><th>NODE</th></tr></thead>
+        <thead><tr><th>Contrato</th><th>Técnico</th><th>QT Revisita 10d</th><th>Tipo Serviço</th><th>NODE</th></tr></thead>
         <tbody id="tabelaRevisitas"><tr><td colspan="5"><div class="empty">Aguardando base.</div></td></tr></tbody>
       </table>
     </div>
@@ -764,8 +1082,17 @@ tbody tr:last-child td{border-bottom:0}
 <section id="acao" class="tab-panel">
   <div class="grid2">
     <div class="card">
-      <h2>Plano de Ação Automático</h2>
+      <div class="section-title-line"><h2>Plano de Ação Automático</h2><span class="section-caption">Prioridade, motivo e ação recomendada</span></div>
+      <div id="acaoPrioridades" class="action-priority-grid">
+        <div class="priority-card"><strong>Aguardando base</strong><span>Carregue a planilha para gerar prioridades.</span></div>
+      </div>
       <div id="planoAcao" class="alert-list"><div class="empty">Carregue uma base para gerar recomendações.</div></div>
+      <div class="table-wrap action-table-wrap">
+        <table>
+          <thead><tr><th>Prioridade</th><th>Técnico</th><th>Indicador</th><th>Motivo</th><th>Ação recomendada</th></tr></thead>
+          <tbody id="tabelaPlanoAcao"><tr><td colspan="5"><div class="empty">Aguardando base.</div></td></tr></tbody>
+        </table>
+      </div>
     </div>
     <div class="card">
       <h2>Validação da Base</h2>
@@ -785,7 +1112,7 @@ tbody tr:last-child td{border-bottom:0}
     <div class="table-wrap" style="margin-top:14px">
       <table>
         <thead>
-          <tr><th>Data</th><th>Arquivo</th><th>Produção</th><th>Revisitas</th><th>% Revisita</th><th>TEC1</th><th>Node Top</th><th>Ação</th></tr>
+          <tr><th>Data</th><th>Arquivo</th><th>Produção</th><th>Revisitas 10d</th><th>% Revisita 10d</th><th>TEC1 30d</th><th>Node Top</th><th>Ação</th></tr>
         </thead>
         <tbody id="tabelaHistorico"><tr><td colspan="8"><div class="empty">Sem histórico salvo.</div></td></tr></tbody>
       </table>
@@ -829,7 +1156,50 @@ function nomeTecnico(login){const key=loginKey(login);return TECNICOS_NOMES[key]
 function rotuloTecnico(login){const key=loginKey(login);return TECNICOS_NOMES[key]?`${TECNICOS_NOMES[key]} — ${key}`:nomeTecnico(login)}
 function celulaTecnico(login){const key=loginKey(login);const nome=nomeTecnico(key);return `<strong class="tech-name">${nome}</strong>${TECNICOS_NOMES[key]?`<div class="tech-code">${key}</div>`:""}`}
 function ordemLoginIndex(login){const idx=ORDEM_TECNICOS.indexOf(loginKey(login));return idx===-1?999:idx}
-function statusTecnico(t){if(t.tec1Pct<95)return["Fora do padrão","red"];if(t.revPct>=7)return["Revisita crítica","red"];if(t.revPct>=5)return["Atenção","orange"];if(t.revPct>=3)return["Monitorar","yellow"];return["No padrão","green"]}
+function statusTecnico(t){
+  const revAcompanhamento=(Number(t.revPct)||0)>LIMITE_ACOMP_REVISITA;
+  const tec1Acompanhamento=(Number(t.tec1Pct)||0)<LIMITE_ACOMP_TEC1;
+  if(revAcompanhamento || tec1Acompanhamento) return ["Em acompanhamento","yellow"];
+  return ["Dentro da meta","green"];
+}
+
+const META_REVISITA=7;
+const META_TEC1=95;
+const LIMITE_ACOMP_REVISITA=6;
+const LIMITE_ACOMP_TEC1=96;
+const JANELA_REVISITA_DIAS=10;
+const JANELA_TEC1_DIAS=30;
+// Revisita: contrato que volta em até 10 dias. A meta é ficar abaixo de 7%.
+// A base deve trazer a coluna QT_REVISITA já considerando essa janela de 10 dias.
+function vtParaMetaRevisita(t){
+  const rev=Number(t.revisitas)||0;
+  const total=Number(t.total)||0;
+  if(rev<=0 || total<=0) return null;
+  const percentual=rev/total*100;
+  if(percentual<META_REVISITA) return null;
+  return Math.max(0, Math.floor((rev*100/META_REVISITA)-total)+1);
+}
+// TEC1: acompanhamento em 30 dias considerando estouro dos horários programados.
+// A base deve trazer TOTAL_OS_TEC1_PADRAO e QTD_TOTAL_OS_TEC1 já considerando essa regra.
+function vtParaMetaTec1(t){
+  const base=Number(t.tecBase)||0;
+  const ok=Number(t.tecOk)||0;
+  const alvo=META_TEC1/100;
+  if(base>0 && (ok/base*100)>=META_TEC1) return 0;
+  if(base<=0) return 1;
+  return Math.max(0, Math.ceil(((alvo*base)-ok)/(1-alvo)));
+}
+function celulaMetaRevisitaVT(qtd){
+  if(qtd===null || qtd===undefined || qtd==="") return "";
+  qtd=Number(qtd)||0;
+  if(qtd<=0) return "";
+  return `<span class="meta-vt need">${qtd} VT</span>`;
+}
+function celulaMetaVT(qtd){
+  qtd=Number(qtd)||0;
+  if(qtd<=0) return `<span class="meta-vt">Na meta</span>`;
+  return `<span class="meta-vt need">${qtd} VT</span>`;
+}
 
 function nomenclaturaValida(row){
   const tipo=head(getField(row,["TIPO_SERVICO","TIPO SERVICO","TIPO_OS","TIPO OS"]));
@@ -908,8 +1278,7 @@ function aplicarFiltros(rows){
   if(tecnico) filtrado=filtrado.filter(r=>loginKey(getField(r,["LOGIN_TECNICO","LOGIN TECNICO","TECNICO"]))===tecnico);
   if(node) filtrado=filtrado.filter(r=>norm(getField(r,["NODE"]))===node);
   if(status==="revisita") filtrado=filtrado.filter(r=>ehRevisita(r));
-  if(status==="ok") filtrado=filtrado.filter(r=>!ehRevisita(r));
-  // tec1baixo é aplicado após o resumo, mas deixamos a base inteira aqui e filtramos técnicos na renderização.
+  // Situação por técnico é aplicada após o resumo, porque depende dos percentuais consolidados.
   return filtrado;
 }
 
@@ -954,13 +1323,21 @@ function processarResumo(rows){
     }
   });
 
-  let arr=Object.values(tec).map(t=>({
-    ...t,
-    revPct:t.total? t.revisitas/t.total*100 : 0,
-    tec1Pct:t.tecBase? t.tecOk/t.tecBase*100 : 0
-  })).sort((a,b)=>ordemLoginIndex(a.login)-ordemLoginIndex(b.login)||a.login.localeCompare(b.login));
+  let arr=Object.values(tec).map(t=>{
+    const resumo={
+      ...t,
+      revPct:t.total? t.revisitas/t.total*100 : 0,
+      tec1Pct:t.tecBase? t.tecOk/t.tecBase*100 : 0
+    };
+    resumo.vtMetaRevisita=vtParaMetaRevisita(resumo);
+    resumo.vtMetaTec1=vtParaMetaTec1(resumo);
+    return resumo;
+  }).sort((a,b)=>ordemLoginIndex(a.login)-ordemLoginIndex(b.login)||a.login.localeCompare(b.login));
 
-  if(($("filtroStatus")?.value||"")==="tec1baixo") arr=arr.filter(t=>t.tec1Pct<95);
+  const filtroSituacao=$("filtroStatus")?.value||"";
+  if(filtroSituacao==="tec1baixo") arr=arr.filter(t=>t.tec1Pct<LIMITE_ACOMP_TEC1);
+  if(filtroSituacao==="acompanhamento") arr=arr.filter(t=>t.revPct>LIMITE_ACOMP_REVISITA || t.tec1Pct<LIMITE_ACOMP_TEC1);
+  if(filtroSituacao==="ok") arr=arr.filter(t=>!(t.revPct>LIMITE_ACOMP_REVISITA || t.tec1Pct<LIMITE_ACOMP_TEC1));
 
   const totalProducao=arr.reduce((a,t)=>a+t.producao,0);
   const totalRev=arr.reduce((a,t)=>a+t.revisitas,0);
@@ -978,35 +1355,130 @@ function renderBars(id,items,labelKey,valueKey,suffix){
  el.innerHTML=items.slice(0,15).map(i=>{const v=Number(i[valueKey])||0;return `<div class="bar-row"><div class="bar-title"><strong>${i[labelKey]||"-"}</strong><span>${suffix==="%"?pct(v):v}</span></div><div class="bar-bg"><div class="bar" style="width:${(v/max)*100}%"></div></div></div>`}).join("");
 }
 
+
+function resumoSituacaoTecnico(t){
+  const problemas=[];
+  if((Number(t.revPct)||0)>LIMITE_ACOMP_REVISITA) problemas.push(`Revisita ${pct(t.revPct)}`);
+  if((Number(t.tec1Pct)||0)<LIMITE_ACOMP_TEC1) problemas.push(`TEC1 ${pct(t.tec1Pct)}`);
+  return problemas.length?problemas.join(" · "):"Dentro da meta";
+}
+function renderResumoExecutivo(summary){
+  const {arr,arrNode,totalProducao,totalRev,totalOk,totalTecBase,baseLen}=summary;
+  const revPct=baseLen?totalRev/baseLen*100:0;
+  const tec1Pct=totalTecBase?totalOk/totalTecBase*100:0;
+  const acompanhamento=arr.filter(t=>(t.revPct>LIMITE_ACOMP_REVISITA)||(t.tec1Pct<LIMITE_ACOMP_TEC1));
+  const melhor=arr.filter(t=>t.producao>0).sort((a,b)=>a.revPct-b.revPct || b.tec1Pct-a.tec1Pct || b.producao-a.producao)[0];
+  if($("execResumoGeral")) $("execResumoGeral").innerHTML=`${totalProducao} produção · ${arr.length} técnicos`;
+  if($("execResumoRev")) $("execResumoRev").innerHTML=`${pct(revPct)} geral · ${totalRev} revisitas`;
+  if($("execResumoTec1")) $("execResumoTec1").innerHTML=`${pct(tec1Pct)} geral · ${totalTecBase-totalOk} fora janela`;
+  if($("execResumoOperacao")) $("execResumoOperacao").innerHTML=acompanhamento.length?`${acompanhamento.length} em acompanhamento`:(melhor?`Destaque: ${melhor.nome}`:(arrNode[0]?`Node top: ${arrNode[0].node}`:"Sem base carregada"));
+}
+function renderRankingOperacional(summary){
+  const {arr}=summary;
+  const ranking=$("rankingOperacional");
+  const acompanhamentoEl=$("rankingAcompanhamento");
+  if(!ranking||!acompanhamentoEl) return;
+  const melhores=[...arr]
+    .filter(t=>t.producao>0)
+    .sort((a,b)=>a.revPct-b.revPct || b.tec1Pct-a.tec1Pct || b.producao-a.producao)
+    .slice(0,5);
+  ranking.innerHTML=melhores.length?melhores.map((t,i)=>`<div class="rank-item">
+    <div class="rank-pos">${i+1}</div>
+    <div class="rank-main"><div class="rank-title">${t.nome}</div><div class="rank-sub">${t.producao} produção · ${t.revisitas} revisitas 10d · ${t.tecFora} fora janela</div></div>
+    <div class="rank-score good">${pct(t.revPct)} Rev<br>${pct(t.tec1Pct)} TEC1</div>
+  </div>`).join(""):'<div class="empty">Sem dados.</div>';
+
+  const acomp=[...arr]
+    .filter(t=>(t.revPct>LIMITE_ACOMP_REVISITA)||(t.tec1Pct<LIMITE_ACOMP_TEC1))
+    .sort((a,b)=>{
+      const pa=(a.revPct>LIMITE_ACOMP_REVISITA?1:0)+(a.tec1Pct<LIMITE_ACOMP_TEC1?1:0);
+      const pb=(b.revPct>LIMITE_ACOMP_REVISITA?1:0)+(b.tec1Pct<LIMITE_ACOMP_TEC1?1:0);
+      return pb-pa || b.revPct-a.revPct || a.tec1Pct-b.tec1Pct;
+    })
+    .slice(0,8);
+  acompanhamentoEl.innerHTML=acomp.length?acomp.map((t,i)=>`<div class="rank-item">
+    <div class="rank-pos">${i+1}</div>
+    <div class="rank-main"><div class="rank-title">${t.nome}</div><div class="rank-sub">${resumoSituacaoTecnico(t)}</div></div>
+    <div class="rank-score warn">${t.vtMetaRevisita?`${t.vtMetaRevisita} VT Rev`:""}${t.vtMetaRevisita&&t.vtMetaTec1?"<br>":""}${t.vtMetaTec1?`${t.vtMetaTec1} VT TEC1`:""}</div>
+  </div>`).join(""):'<div class="alert greenline">✅ Nenhum técnico em acompanhamento no filtro atual.</div>';
+}
+function renderCardsMobile(summary){
+  const el=$("cardsTecnicosMobile");
+  if(!el) return;
+  const {arr}=summary;
+  el.innerHTML=arr.length?arr.map(t=>{const [lab,cor]=statusTecnico(t);return `<div class="tech-mobile-card">
+    <div class="tech-mobile-head"><div>${celulaTecnico(t.login)}</div><span class="badge ${cor}">${lab}</span></div>
+    <div class="mobile-metrics">
+      <div class="metric-box"><span>Produção</span><strong>${t.producao}</strong></div>
+      <div class="metric-box"><span>Revisita 10d</span><strong>${pct(t.revPct)}</strong></div>
+      <div class="metric-box"><span>TEC1 30d</span><strong>${pct(t.tec1Pct)}</strong></div>
+      <div class="metric-box"><span>Fora janela</span><strong>${t.tecFora}</strong></div>
+      <div class="metric-box"><span>VT Meta Rev.</span><strong>${t.vtMetaRevisita?`${t.vtMetaRevisita} VT`:""}</strong></div>
+      <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:"Na meta"}</strong></div>
+    </div>
+  </div>`}).join(""):'<div class="empty">Sem dados para os filtros selecionados.</div>';
+}
+function renderPlanoAcaoDetalhado(summary){
+  const {arr,arrNode}=summary;
+  const prioridades=[];
+  const critRev=[...arr].filter(t=>t.revPct>LIMITE_ACOMP_REVISITA).sort((a,b)=>b.revPct-a.revPct);
+  const critTec=[...arr].filter(t=>t.tec1Pct<LIMITE_ACOMP_TEC1).sort((a,b)=>a.tec1Pct-b.tec1Pct);
+  critRev.slice(0,6).forEach(t=>prioridades.push({nivel:"Alta",classe:"high",tecnico:t.nome,indicador:"Revisita 10d",motivo:`${pct(t.revPct)} acima de 6%`,acao:`Revisar contratos reincidentes e buscar ${t.vtMetaRevisita||0} VT sem revisita.`}));
+  critTec.slice(0,6).forEach(t=>prioridades.push({nivel:"Média",classe:"mid",tecnico:t.nome,indicador:"TEC1 30d",motivo:`${pct(t.tec1Pct)} abaixo de 96%`,acao:`Auditar estouro de horários programados e buscar ${t.vtMetaTec1||0} VT dentro do padrão.`}));
+  if(arrNode[0]) prioridades.push({nivel:"Média",classe:"mid",tecnico:"Equipe",indicador:"Node",motivo:`${arrNode[0].node} com ${arrNode[0].qtd} ocorrências`,acao:"Verificar concentração de retorno, rota, agenda e causas por região."});
+
+  const grid=$("acaoPrioridades");
+  if(grid){
+    if(!arr.length){
+      grid.innerHTML='<div class="priority-card"><strong>Aguardando base</strong><span>Carregue a planilha para gerar prioridades.</span></div>';
+    }else{
+      const alta=prioridades.filter(p=>p.classe==="high").length;
+      const media=prioridades.filter(p=>p.classe==="mid").length;
+      const ok=arr.length-alta;
+      grid.innerHTML=`<div class="priority-card redline"><strong>${alta} prioridade alta</strong><span>Foco em revisita acima de 6%.</span></div>
+      <div class="priority-card orangeline"><strong>${media} prioridade média</strong><span>Foco em TEC1, node e agenda.</span></div>
+      <div class="priority-card greenline"><strong>${Math.max(0,ok)} dentro/monitorado</strong><span>Técnicos sem alerta de revisita crítica.</span></div>`;
+    }
+  }
+  const tbody=$("tabelaPlanoAcao");
+  if(tbody){
+    tbody.innerHTML=prioridades.length?prioridades.map(p=>`<tr><td><span class="action-pill ${p.classe}">${p.nivel}</span></td><td><strong>${p.tecnico}</strong></td><td>${p.indicador}</td><td>${p.motivo}</td><td>${p.acao}</td></tr>`).join(""):'<tr><td colspan="5"><div class="empty">Nenhuma ação crítica no filtro atual.</div></td></tr>';
+  }
+}
+
 function renderDashboard(summary){
   currentSummary=summary;
   const {arr,arrNode,revisitas,totalProducao,totalRev,totalOk,totalTecBase,baseLen}=summary;
 
-  $("kpiProducao").textContent=totalProducao;
-  $("kpiBase").textContent=baseLen;
-  $("kpiTecnicos").textContent=arr.length;
-  $("kpiRev").textContent=totalRev;
-  $("kpiRevPct").textContent=pct(baseLen?totalRev/baseLen*100:0);
-  $("kpiTec1").textContent=pct(totalTecBase?totalOk/totalTecBase*100:0);
-  $("kpiNode").textContent=arrNode[0]?.node||"-";
+  if($("kpiProducao")) $("kpiProducao").textContent=totalProducao;
+  if($("kpiBase")) $("kpiBase").textContent=baseLen;
+  if($("kpiTecnicos")) $("kpiTecnicos").textContent=arr.length;
+  if($("kpiRev")) $("kpiRev").textContent=totalRev;
+  if($("kpiRevPct")) $("kpiRevPct").textContent=pct(baseLen?totalRev/baseLen*100:0);
+  if($("kpiTec1")) $("kpiTec1").textContent=pct(totalTecBase?totalOk/totalTecBase*100:0);
+  if($("kpiNode")) $("kpiNode").textContent=arrNode[0]?.node||"-";
 
   $("tabelaTecnicos").innerHTML=arr.length?arr.map(t=>{const [lab,cor]=statusTecnico(t);return `<tr>
     <td>${celulaTecnico(t.login)}</td>
     <td>${t.producao}</td>
     <td>${t.revisitas}</td>
     <td>${pct(t.revPct)}</td>
+    <td>${celulaMetaRevisitaVT(t.vtMetaRevisita)}</td>
     <td>${t.tecFora}</td>
     <td>${pct(t.tec1Pct)}</td>
+    <td>${celulaMetaVT(t.vtMetaTec1)}</td>
     <td><span class="badge ${cor}">${lab}</span></td>
-  </tr>`}).join(""):'<tr><td colspan="7"><div class="empty">Sem dados para os filtros selecionados.</div></td></tr>';
+  </tr>`}).join(""):'<tr><td colspan="9"><div class="empty">Sem dados para os filtros selecionados.</div></td></tr>';
 
   renderBars("rankingNode",arrNode,"node","qtd","n");
   renderBars("rankingRevisita",[...arr].sort((a,b)=>b.revPct-a.revPct),"nome","revPct","%");
 
-  $("tabelaProducao").innerHTML=[...arr]
-    .sort((a,b)=>b.producao-a.producao)
-    .map(t=>{const part=totalProducao?t.producao/totalProducao*100:0;return `<tr><td>${celulaTecnico(t.login)}</td><td>${t.producao}</td><td>${pct(part)}</td></tr>`;})
-    .join("") || '<tr><td colspan="3"><div class="empty">Sem dados.</div></td></tr>';
+  if($("tabelaProducao")) {
+    $("tabelaProducao").innerHTML=[...arr]
+      .sort((a,b)=>b.producao-a.producao)
+      .map(t=>{const part=totalProducao?t.producao/totalProducao*100:0;return `<tr><td>${celulaTecnico(t.login)}</td><td>${t.producao}</td><td>${pct(part)}</td></tr>`;})
+      .join("") || '<tr><td colspan="3"><div class="empty">Sem dados.</div></td></tr>';
+  }
 
   if(revisitas.length){
     const ordenadas=[...revisitas].sort((a,b)=>ordemLoginIndex(a.login)-ordemLoginIndex(b.login)||String(a.login).localeCompare(String(b.login))||String(a.contrato).localeCompare(String(b.contrato)));
@@ -1019,43 +1491,47 @@ function renderDashboard(summary){
     $("tabelaRevisitas").innerHTML='<tr><td colspan="5"><div class="empty">Nenhuma revisita encontrada.</div></td></tr>';
   }
 
+  renderResumoExecutivo(summary);
+  renderRankingOperacional(summary);
+  renderCardsMobile(summary);
   renderAlertas(summary);
   renderPlanoAcao(summary);
+  renderPlanoAcaoDetalhado(summary);
 }
 
 function renderAlertas(summary){
   const {arr,arrNode,totalProducao,totalRev,totalOk,totalTecBase,baseLen}=summary;
   const alertas=[];
-  const critRev=arr.filter(t=>t.revPct>=5).sort((a,b)=>b.revPct-a.revPct);
-  const critTec=arr.filter(t=>t.tec1Pct<95).sort((a,b)=>a.tec1Pct-b.tec1Pct);
+  const critRev=arr.filter(t=>t.revPct>LIMITE_ACOMP_REVISITA).sort((a,b)=>b.revPct-a.revPct);
+  const critTec=arr.filter(t=>t.tec1Pct<LIMITE_ACOMP_TEC1).sort((a,b)=>a.tec1Pct-b.tec1Pct);
   const melhor=arr.filter(t=>t.producao>0).sort((a,b)=>a.revPct-b.revPct || b.tec1Pct-a.tec1Pct)[0];
 
-  if(critRev[0]) alertas.push(`<div class="alert redline">🚨 Maior revisita: <strong>${critRev[0].nome}</strong> com <strong>${pct(critRev[0].revPct)}</strong>.</div>`);
-  if(critTec[0]) alertas.push(`<div class="alert redline">⚠️ TEC1 abaixo do padrão: <strong>${critTec[0].nome}</strong> com <strong>${pct(critTec[0].tec1Pct)}</strong>.</div>`);
+  if(critRev[0]) alertas.push(`<div class="alert redline">🚨 Maior revisita 10d: <strong>${critRev[0].nome}</strong> com <strong>${pct(critRev[0].revPct)}</strong>.</div>`);
+  if(critTec[0]) alertas.push(`<div class="alert redline">⚠️ TEC1 30d abaixo do padrão: <strong>${critTec[0].nome}</strong> com <strong>${pct(critTec[0].tec1Pct)}</strong>.</div>`);
   if(arrNode[0]) alertas.push(`<div class="alert orangeline">📍 Node mais recorrente: <strong>${arrNode[0].node}</strong> com <strong>${arrNode[0].qtd}</strong> ocorrências.</div>`);
   if(!alertas.length && arr.length) alertas.push(`<div class="alert greenline">✅ Nenhum alerta crítico encontrado nos filtros atuais.</div>`);
 
   $("alertasResumo").innerHTML=alertas.join("")||'<div class="empty">Carregue uma base.</div>';
   $("maiorAtencao").innerHTML=critRev[0]
-    ? `Priorizar acompanhamento de <strong>${critRev[0].nome}</strong>, maior índice de revisita.`
-    : (critTec[0] ? `Priorizar melhoria de TEC1 com <strong>${critTec[0].nome}</strong>.` : "Sem ponto crítico evidente nos filtros atuais.");
+    ? `Priorizar acompanhamento de <strong>${critRev[0].nome}</strong>, revisita acima de 6% em 10 dias.`
+    : (critTec[0] ? `Priorizar melhoria de TEC1 30d com <strong>${critTec[0].nome}</strong>.` : "Sem ponto crítico evidente nos filtros atuais.");
   $("destaquePositivo").innerHTML=melhor
-    ? `<strong>${melhor.nome}</strong> aparece como destaque com ${pct(melhor.revPct)} de revisita e ${pct(melhor.tec1Pct)} de TEC1.`
+    ? `<strong>${melhor.nome}</strong> aparece como destaque com ${pct(melhor.revPct)} de revisita 10d e ${pct(melhor.tec1Pct)} de TEC1 30d.`
     : "Aguardando dados.";
 }
 
 function renderPlanoAcao(summary){
   const {arr,arrNode}=summary;
-  const critRev=arr.filter(t=>t.revPct>=5).sort((a,b)=>b.revPct-a.revPct);
-  const critTec=arr.filter(t=>t.tec1Pct<95).sort((a,b)=>a.tec1Pct-b.tec1Pct);
+  const critRev=arr.filter(t=>t.revPct>LIMITE_ACOMP_REVISITA).sort((a,b)=>b.revPct-a.revPct);
+  const critTec=arr.filter(t=>t.tec1Pct<LIMITE_ACOMP_TEC1).sort((a,b)=>a.tec1Pct-b.tec1Pct);
   const baixoVolume=arr.filter(t=>t.producao>0).sort((a,b)=>a.producao-b.producao)[0];
   const itens=[];
 
-  if(critRev[0]) itens.push(`<div class="alert redline"><strong>1. Revisita:</strong> acompanhar <strong>${critRev[0].nome}</strong>, revisar contratos reincidentes e validar causa raiz.</div>`);
-  if(critTec[0]) itens.push(`<div class="alert redline"><strong>2. TEC1:</strong> auditar baixas fora do padrão do técnico <strong>${critTec[0].nome}</strong>.</div>`);
+  if(critRev[0]) itens.push(`<div class="alert redline"><strong>1. Revisita 10d:</strong> acompanhar técnicos acima de 6%, especialmente <strong>${critRev[0].nome}</strong>, revisar contratos que voltaram em até 10 dias e validar causa raiz.</div>`);
+  if(critTec[0]) itens.push(`<div class="alert redline"><strong>2. TEC1 30d:</strong> auditar baixas fora do horário programado do técnico <strong>${critTec[0].nome}</strong>.</div>`);
   if(arrNode[0]) itens.push(`<div class="alert orangeline"><strong>3. Node crítico:</strong> verificar recorrência no node <strong>${arrNode[0].node}</strong>.</div>`);
   if(baixoVolume) itens.push(`<div class="alert blueline"><strong>4. Produção:</strong> conferir distribuição de carga; menor produção atual: <strong>${baixoVolume.nome}</strong> com ${baixoVolume.producao}.</div>`);
-  itens.push(`<div class="alert greenline"><strong>5. Rotina:</strong> manter acompanhamento diário de produção, revisita, TEC1 e nodes.</div>`);
+  itens.push(`<div class="alert greenline"><strong>5. Rotina:</strong> manter acompanhamento diário de produção, revisita 10d, TEC1 30d e nodes.</div>`);
   $("planoAcao").innerHTML=itens.join("");
 }
 
@@ -1151,7 +1627,7 @@ async function carregarBase(){
     salvarHistorico();
 
     const z450=currentSummary.arr.find(t=>t.login==="Z450037");
-    setStatus(`✅ Base carregada.<br>Produção total: <strong>${currentSummary.totalProducao}</strong> | Base manutenção: <strong>${processedRows.length}</strong> | Revisitas: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas.`:""}`);
+    setStatus(`✅ Base carregada.<br>Produção total: <strong>${currentSummary.totalProducao}</strong> | Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}`);
   }catch(err){
     console.error(err); setStatus("❌ Erro ao carregar: <strong>"+err.message+"</strong>");
   }
@@ -1175,16 +1651,25 @@ function limparTudo(){
  rawRows=[];processedRows=[];currentSummary=null;currentFileName="";
  setStatus("Nenhuma base carregada.");
  ["kpiProducao","kpiBase","kpiTecnicos","kpiRev"].forEach(id=>{ if($(id)) $(id).textContent="0"; });
- $("kpiRevPct").textContent="0%"; $("kpiTec1").textContent="0%"; $("kpiNode").textContent="-";
- $("tabelaTecnicos").innerHTML='<tr><td colspan="7"><div class="empty">Carregue a base para visualizar.</div></td></tr>';
+ if($("kpiRevPct")) $("kpiRevPct").textContent="0%"; if($("kpiTec1")) $("kpiTec1").textContent="0%"; if($("kpiNode")) $("kpiNode").textContent="-";
+ $("tabelaTecnicos").innerHTML='<tr><td colspan="9"><div class="empty">Carregue a base para visualizar.</div></td></tr>';
  $("rankingNode").innerHTML='<div class="empty">Aguardando base.</div>';
  $("rankingRevisita").innerHTML='<div class="empty">Aguardando base.</div>';
- $("tabelaProducao").innerHTML='<tr><td colspan="3"><div class="empty">Aguardando base.</div></td></tr>';
+ if($("rankingOperacional")) $("rankingOperacional").innerHTML='<div class="empty">Aguardando base.</div>';
+ if($("rankingAcompanhamento")) $("rankingAcompanhamento").innerHTML='<div class="empty">Aguardando base.</div>';
+ if($("cardsTecnicosMobile")) $("cardsTecnicosMobile").innerHTML='<div class="empty">Carregue a base para visualizar.</div>';
+ if($("execResumoGeral")) $("execResumoGeral").textContent='Aguardando base';
+ if($("execResumoRev")) $("execResumoRev").textContent='Meta < 7%';
+ if($("execResumoTec1")) $("execResumoTec1").textContent='Meta ≥ 95%';
+ if($("execResumoOperacao")) $("execResumoOperacao").textContent='Sem base carregada';
+ if($("tabelaProducao")) $("tabelaProducao").innerHTML='<tr><td colspan="3"><div class="empty">Aguardando base.</div></td></tr>';
  $("tabelaRevisitas").innerHTML='<tr><td colspan="5"><div class="empty">Aguardando base.</div></td></tr>';
  $("alertasResumo").innerHTML='<div class="empty">Carregue uma base.</div>';
  $("maiorAtencao").textContent="Aguardando dados.";
  $("destaquePositivo").textContent="Aguardando dados.";
  $("planoAcao").innerHTML='<div class="empty">Carregue uma base para gerar recomendações.</div>';
+ if($("acaoPrioridades")) $("acaoPrioridades").innerHTML='<div class="priority-card"><strong>Aguardando base</strong><span>Carregue a planilha para gerar prioridades.</span></div>';
+ if($("tabelaPlanoAcao")) $("tabelaPlanoAcao").innerHTML='<tr><td colspan="5"><div class="empty">Aguardando base.</div></td></tr>';
  $("validacaoBase").innerHTML='<div class="empty">Aguardando importação.</div>';
 }
 
@@ -1192,7 +1677,7 @@ function textoFiltroExportacao(){
   const filtroTecnico=$("filtroTecnico");
   const tecnico=filtroTecnico?.value ? filtroTecnico.options[filtroTecnico.selectedIndex].text : "Todos os técnicos";
   const node=$("filtroNode")?.value||"Todos os nodes";
-  const status=$("filtroStatus")?.value||"Todos os status";
+  const status=$("filtroStatus")?.value||"Todas as situações";
   const data=new Date().toLocaleString("pt-BR");
   return {tecnico,node,status,data};
 }
@@ -1208,18 +1693,25 @@ function criarAreaExportacao(){
   const shell=document.createElement("div");
   shell.className="export-capture-shell";
   shell.id="exportCaptureTemp";
+  const resumo=currentSummary||{};
+  const revPct=resumo.baseLen?resumo.totalRev/resumo.baseLen*100:0;
+  const tec1Pct=resumo.totalTecBase?resumo.totalOk/resumo.totalTecBase*100:0;
   shell.innerHTML=`
     <div class="export-report-header">
       <div>
-        <h1>Relatório de Manutenção</h1>
-        <p>Exportação com apenas Performance por Técnico e Contratos com Revisita</p>
+        <h1>Relatório Formal de Manutenção</h1>
+        <p>Performance por Técnico e Contratos com Revisita 10d</p>
       </div>
       <div style="text-align:right;font-size:12px;font-weight:800;line-height:1.55;color:#eaf4ff">
         Técnico: ${info.tecnico}<br>
         Node: ${info.node}<br>
-        Status: ${info.status}<br>
+        Situação: ${info.status}<br>
         Gerado em: ${info.data}
       </div>
+    </div>
+    <div class="export-summary-grid">
+      <div class="exec-chip"><div class="exec-label">Revisita 10d</div><div class="exec-value">${pct(revPct)}</div></div>
+      <div class="exec-chip"><div class="exec-label">TEC1 30d</div><div class="exec-value">${pct(tec1Pct)}</div></div>
     </div>`;
 
   const performanceClone=performance.cloneNode(true);
