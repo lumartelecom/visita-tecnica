@@ -1301,54 +1301,6 @@ function abrirModalTecnicos(atualizarLista=true){
     </button>`).join("");
     conteudo.querySelectorAll("[data-login]").forEach(btn=>btn.addEventListener("click",()=>abrirIndicadoresTecnico(btn.dataset.login)));
   }
-  const inputBusca=$("buscaContratoBase");
-  const btnPesquisar=$("pesquisarContratoBase");
-  const limparBusca=$("limparBuscaContratoBase");
-  const resultadoBusca=$("resultadoBuscaContratoBase");
-  const tableScroll=conteudo.querySelector(".table-wrap");
-  if(inputBusca){
-    const limparDestaque=()=>{
-      conteudo.querySelectorAll("tbody tr[data-contrato]").forEach(tr=>tr.classList.remove("contrato-encontrado"));
-    };
-    const normalizarBusca=v=>String(v||"").replace(/[^0-9a-zA-Z]/g,"").toLowerCase();
-    const pesquisarContrato=()=>{
-      const termo=normalizarBusca(inputBusca.value);
-      const linhas=[...conteudo.querySelectorAll("tbody tr[data-contrato]")];
-      limparDestaque();
-      if(!termo){
-        if(resultadoBusca) resultadoBusca.textContent="Digite um contrato para pesquisar.";
-        inputBusca.focus();
-        return;
-      }
-
-      const encontradoExato=linhas.find(tr=>String(tr.dataset.contrato||"")===termo);
-      const encontradoParcial=linhas.find(tr=>String(tr.dataset.contrato||"").includes(termo));
-      const encontrado=encontradoExato||encontradoParcial;
-
-      if(encontrado){
-        encontrado.classList.add("contrato-encontrado");
-        if(tableScroll){
-          const top=encontrado.offsetTop-tableScroll.offsetTop-(tableScroll.clientHeight/2)+(encontrado.clientHeight/2);
-          tableScroll.scrollTo({top:Math.max(0,top),behavior:"smooth"});
-        }else{
-          encontrado.scrollIntoView({behavior:"smooth",block:"center"});
-        }
-        if(resultadoBusca) resultadoBusca.textContent=`Contrato encontrado: ${encontrado.dataset.contratoLabel||inputBusca.value}`;
-      }else{
-        if(resultadoBusca) resultadoBusca.textContent=`Contrato ${inputBusca.value} não encontrado nesta base.`;
-      }
-    };
-    if(btnPesquisar) btnPesquisar.addEventListener("click",pesquisarContrato);
-    inputBusca.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();pesquisarContrato();}});
-    if(limparBusca) limparBusca.addEventListener("click",()=>{
-      inputBusca.value="";
-      limparDestaque();
-      if(tableScroll) tableScroll.scrollTo({top:0,behavior:"smooth"});
-      if(resultadoBusca) resultadoBusca.textContent="Digite o contrato e clique em pesquisar.";
-      inputBusca.focus();
-    });
-    setTimeout(()=>inputBusca.focus(),80);
-  }
   modal.classList.add("active");
   modal.setAttribute("aria-hidden","false");
 }
@@ -1384,6 +1336,64 @@ function tagsIndicadoresBase(row){
   if(tecDen>0&&Math.max(0,tecDen-tecNum)>0) tags.push('<span class="action-pill high">TEC1</span>');
   return tags.length?`<div class="indicador-tags">${tags.join("")}</div>`:'<div class="indicador-tags"><span class="action-pill ok">Dentro</span></div>';
 }
+
+function ativarBuscaContratoBase(conteudo){
+  const inputBusca=$("buscaContratoBase");
+  const btnPesquisar=$("pesquisarContratoBase");
+  const limparBusca=$("limparBuscaContratoBase");
+  const resultadoBusca=$("resultadoBuscaContratoBase");
+  const tableScroll=conteudo?.querySelector(".base-total-table .table-wrap");
+  if(!inputBusca||!btnPesquisar) return;
+
+  const normalizarBusca=v=>String(v||"").replace(/[^0-9a-zA-Z]/g,"").toLowerCase();
+
+  const limparDestaque=()=>{
+    conteudo.querySelectorAll("tbody tr[data-contrato]").forEach(tr=>tr.classList.remove("contrato-encontrado"));
+  };
+
+  const pesquisarContrato=()=>{
+    const termo=normalizarBusca(inputBusca.value);
+    const linhas=[...conteudo.querySelectorAll("tbody tr[data-contrato]")];
+    limparDestaque();
+
+    if(!termo){
+      if(resultadoBusca) resultadoBusca.textContent="Digite um contrato para pesquisar.";
+      inputBusca.focus();
+      return;
+    }
+
+    const encontradoExato=linhas.find(tr=>String(tr.dataset.contrato||"")===termo);
+    const encontradoParcial=linhas.find(tr=>String(tr.dataset.contrato||"").includes(termo));
+    const encontrado=encontradoExato||encontradoParcial;
+
+    if(encontrado){
+      encontrado.classList.add("contrato-encontrado");
+      if(tableScroll){
+        tableScroll.scrollTo({top:Math.max(0,encontrado.offsetTop-80),behavior:"smooth"});
+      }else{
+        encontrado.scrollIntoView({behavior:"smooth",block:"center"});
+      }
+      if(resultadoBusca) resultadoBusca.textContent=`Contrato encontrado: ${encontrado.dataset.contratoLabel||inputBusca.value}`;
+    }else{
+      if(resultadoBusca) resultadoBusca.textContent=`Contrato ${inputBusca.value} não encontrado nesta base.`;
+    }
+  };
+
+  btnPesquisar.addEventListener("click",pesquisarContrato);
+  inputBusca.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();pesquisarContrato();}});
+  if(limparBusca){
+    limparBusca.addEventListener("click",()=>{
+      inputBusca.value="";
+      limparDestaque();
+      if(tableScroll) tableScroll.scrollTo({top:0,behavior:"smooth"});
+      if(resultadoBusca) resultadoBusca.textContent="Digite o contrato e clique em pesquisar.";
+      inputBusca.focus();
+    });
+  }
+
+  setTimeout(()=>inputBusca.focus(),80);
+}
+
 function abrirModalBaseTotal(){
   const modal=$("modalIndicadorDetalhe");
   const conteudo=$("modalIndicadorConteudo");
@@ -1440,6 +1450,7 @@ function abrirModalBaseTotal(){
         </table>
       </div>
     </div>`;
+    ativarBuscaContratoBase(conteudo);
   }
   modal.classList.add("active");
   modal.setAttribute("aria-hidden","false");
