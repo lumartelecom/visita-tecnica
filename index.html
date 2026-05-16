@@ -748,7 +748,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 <!-- HISTÓRICO -->
 <section id="historico" class="tab-panel">
   <div class="export-row">
-    <button id="btnCarregarUltima" class="primary" type="button">Carregar última base salva</button>
+    <button id="btnCarregarUltima" class="primary" type="button" onclick="carregarUltimaBase()">Carregar última base salva</button>
     <button id="btnLimparHistorico" class="danger" type="button">Limpar histórico</button>
   </div>
   <!-- STATUS -->
@@ -1666,21 +1666,99 @@ function filtrarBasePrincipal(rows){
 }
 
 function salvarUltimaBase(rows,fileName){
-  try{localStorage.setItem(STORAGE_LAST,JSON.stringify({fileName,date:new Date().toISOString(),rows}));}catch(e){console.warn("Não foi possível salvar.",e);}
+  try{
+    const payload=JSON.stringify({fileName,date:new Date().toISOString(),rows});
+    localStorage.setItem(STORAGE_LAST,payload);
+    localStorage.setItem("lumar_manutencao_ultima_base_v2",payload);
+  }catch(e){console.warn("Não foi possível salvar.",e);}
 }
+function encontrarUltimaBaseSalva(){
+  const candidatos=[
+    STORAGE_LAST,
+    "lumar_manutencao_ultima_base_v2",
+    "lumar_manutencao_ultima_base",
+    "ultimaBaseManutencao",
+    "ultima_base_manutencao",
+    "lastBase",
+    "last_import"
+  ];
+
+  for(const key of candidatos){
+    try{
+      const raw=localStorage.getItem(key);
+      if(!raw) continue;
+      const obj=JSON.parse(raw);
+      const rows=obj?.rows||obj?.rawRows||obj?.dados||obj?.data||obj?.base||[];
+      if(Array.isArray(rows)&&rows.length){
+        return {key,fileName:obj.fileName||obj.nomeArquivo||obj.name||"Base salva",rows};
+      }
+    }catch(e){console.warn("Falha ao ler chave",key,e);}
+  }
+
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      const raw=localStorage.getItem(key);
+      if(!raw||raw.length<10) continue;
+      try{
+        const obj=JSON.parse(raw);
+        const rows=obj?.rows||obj?.rawRows||obj?.dados||obj?.data||obj?.base||[];
+        if(Array.isArray(rows)&&rows.length&&rows[0]&&typeof rows[0]==="object"){
+          const cols=Object.keys(rows[0]).map(norm);
+          const pareceBase=cols.includes("CONTRATO")||cols.includes("LOGIN_TECNICO")||cols.includes("LOGIN TECNICO");
+          if(pareceBase) return {key,fileName:obj.fileName||obj.nomeArquivo||key,rows};
+        }
+      }catch(e){}
+    }
+  }catch(e){console.warn("Falha ao procurar base no localStorage.",e);}
+
+  return null;
+}
+
+function abrirAbaDashboard(){
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  const btn=[...document.querySelectorAll(".tab-btn")].find(b=>b.dataset.tab==="dashboard");
+  if(btn) btn.classList.add("active");
+  if($("dashboard")) $("dashboard").classList.add("active");
+}
+
 function carregarUltimaBase(){
-  const raw=localStorage.getItem(STORAGE_LAST);
-  if(!raw){setStatus("⚠️ Nenhuma última base salva neste navegador.");return}
-  const saved=JSON.parse(raw);
-  rawRows=saved.rows||[];currentFileName=saved.fileName||"Base salva";tecnicoAtivoLogin="";
-  const validation=validarBase(rawRows);
-  processedRows=filtrarBasePrincipal(rawRows);
-  preencherFiltros(processedRows);
-  renderValidacao(validation,processedRows.length);
-  const filtrado=aplicarFiltros(processedRows);
-  lastRenderRows=filtrado;
-  renderDashboard(processarResumo(filtrado));
-  setStatus(`🔁 Última base carregada: <strong>${currentFileName}</strong>.`);
+  const saved=encontrarUltimaBaseSalva();
+  if(!saved||!saved.rows?.length){
+    setStatus("⚠️ Nenhuma última base salva neste navegador. Carregue uma planilha primeiro para criar o salvamento automático.");
+    return;
+  }
+
+  try{
+    rawRows=saved.rows||[];
+    currentFileName=saved.fileName||"Base salva";
+    tecnicoAtivoLogin="";
+
+    const validation=validarBase(rawRows);
+    processedRows=filtrarBasePrincipal(rawRows);
+
+    if(!processedRows.length){
+      // Se a base salva já estiver filtrada ou vier de uma versão antiga, usa as linhas salvas mesmo assim.
+      processedRows=[...rawRows];
+    }
+
+    preencherFiltros(processedRows);
+    renderValidacao(validation,processedRows.length);
+
+    const filtrado=aplicarFiltros(processedRows);
+    lastRenderRows=filtrado;
+    currentSummary=processarResumo(filtrado);
+    renderDashboard(currentSummary);
+
+    salvarUltimaBase(rawRows,currentFileName);
+    abrirAbaDashboard();
+
+    setStatus(`🔁 Última base carregada: <strong>${currentFileName}</strong>.<br>Registros carregados: <strong>${processedRows.length}</strong>.`);
+  }catch(err){
+    console.error(err);
+    setStatus("❌ Não foi possível carregar a última base: <strong>"+err.message+"</strong>");
+  }
 }
 
 function salvarHistorico(){
@@ -1703,6 +1781,7 @@ function removerHistorico(id){
   localStorage.setItem(STORAGE_HISTORY,JSON.stringify(hist));renderHistorico();
 }
 window.removerHistorico=removerHistorico;
+window.carregarUltimaBase=carregarUltimaBase;
 
 async function carregarBase(){
   const file=arquivoSelecionado||$("fileInput").files[0];if(!file){setStatus("⚠️ Selecione uma base primeiro.");return}
@@ -1847,7 +1926,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("btnCarregar").addEventListener("click",carregarBase);
   $("btnLimpar").addEventListener("click",limparTudo);
   $("fileInput").addEventListener("change",e=>{arquivoSelecionado=e.target.files[0]||null;if(arquivoSelecionado)setStatus("📁 Arquivo selecionado: <strong>"+arquivoSelecionado.name+"</strong>. Clique em <strong>Carregar Base</strong>.");});
-  $("btnCarregarUltima").addEventListener("click",carregarUltimaBase);
+  if($("btnCarregarUltima")) $("btnCarregarUltima").addEventListener("click",carregarUltimaBase);
   $("btnLimparHistorico").addEventListener("click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
   $("cardTecnicos").addEventListener("click",abrirModalTecnicos);
   $("cardTecnicos").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();abrirModalTecnicos();}});
