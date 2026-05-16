@@ -293,6 +293,90 @@ tbody tr:last-child td{border-bottom:0}
   body{background:#fff}
   .card{box-shadow:none;border:1px solid #ddd}
 }
+
+/* === CORPORATE VISUAL REFRESH - Codex 2026-05-16 === */
+:root{
+  --bg:#eef3f8;
+  --surface:#ffffff;
+  --surface-alt:#f6f9fc;
+  --navy:#0f1f35;
+  --navy2:#17375f;
+  --blue:#155fc4;
+  --blue-hover:#0f4fa6;
+  --blue-light:#e6f0ff;
+  --green:#0f9468;
+  --green-light:#e7f8ef;
+  --yellow:#c9830e;
+  --yellow-light:#fff7d8;
+  --orange:#e86d18;
+  --orange-light:#fff0e4;
+  --red:#d73737;
+  --red-light:#fff0f0;
+  --indigo:#414ee3;
+  --cyan:#0a9fbe;
+  --violet:#7048e8;
+  --text:#1b2638;
+  --text-muted:#66758a;
+  --border:#d9e2ee;
+  --border-strong:#b8c6d9;
+  --shadow-sm:0 10px 24px rgba(20,36,60,.07);
+  --shadow:0 18px 46px rgba(20,36,60,.13);
+  --radius:8px;
+  --radius-lg:10px;
+}
+html{background:#eef3f8;scroll-behavior:smooth}
+body{
+  background:
+    linear-gradient(180deg,#eaf0f7 0,#f7f9fc 260px,#eef3f8 100%),
+    radial-gradient(circle at 12% 0,rgba(21,95,196,.13),transparent 30%),
+    radial-gradient(circle at 86% 4%,rgba(10,159,190,.11),transparent 28%);
+  color:var(--text);
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(15,31,53,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(15,31,53,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.28),transparent 58%);
+  z-index:-1;
+}
+.site-header{
+  background:linear-gradient(135deg,#0c1b30,#17375f 58%,#0e2747);
+  box-shadow:0 14px 42px rgba(12,27,48,.26);
+  border-bottom:1px solid rgba(99,179,237,.28);
+}
+.site-header::after{content:"";display:block;height:2px;background:linear-gradient(90deg,transparent,#2bd1e5,transparent);opacity:.9}
+.header-inner{height:74px;gap:18px;padding:0 32px}
+.logo-wrap{width:46px;height:46px;border-radius:10px;border-color:rgba(255,255,255,.28);box-shadow:0 10px 26px rgba(0,0,0,.18)}
+.header-divider{height:38px;background:rgba(255,255,255,.22)}
+.header-titles h1{font-size:18px;letter-spacing:.01em;color:#fff}
+.header-titles .subtitle{font-size:12px;color:rgba(255,255,255,.68);letter-spacing:.04em;text-transform:uppercase}
+.header-badge{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);border-radius:999px;color:#eef7ff;padding:7px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.import-bar-wrap{background:rgba(255,255,255,.82);border-bottom:1px solid rgba(184,198,217,.7);backdrop-filter:saturate(140%) blur(10px)}
+.import-bar{padding:16px 32px;gap:12px}
+.import-bar::before{content:"Base de dados";font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:var(--blue-light);border:1px solid #c5dcff;border-radius:999px;padding:6px 10px}
+input[type=file]{background:#fff;border-color:var(--border-strong);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);min-height:38px}
+input[type=file]:hover{border-color:#9db4d2;background:#f9fbff}
+button,.btn{min-height:38px;border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:background .15s,border-color .15s,box-shadow .15s,transform .15s,filter .15s}
+button:hover,.btn:hover{transform:translateY(-1px)}
+.primary,#btnCarregar{background:linear-gradient(135deg,#1f73dc,#155fc4);border-color:#0e4fa9;box-shadow:0 8px 20px rgba(21,95,196,.22)}
+.primary::before,#btnCarregar::before{content:"+";font-weight:800}
+#btnLimpar::before{content:"×";font-weight:800}.secondary{background:#fff;color:#425168;border-color:var(--border-strong)}.secondary:hover{background:#f7faff;border-color:#9db4d2}.danger{background:#fff2f2;border-color:#f2b7b7}.success{background:linear-gradient(135deg,#19a976,#0f9468)}
+.status-wrap{padding:14px 32px 0}.status{border-radius:10px;background:linear-gradient(90deg,#e9f2ff,#f7fbff);border:1px solid #caddfb;border-left:4px solid var(--blue);box-shadow:var(--shadow-sm);color:#24426c;padding:12px 16px;font-weight:600}
+.container{padding:18px 32px 48px}.tabs{background:rgba(255,255,255,.72);border:1px solid rgba(217,226,238,.92);border-radius:10px;padding:5px;margin-bottom:18px;box-shadow:var(--shadow-sm);gap:4px}.tab-btn{border-radius:7px;border:0;margin:0;padding:10px 18px;color:#66758a}.tab-btn:hover{background:#eef4ff;color:#17375f}.tab-btn.active{background:linear-gradient(135deg,#17375f,#155fc4);color:#fff;box-shadow:0 8px 18px rgba(21,95,196,.18)}
+.filters{background:rgba(255,255,255,.78);border-color:rgba(217,226,238,.95);box-shadow:var(--shadow-sm);padding:12px;gap:10px}.filter-card label{color:#53647a;letter-spacing:.08em}select,input[type=date]{min-height:36px;border-radius:8px;background:#fff;color:#1b2638;border-color:var(--border-strong)}select:focus,input[type=date]:focus{box-shadow:0 0 0 4px rgba(21,95,196,.11)}select option{background:#fff;color:#111827}
+.kpis{gap:16px;margin-bottom:18px}.kpi-card{border-radius:10px;padding:18px 20px 16px;background:linear-gradient(180deg,#fff,#f9fbff);border-color:rgba(217,226,238,.95);box-shadow:var(--shadow-sm);border-top:0;border-left:4px solid var(--blue)}.kpi-card:before{content:"";position:absolute;right:16px;top:16px;width:36px;height:36px;border-radius:10px;background:rgba(21,95,196,.08);z-index:0}.kpi-card:after{right:-34px;top:-34px;width:98px;height:98px;background:rgba(21,95,196,.055)}.kpi-card:nth-child(1){border-left-color:var(--indigo)}.kpi-card:nth-child(2){border-left-color:var(--cyan)}.kpi-card:nth-child(3){border-left-color:var(--orange)}.kpi-card:nth-child(4){border-left-color:var(--green)}.kpi-card:nth-child(1):before{content:"VT";display:flex;align-items:center;justify-content:center;color:var(--indigo);font:700 11px 'IBM Plex Mono',monospace}.kpi-card:nth-child(2):before{content:"EQ";display:flex;align-items:center;justify-content:center;color:var(--cyan);font:700 11px 'IBM Plex Mono',monospace}.kpi-card:nth-child(3):before{content:"RV";display:flex;align-items:center;justify-content:center;color:var(--orange);font:700 11px 'IBM Plex Mono',monospace}.kpi-card:nth-child(4):before{content:"T1";display:flex;align-items:center;justify-content:center;color:var(--green);font:700 11px 'IBM Plex Mono',monospace}.kpi-label{font-size:10px;color:#66758a;letter-spacing:.09em}.kpi-value{font-size:32px;color:#10213a}.kpi-sub{color:#66758a}.clickable-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);border-color:#bcd2ef}
+.card{border-radius:10px;background:rgba(255,255,255,.94);border-color:rgba(217,226,238,.96);box-shadow:var(--shadow-sm);padding:22px 24px}.card:hover{box-shadow:var(--shadow)}h2{font-size:13px;color:#233550;letter-spacing:.08em;border-bottom-color:#e7edf5}h3{color:#53647a;letter-spacing:.09em}.section-caption{color:#718096}.section-title-line h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:999px;background:var(--cyan);margin-right:8px;vertical-align:1px}.grid,.grid2,.grid3{gap:16px;margin-bottom:16px}.action-card{border-top:0;border-left:4px solid var(--blue)}.action-card:after{opacity:.8}.action-card p{color:#233550}
+.table-wrap{border-radius:10px;border-color:#d9e2ee;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}table{font-size:13px}thead th{background:linear-gradient(135deg,#10213a,#17375f);color:#eef7ff;padding:12px 13px;letter-spacing:.08em}tbody tr:hover{background:#f1f6ff}td{padding:11px 13px;border-bottom-color:#edf2f8}.group-row td{background:#eef5ff!important}.tech-name{color:#10213a}.tech-code{color:#66758a}.meta-vt,.badge,.action-pill{box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}.rank-item,.priority-card,.metric-box,.tech-mobile-card,.tech-modal-btn{border-color:#d9e2ee;background:linear-gradient(180deg,#fff,#f9fbff);border-radius:8px}.rank-item:hover,.tech-modal-btn:hover{background:#eef5ff}.rank-pos{background:#e6f0ff;color:#17375f}.alert{border-radius:8px;background:#fff;box-shadow:0 4px 12px rgba(20,36,60,.04)}.empty{background:#f7fafe;border:1px dashed #cad7e8;border-radius:8px;color:#718096}.export-row{background:rgba(255,255,255,.72);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px}.small-note{color:#66758a}.fade-modal{background:rgba(15,31,53,.58);backdrop-filter:blur(8px)}.modal-card{border-radius:12px;border-color:#d9e2ee;box-shadow:0 30px 80px rgba(15,31,53,.28)}.modal-head h2{color:#10213a}.modal-close{font-size:18px}.export-report-header{background:linear-gradient(135deg,#10213a,#155fc4)}
+@media(max-width:900px){.header-inner{height:auto;min-height:70px;padding-top:10px;padding-bottom:10px}.header-titles h1{font-size:16px}.import-bar::before{width:100%;justify-content:center;text-align:center}.grid2,.grid3{grid-template-columns:1fr}}
+@media(max-width:620px){.container,.import-bar,.status-wrap{padding-left:14px;padding-right:14px}.import-bar{display:grid;grid-template-columns:1fr 1fr}.import-bar input[type=file],.import-bar::before{grid-column:1/-1}.kpis{grid-template-columns:1fr 1fr}.kpi-card{padding:14px}.kpi-value{font-size:24px}.tabs{padding:4px}.tab-btn{flex:1;justify-content:center}.export-row{grid-template-columns:1fr}.card{padding:16px}.status{font-size:12px}}
+@media(max-width:430px){.kpis{grid-template-columns:1fr 1fr}.kpi-label{font-size:9px}.kpi-value{font-size:21px}.logo-wrap{width:40px;height:40px}.header-titles .subtitle{font-size:10px}.import-bar{grid-template-columns:1fr}.import-bar button{width:100%;justify-content:center}}
+
+.status-wrap-historico{max-width:none;padding:0 0 14px;margin:0}
+.status-wrap-historico .status{margin:0}
+/* === END CORPORATE VISUAL REFRESH === */
 </style>
 </head>
 <body>
@@ -319,10 +403,6 @@ tbody tr:last-child td{border-bottom:0}
   </div>
 </div>
 
-<!-- STATUS -->
-<div class="status-wrap">
-  <div class="status" id="status">Nenhuma base carregada.</div>
-</div>
 
 <div class="container">
 
@@ -438,6 +518,22 @@ tbody tr:last-child td{border-bottom:0}
     </div>
   </section>
 
+  <!-- CONTRATOS TEC1 FORA DO PADRÃO -->
+  <section class="grid" id="secContratosTec1Fora">
+    <div class="card">
+      <div class="section-title-line">
+        <h2>Contratos TEC1 Fora do Padrão</h2>
+        <span class="section-caption">Baixas fora da janela programada · agrupado por técnico</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Contrato</th><th>Cód. Baixa</th><th>Data Agenda</th><th>Fora Padrão</th><th>Dentro Padrão</th><th>TEC1 Linha</th><th>O.S p/ Meta TEC1</th><th>Tipo Serviço</th><th>NODE</th></tr></thead>
+          <tbody id="tabelaTec1Fora"><tr><td colspan="9"><div class="empty">Aguardando base.</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
 </section>
 
 <!-- PLANO DE AÇÃO -->
@@ -471,6 +567,10 @@ tbody tr:last-child td{border-bottom:0}
   <div class="export-row">
     <button id="btnCarregarUltima" class="primary" type="button">Carregar última base salva</button>
     <button id="btnLimparHistorico" class="danger" type="button">Limpar histórico</button>
+  </div>
+  <!-- STATUS -->
+  <div class="status-wrap status-wrap-historico">
+    <div class="status" id="status">Nenhuma base carregada.</div>
   </div>
   <div class="card">
     <h2>Histórico Local</h2>
@@ -757,7 +857,7 @@ function preencherFiltros(rows){
 }
 
 function processarResumo(rows){
-  const tec={},nodes={},revisitas=[];
+  const tec={},nodes={},revisitas=[],tec1ForaPadrao=[];
   const historicoContratos=montarHistoricoContratos(processedRows.length?processedRows:rows);
   rows.forEach(r=>{
     const login=loginKey(getField(r,["LOGIN_TECNICO","LOGIN TECNICO","TECNICO"]))||"SEM_LOGIN";
@@ -772,7 +872,20 @@ function processarResumo(rows){
     if(ehProducao(r)) tec[login].producao++;
     const tecNum=parseNumber(getField(r,["TOTAL_OS_TEC1_PADRAO","TOTAL OS TEC1 PADRAO"]));
     const tecDen=parseNumber(getField(r,["QTD_TOTAL_OS_TEC1","QTD TOTAL OS TEC1"]));
-    if(tecDen>0){tec[login].tecOk+=tecNum;tec[login].tecBase+=tecDen;tec[login].tecFora+=Math.max(0,tecDen-tecNum);}
+    if(tecDen>0){
+      const fora=Math.max(0,tecDen-tecNum);
+      tec[login].tecOk+=tecNum;tec[login].tecBase+=tecDen;tec[login].tecFora+=fora;
+      if(fora>0){
+        tec1ForaPadrao.push({
+          contrato,login,nome:nomeTecnico(login),node,
+          codigo:codigosBaixa(r)[0]||"-",
+          data:dataAgendaPrincipal(r)||"-",
+          fora,padrao:tecNum,base:tecDen,
+          tec1Pct:tecDen?tecNum/tecDen*100:0,
+          tipo:norm(getField(r,["TIPO_SERVICO","TIPO SERVICO","TIPO_OS","TIPO OS"]))||"-"
+        });
+      }
+    }
     if(ehRevisita(r)){
       tec[login].revisitas++;
       revisitas.push({contrato,login,nome:nomeTecnico(login),node,qt:parseNumber(getField(r,["QT_REVISITA","QT REVISITA"])),tipo:norm(getField(r,["TIPO_SERVICO","TIPO SERVICO","TIPO_OS","TIPO OS"])),...dadosRevisita(r,contrato,historicoContratos)});
@@ -799,7 +912,7 @@ function processarResumo(rows){
   const totalOk=arr.reduce((a,t)=>a+t.tecOk,0);
   const totalTecBase=arr.reduce((a,t)=>a+t.tecBase,0);
   const arrNode=Object.entries(nodes).map(([node,qtd])=>{return {node,qtd}}).sort((a,b)=>b.qtd-a.qtd);
-  return {arr,arrNode,revisitas,totalProducao,totalRev,totalOk,totalTecBase,baseLen:rows.length};
+  return {arr,arrNode,revisitas,tec1ForaPadrao,totalProducao,totalRev,totalOk,totalTecBase,baseLen:rows.length};
 }
 
 function renderBars(id,items,labelKey,valueKey,suffix){
@@ -894,7 +1007,7 @@ function renderPlanoAcaoDetalhado(summary){
 
 function renderDashboard(summary){
   currentSummary=summary;
-  const {arr,arrNode,revisitas,totalProducao,totalRev,totalOk,totalTecBase,baseLen}=summary;
+  const {arr,arrNode,revisitas,tec1ForaPadrao,totalProducao,totalRev,totalOk,totalTecBase,baseLen}=summary;
 
   if($("kpiBase")) $("kpiBase").textContent=baseLen;
   if($("kpiTecnicos")) $("kpiTecnicos").textContent=arr.length;
@@ -926,6 +1039,21 @@ function renderDashboard(summary){
     }).join("");
   }else{
     $("tabelaRevisitas").innerHTML='<tr><td colspan="8"><div class="empty">Nenhuma revisita encontrada.</div></td></tr>';
+  }
+
+  if($("tabelaTec1Fora")){
+    if((tec1ForaPadrao||[]).length){
+      const ordenadas=[...tec1ForaPadrao].sort((a,b)=>ordemLoginIndex(a.login)-ordemLoginIndex(b.login)||String(a.login).localeCompare(String(b.login))||String(a.contrato).localeCompare(String(b.contrato)));
+      const metaTec1PorLogin=Object.fromEntries(arr.map(t=>[loginKey(t.login),Number(t.vtMetaTec1)||0]));
+      let atualTec1="";
+      $("tabelaTec1Fora").innerHTML=ordenadas.map(r=>{
+        const abre=r.login!==atualTec1;atualTec1=r.login;
+        return `${abre?`<tr class="group-row"><td colspan="9"><span>${nomeTecnico(r.login)}${TECNICOS_NOMES[loginKey(r.login)]?` <small>(${loginKey(r.login)})</small>`:""}</span></td></tr>`:""}
+        <tr><td>${r.contrato}</td><td>${r.codigo||"-"}</td><td>${r.data||"-"}</td><td><span class="meta-vt need">${r.fora}</span></td><td>${r.padrao}</td><td>${pct(r.tec1Pct)}</td><td>${celulaMetaVT(metaTec1PorLogin[loginKey(r.login)]||0)}</td><td>${r.tipo}</td><td>${r.node}</td></tr>`;
+      }).join("");
+    }else{
+      $("tabelaTec1Fora").innerHTML='<tr><td colspan="9"><div class="empty">Nenhum contrato TEC1 fora do padrão encontrado.</div></td></tr>';
+    }
   }
 
   renderRankingOperacional(summary);
@@ -1147,6 +1275,7 @@ function limparTudo(){
   if($("rankingAcompanhamento")) $("rankingAcompanhamento").innerHTML='<div class="empty">Aguardando base.</div>';
   if($("cardsTecnicosMobile")) $("cardsTecnicosMobile").innerHTML='<div class="empty">Carregue a base para visualizar.</div>';
   $("tabelaRevisitas").innerHTML='<tr><td colspan="8"><div class="empty">Aguardando base.</div></td></tr>';
+  if($("tabelaTec1Fora")) $("tabelaTec1Fora").innerHTML='<tr><td colspan="9"><div class="empty">Aguardando base.</div></td></tr>';
   $("alertasResumo").innerHTML='<div class="empty">Carregue uma base.</div>';
   $("maiorAtencao").textContent="Aguardando dados.";$("destaquePositivo").textContent="Aguardando dados.";
   $("planoAcao").innerHTML='<div class="empty">Carregue uma base para gerar recomendações.</div>';
@@ -1179,7 +1308,8 @@ function nomeArquivoExportacao(ext){
 function criarAreaExportacao(){
   const performance=document.querySelector("#secPerformanceTecnico .card");
   const contratos=document.querySelector("#secContratosRevisita");
-  if(!performance||!contratos) throw new Error("Não foi possível localizar as seções de exportação.");
+  const contratosTec1=document.querySelector("#secContratosTec1Fora");
+  if(!performance||!contratos||!contratosTec1) throw new Error("Não foi possível localizar as seções de exportação.");
   const info=textoFiltroExportacao();
   const shell=document.createElement("div");
   shell.className="export-capture-shell";shell.id="exportCaptureTemp";
@@ -1187,7 +1317,7 @@ function criarAreaExportacao(){
   const revPct=resumo.baseLen?resumo.totalRev/resumo.baseLen*100:0;
   const tec1Pct=resumo.totalTecBase?resumo.totalOk/resumo.totalTecBase*100:0;
   shell.innerHTML=`<div class="export-report-header">
-    <div><h1>Relatório de Manutenção</h1><p>Performance por Técnico e Contratos com Revisita</p></div>
+    <div><h1>Relatório de Manutenção</h1><p>Performance por Técnico, Contratos com Revisita e TEC1 fora do padrão</p></div>
     <div style="text-align:right;font-size:12px;font-weight:700;line-height:1.55;color:rgba(255,255,255,.86)">Gerado em<br>${info.data}</div>
   </div>
   <div class="export-filter-line">
@@ -1201,6 +1331,7 @@ function criarAreaExportacao(){
   </div>`;
   shell.appendChild(performance.cloneNode(true));
   shell.appendChild(contratos.cloneNode(true));
+  shell.appendChild(contratosTec1.cloneNode(true));
   document.body.appendChild(shell);
   return shell;
 }
@@ -1250,7 +1381,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
   });
   renderHistorico();
+  if(localStorage.getItem(STORAGE_LAST)) carregarUltimaBase();
 });
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
