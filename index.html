@@ -437,21 +437,6 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-resumo-card .section-caption{display:none}
 .plantoes-resumo-card .plantoes-summary{max-width:360px;margin:0 auto}
 .plantoes-title-actions .success,.plantoes-dupla-row .section-title-line .success{padding:6px 9px;font-size:10px;white-space:nowrap}
-.plantoes-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.plantao-edit-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.plantao-edit-actions button{padding:6px 10px;font-size:10px;min-height:32px}
-.plantao-edit-actions .plantao-salvar-contexto{display:none}
-#plantoes.plantoes-editando .plantao-edit-actions .plantao-salvar-contexto{display:inline-flex}
-#plantoes.plantoes-editando .plantao-edit-actions .plantao-editar-contexto{display:none}
-.plantoes-readonly-value{display:block;font-weight:800;color:var(--navy);line-height:1.25}
-.plantoes-muted-value{color:var(--text-muted);font-weight:700}
-.plantoes-export-card{padding:10px!important}
-.plantoes-export-card .plantoes-actions{display:grid!important;grid-template-columns:minmax(115px,1fr) repeat(2,minmax(78px,.72fr));gap:6px!important}
-.plantoes-export-card .section-title-line{display:none}
-.plantoes-folga-card .section-title-line{align-items:center}
-.plantoes-title-actions{justify-content:space-between}
-.plantoes-title-main{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.plantoes-title-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .plantoes-table table{min-width:790px;font-size:10px}
 .plantoes-table th{position:sticky;top:0}
 .plantoes-table th,.plantoes-table td{padding:5px 5px}
@@ -466,133 +451,6 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-help{font-size:10px;color:var(--text-muted);font-weight:600;line-height:1.35;margin-top:6px}
 @media(max-width:1100px){.plantoes-grid{grid-template-columns:1fr}.plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.plantoes-summary{grid-template-columns:1fr}.plantoes-actions{width:100%}.plantoes-actions button{flex:1;justify-content:center}.plantoes-toolbar{align-items:stretch}.plantoes-select{width:100%}}
-
-/* === PLANTÕES: layout direto dos botões === */
-#plantoes .plantoes-config-ferias{padding:12px 14px}
-#plantoes .section-title-line.plantoes-title-row,
-#plantoes .card>.section-title-line{align-items:center}
-#plantoes .plantoes-dupla-row{
-  grid-template-columns:minmax(260px,.58fr) minmax(430px,1.42fr)!important;
-  align-items:stretch;
-  gap:12px;
-}
-#plantoes .plantoes-export-card{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  min-height:86px;
-  padding:12px!important;
-}
-#plantoes .plantoes-export-card .plantoes-actions{
-  display:grid!important;
-  grid-template-columns:minmax(120px,1fr) 64px 86px;
-  align-items:center!important;
-  gap:8px!important;
-}
-#plantaoMes{
-  width:100%!important;
-  min-width:0!important;
-  height:38px;
-  font-size:13px!important;
-  font-weight:800;
-}
-#plantaoPdf,#plantaoImagem{
-  min-height:38px;
-  padding:0 10px!important;
-  font-size:12px!important;
-  font-weight:900;
-}
-#plantaoPdf::before,#plantaoImagem::before{margin-right:4px}
-#plantoes .plantao-edit-actions{
-  gap:5px;
-  padding:2px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:#f7faff;
-}
-#plantoes .plantao-edit-actions button{
-  min-height:30px;
-  padding:0 12px;
-  border-radius:6px;
-  font-size:11px;
-  font-weight:900;
-}
-#plantaoEditarConfig,#plantaoEditarEscala{
-  background:#fff;
-  border-color:#b8c6d9;
-  color:#17375f;
-}
-#plantaoSalvarConfig,#plantaoSalvarEscala{
-  background:linear-gradient(135deg,#19a976,#0f9468);
-  color:#fff;
-  border-color:#0b7d58;
-}
-#plantoes .plantoes-title-actions{
-  width:100%;
-  display:grid;
-  grid-template-columns:minmax(260px,1fr) auto;
-  align-items:center;
-  gap:10px;
-}
-#plantoes .plantoes-title-main{
-  min-width:0;
-  justify-content:flex-start;
-}
-#plantoes .plantoes-month-title{
-  font-size:15px;
-  line-height:1.25;
-}
-#plantoes .plantoes-title-controls{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:8px;
-  flex-wrap:wrap;
-}
-#plantaoRedistribuirFolgas,
-#plantaoRedistribuirPlantoes,
-#plantaoToggleTerceiro{
-  min-height:34px;
-  padding:0 12px!important;
-  border-radius:7px;
-  font-size:11px!important;
-  font-weight:900;
-}
-#plantaoRedistribuirFolgas:disabled,
-#plantaoRedistribuirPlantoes:disabled,
-#plantaoToggleTerceiro:disabled{
-  opacity:.48;
-  transform:none;
-  cursor:not-allowed;
-  filter:saturate(.72);
-}
-#plantoes .plantoes-inline-kpis{
-  flex-wrap:nowrap;
-  gap:6px;
-}
-#plantoes .plantoes-inline-kpis .plantoes-chip{
-  min-width:74px;
-  padding:5px 8px;
-}
-@media(max-width:980px){
-  #plantoes .plantoes-dupla-row{grid-template-columns:1fr!important}
-  #plantoes .plantoes-title-actions{grid-template-columns:1fr}
-  #plantoes .plantoes-title-controls{justify-content:flex-start}
-}
-@media(max-width:560px){
-  #plantoes .plantoes-export-card .plantoes-actions{grid-template-columns:1fr 1fr}
-  #plantaoMes{grid-column:1/-1}
-  #plantaoPdf,#plantaoImagem{width:100%}
-  #plantoes .plantoes-title-main,
-  #plantoes .plantoes-title-controls,
-  #plantoes .plantao-edit-actions{width:100%}
-  #plantoes .plantao-edit-actions button,
-  #plantaoRedistribuirFolgas,
-  #plantaoRedistribuirPlantoes,
-  #plantaoToggleTerceiro{flex:1;justify-content:center}
-  #plantoes .plantoes-inline-kpis{width:100%}
-  #plantoes .plantoes-inline-kpis .plantoes-chip{flex:1}
-}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}}
@@ -857,6 +715,60 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 }
 </style>
 
+
+<style>
+/* Log Ofensor ao lado do TEC1 */
+@media(min-width:1101px){
+  .kpis{grid-template-columns:repeat(5,minmax(0,1fr));}
+}
+#cardLogOfensor{
+  border-left-color:var(--red);
+}
+#cardLogOfensor:before{
+  content:"LOG";
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--red);
+  font:700 10px 'IBM Plex Mono',monospace;
+}
+#cardLogOfensor .kpi-value{
+  color:#9c2634;
+}
+.log-ofensor-resumo{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:0 0 12px;
+}
+.log-ofensor-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #f2b7b7;
+  background:#fff2f2;
+  color:#9c2634;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:800;
+}
+.log-ofensor-note{
+  margin:0 0 12px;
+  padding:10px 12px;
+  border:1px solid #fed7aa;
+  border-left:4px solid var(--orange);
+  border-radius:8px;
+  background:#fffaf5;
+  color:#7c2d12;
+  font-size:12px;
+  font-weight:700;
+}
+.log-ofensor-table table{
+  min-width:980px;
+}
+</style>
+
 </head>
 <body>
 
@@ -916,6 +828,11 @@ button:hover,.btn:hover{transform:translateY(-1px)}
       <div class="kpi-label">TEC1</div>
       <div class="kpi-value" id="kpiTec1">0% / 0</div>
       <div class="kpi-sub">Clique para detalhar</div>
+    </button>
+    <button class="kpi-card clickable-card kpi-button" id="cardLogOfensor" type="button" aria-label="Abrir log ofensor de revisitas em 30 dias">
+      <div class="kpi-label">Log Ofensor</div>
+      <div class="kpi-value" id="kpiLogOfensor">0</div>
+      <div class="kpi-sub">Revisitas 30d</div>
     </button>
   </section>
 
@@ -1088,12 +1005,8 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 <!-- PLANTÕES -->
 <section id="plantoes" class="tab-panel">
   <div class="card plantoes-config-ferias">
-    <div class="section-title-line plantoes-title-row">
+    <div class="section-title-line">
       <h2>Configuração de Férias</h2>
-      <div class="plantao-edit-actions">
-        <button id="plantaoEditarConfig" class="secondary plantao-editar-contexto" type="button">Editar</button>
-        <button id="plantaoSalvarConfig" class="success plantao-salvar-contexto" type="button">Salvar</button>
-      </div>
     </div>
     <div class="table-wrap">
       <table class="plantoes-config-table">
@@ -1104,12 +1017,13 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   </div>
 
   <div class="plantoes-dupla-row" style="grid-template-columns: minmax(280px, 0.8fr) minmax(250px, 1fr);">
-    <div class="card plantoes-export-card">
+    <div class="card">
       <div class="section-title-line">
         <h2>Controles</h2>
       </div>
       <div class="plantoes-actions" style="display: flex; flex-direction: row; gap: 6px; align-items: center;">
         <select id="plantaoMes" class="plantoes-select" aria-label="Selecionar mês" style="flex: 1; padding: 5px 8px; font-size: 11px;"></select>
+        <button id="plantaoSalvar" class="success" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">Salvar</button>
         <button id="plantaoPdf" class="success plantao-btn-plus" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">PDF</button>
         <button id="plantaoImagem" class="success plantao-btn-plus" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">Imagem</button>
       </div>
@@ -1131,20 +1045,12 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <div class="section-title-line">
       <div>
         <div class="plantoes-title-actions">
-          <div class="plantoes-title-main">
-            <div class="plantoes-month-title" id="plantaoTituloMes">Plantões</div>
-            <div class="plantao-edit-actions">
-              <button id="plantaoEditarEscala" class="secondary plantao-editar-contexto" type="button">Editar</button>
-              <button id="plantaoSalvarEscala" class="success plantao-salvar-contexto" type="button">Salvar</button>
-            </div>
-          </div>
-          <div class="plantoes-title-controls">
-            <button id="plantaoRedistribuirPlantoes" class="success" type="button">Redistribuir plantões</button>
-            <button id="plantaoToggleTerceiro" class="secondary" type="button">Adicionar Técnico C</button>
-            <div class="plantoes-inline-kpis">
-              <div class="plantoes-chip"><span>Plantões</span><strong id="plantaoKpiPlantoes">0</strong></div>
-              <div class="plantoes-chip"><span>Folgas</span><strong id="plantaoKpiFolgas">0</strong></div>
-            </div>
+          <div class="plantoes-month-title" id="plantaoTituloMes">Plantões</div>
+          <button id="plantaoRedistribuirPlantoes" class="success" type="button">Redistribuir plantões</button>
+          <button id="plantaoToggleTerceiro" class="secondary" type="button">Adicionar Técnico C</button>
+          <div class="plantoes-inline-kpis">
+            <div class="plantoes-chip"><span>Plantões</span><strong id="plantaoKpiPlantoes">0</strong></div>
+            <div class="plantoes-chip"><span>Folgas</span><strong id="plantaoKpiFolgas">0</strong></div>
           </div>
         </div>
       </div>
@@ -1227,9 +1133,6 @@ let tecnicoAtivoLogin="";
 
 const STORAGE_LAST="lumar_dashboard_last_dataset_v1";
 const STORAGE_HISTORY="lumar_dashboard_history_v1";
-const STORAGE_LAST_DB="lumar_indicadores_vt_db";
-const STORAGE_LAST_STORE="datasets";
-const STORAGE_LAST_KEY="ultima_base";
 
 function $(id){return document.getElementById(id)}
 function setStatus(msg){const el=$("status"); if(el) el.innerHTML=msg}
@@ -1630,6 +1533,7 @@ function renderDashboard(summary){
   const mediaRev=baseLen?totalRev/baseLen*100:0;
   if($("kpiRev")) $("kpiRev").textContent=`${pct(mediaRev)} / ${totalRev}`;
   if($("kpiTec1")) $("kpiTec1").textContent=`${pct(totalTecBase?totalOk/totalTecBase*100:0)} / ${(tec1ForaPadrao||[]).length}`;
+  atualizarKpiLogOfensor(summary);
   if($("balaoRevValor")) $("balaoRevValor").textContent=totalRev;
   if($("balaoTec1Valor")) $("balaoTec1Valor").textContent=(tec1ForaPadrao||[]).length;
 
@@ -1987,6 +1891,153 @@ function abrirModalBaseTotal(){
   modal.setAttribute("aria-hidden","false");
 }
 
+
+function tsParaDataBR(ts){
+  if(!ts) return "-";
+  const d=new Date(ts);
+  if(Number.isNaN(d.getTime())) return "-";
+  return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+}
+
+function obterRevisitasLogOfensor30d(summary){
+  const todas=[...(summary?.revisitas||[])];
+  const comData=todas.map(r=>{
+    const ts=dataParaOrdem(r.dataRevisita||r.dataPrimeira||"");
+    return {r,ts};
+  }).filter(x=>x.ts);
+
+  if(!todas.length){
+    return {itens:[],totalOriginal:0,limite:0,maisRecente:0,semDatas:false};
+  }
+
+  if(!comData.length){
+    return {itens:todas,totalOriginal:todas.length,limite:0,maisRecente:0,semDatas:true};
+  }
+
+  const maisRecente=Math.max(...comData.map(x=>x.ts));
+  const limite=maisRecente-(30*24*60*60*1000);
+  const itens=comData.filter(x=>x.ts>=limite).map(x=>x.r);
+  return {itens,totalOriginal:todas.length,limite,maisRecente,semDatas:false};
+}
+
+function agruparLogOfensor(itens){
+  const grupos={};
+  itens.forEach(r=>{
+    const codigo=norm(r.codigoPrimeira||r.codigoRevisita||"SEM CÓDIGO")||"SEM CÓDIGO";
+    if(!grupos[codigo]) grupos[codigo]={codigo,qtd:0,contratos:new Set(),itens:[]};
+    grupos[codigo].qtd++;
+    grupos[codigo].contratos.add(String(r.contrato||""));
+    grupos[codigo].itens.push(r);
+  });
+  return Object.values(grupos).sort((a,b)=>b.qtd-a.qtd||String(a.codigo).localeCompare(String(b.codigo)));
+}
+
+function atualizarKpiLogOfensor(summary){
+  const el=$("kpiLogOfensor");
+  if(!el) return;
+  const log=obterRevisitasLogOfensor30d(summary);
+  const grupos=agruparLogOfensor(log.itens);
+  if(!log.itens.length){
+    el.textContent="0";
+    return;
+  }
+  el.textContent=grupos[0]?`${log.itens.length} / ${grupos[0].codigo}`:`${log.itens.length}`;
+}
+
+function montarHTMLLogOfensor(summary){
+  const log=obterRevisitasLogOfensor30d(summary);
+  const grupos=agruparLogOfensor(log.itens);
+  const total=log.itens.length;
+
+  if(!summary){
+    return '<div class="empty">Carregue uma base primeiro para visualizar o Log Ofensor.</div>';
+  }
+
+  if(!total){
+    return '<div class="empty">Nenhuma revisita encontrada para montar o Log Ofensor.</div>';
+  }
+
+  const periodo=log.semDatas
+    ? "A base não trouxe datas válidas para calcular a janela. Mostrando todas as revisitas encontradas."
+    : `Janela de 30 dias calculada pela data mais recente da base: ${tsParaDataBR(log.limite)} até ${tsParaDataBR(log.maisRecente)}.`;
+
+  const chips=grupos.slice(0,8).map(g=>{
+    const percentual=total?(g.qtd/total*100):0;
+    return `<span class="log-ofensor-chip">${escapeHTML(g.codigo)} · ${g.qtd} rev. · ${pct(percentual)}</span>`;
+  }).join("");
+
+  const linhas=grupos.map(g=>{
+    const percentual=total?(g.qtd/total*100):0;
+    const detalhes=[...g.itens].sort((a,b)=>(dataParaOrdem(b.dataRevisita||b.dataPrimeira||"")||0)-(dataParaOrdem(a.dataRevisita||a.dataPrimeira||"")||0)||String(a.contrato||"").localeCompare(String(b.contrato||"")));
+    const rows=detalhes.map(r=>{
+      const contratoBusca=String(r.contrato||"").replace(/[^0-9a-zA-Z]/g,"").toLowerCase();
+      const dataBusca=dataKeyFiltro(r.dataRevisita||r.dataPrimeira||"");
+      return `<tr data-contrato="${contratoBusca}" data-contrato-label="${escapeHTML(r.contrato||"-")}" data-date="${dataBusca}">
+        <td>${escapeHTML(r.contrato||"-")}</td>
+        <td>${escapeHTML(r.nome||nomeTecnico(r.login)||"-")}</td>
+        <td>${escapeHTML(r.codigoPrimeira||g.codigo||"-")}</td>
+        <td>${escapeHTML(r.dataPrimeira||"-")}</td>
+        <td>${escapeHTML(r.codigoRevisita||"-")}</td>
+        <td>${escapeHTML(r.dataRevisita||"-")}</td>
+        <td>${escapeHTML(r.qt||"-")}</td>
+        <td>${escapeHTML(r.tipo||"-")}</td>
+        <td>${escapeHTML(r.node||"-")}</td>
+      </tr>`;
+    }).join("");
+    return `<tr class="group-row"><td colspan="9"><span>Código ofensor ${escapeHTML(g.codigo)} · ${g.qtd} revisita(s) · ${pct(percentual)}</span></td></tr>${rows}`;
+  }).join("");
+
+  return `<div class="log-ofensor-note">${periodo}</div>
+    <div class="log-ofensor-resumo">${chips}</div>
+    <div class="table-wrap log-ofensor-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Contrato</th>
+            <th>Técnico</th>
+            <th>Cód. Ofensor</th>
+            <th>Data 1ª VT</th>
+            <th>Cód. Revisita</th>
+            <th>Data Revisita</th>
+            <th>Qtd.</th>
+            <th>Serviço</th>
+            <th>NODE</th>
+          </tr>
+        </thead>
+        <tbody>${linhas}</tbody>
+      </table>
+    </div>`;
+}
+
+function abrirModalLogOfensor(){
+  const modal=$("modalIndicadorDetalhe");
+  const conteudo=$("modalIndicadorConteudo");
+  if(!modal||!conteudo) return;
+
+  conteudo.innerHTML=`<div class="modal-date-filter">
+      <label>Data inicial <input id="dataInicioIndicador" type="date"></label>
+      <label>Data final <input id="dataFimIndicador" type="date"></label>
+      <button class="primary" type="button" id="filtrarDataIndicador">Filtrar data</button>
+      <button class="secondary" type="button" id="limparDataIndicador">Limpar data</button>
+    </div>
+    <div class="modal-indicador-search">
+      <input id="buscaContratoIndicador" type="search" placeholder="Digite o contrato..." autocomplete="off">
+      <button class="primary" type="button" id="pesquisarContratoIndicador">Pesquisar</button>
+      <button class="secondary" type="button" id="limparBuscaContratoIndicador">Limpar</button>
+    </div>
+    <div class="modal-indicador-search-info" id="resultadoBuscaContratoIndicador">Digite o contrato e clique em pesquisar.</div>
+    ${montarHTMLLogOfensor(currentSummary)}`;
+
+  $("modalIndicadorTitulo").textContent="Log Ofensor";
+  $("modalIndicadorSub").textContent="Contratos agrupados pelos códigos que mais geraram revisitas em 30 dias.";
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden","false");
+
+  ativarFiltroDataModalIndicador(conteudo);
+  ativarBuscaModalIndicador(conteudo);
+}
+
+
 function abrirModalIndicador(tipo){
   const modal=$("modalIndicadorDetalhe");
   const conteudo=$("modalIndicadorConteudo");
@@ -2224,57 +2275,14 @@ function historicoMesmoItem(h,item){
   const mesmaTec1=Math.abs(Number(h?.tec1||0)-Number(item?.tec1||0))<0.0001;
   return mesmoArquivo&&mesmaProducao&&mesmasRevisitas&&mesmaRevPct&&mesmaTec1;
 }
-function abrirBancoUltimaBase(){
-  return new Promise((resolve,reject)=>{
-    if(!("indexedDB" in window)){reject(new Error("IndexedDB indisponível"));return;}
-    const req=indexedDB.open(STORAGE_LAST_DB,1);
-    req.onupgradeneeded=()=>{req.result.createObjectStore(STORAGE_LAST_STORE,{keyPath:"id"});};
-    req.onsuccess=()=>resolve(req.result);
-    req.onerror=()=>reject(req.error||new Error("Falha ao abrir IndexedDB"));
-  });
-}
-async function salvarUltimaBaseIndexedDB(obj){
-  const db=await abrirBancoUltimaBase();
-  return new Promise((resolve,reject)=>{
-    const tx=db.transaction(STORAGE_LAST_STORE,"readwrite");
-    tx.objectStore(STORAGE_LAST_STORE).put({...obj,id:STORAGE_LAST_KEY});
-    tx.oncomplete=()=>{db.close();resolve(true);};
-    tx.onerror=()=>{db.close();reject(tx.error||new Error("Falha ao salvar IndexedDB"));};
-  });
-}
-async function lerUltimaBaseIndexedDB(){
+function salvarUltimaBase(rows,fileName){
   try{
-    const db=await abrirBancoUltimaBase();
-    return await new Promise((resolve,reject)=>{
-      const tx=db.transaction(STORAGE_LAST_STORE,"readonly");
-      const req=tx.objectStore(STORAGE_LAST_STORE).get(STORAGE_LAST_KEY);
-      req.onsuccess=()=>{db.close();resolve(req.result||null);};
-      req.onerror=()=>{db.close();reject(req.error||new Error("Falha ao ler IndexedDB"));};
-    });
-  }catch(e){
-    console.warn("Falha ao ler última base no IndexedDB.",e);
-    return null;
-  }
-}
-async function salvarUltimaBase(rows,fileName){
-  const signature=assinaturaPlanilha(rows);
-  const obj={fileName,date:new Date().toISOString(),rows,signature};
-  try{
-    await salvarUltimaBaseIndexedDB(obj);
-  }catch(e){
-    console.warn("Não foi possível salvar a última base no IndexedDB.",e);
-  }
-  try{
-    const payload=JSON.stringify(obj);
+    const signature=assinaturaPlanilha(rows);
+    const payload=JSON.stringify({fileName,date:new Date().toISOString(),rows,signature});
     localStorage.setItem(STORAGE_LAST,payload);
     localStorage.setItem("lumar_manutencao_ultima_base_v2",payload);
-  }catch(e){
-    console.warn("localStorage sem espaço para a base completa; IndexedDB será usado.",e);
-    try{
-      localStorage.setItem(STORAGE_LAST,JSON.stringify({fileName,date:obj.date,signature,rows:[]}));
-    }catch(_e){}
-  }
-  return signature;
+    return signature;
+  }catch(e){console.warn("Não foi possível salvar.",e);return "";}
 }
 function encontrarUltimaBaseSalva(){
   const candidatos=[
@@ -2319,15 +2327,6 @@ function encontrarUltimaBaseSalva(){
   return null;
 }
 
-async function encontrarUltimaBaseSalvaAsync(){
-  const idb=await lerUltimaBaseIndexedDB();
-  const rows=idb?.rows||[];
-  if(Array.isArray(rows)&&rows.length){
-    return {key:"indexedDB",fileName:idb.fileName||"Base salva",rows,signature:idb.signature||assinaturaPlanilha(rows)};
-  }
-  return encontrarUltimaBaseSalva();
-}
-
 function abrirAbaDashboard(){
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
   document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
@@ -2336,10 +2335,10 @@ function abrirAbaDashboard(){
   if($("dashboard")) $("dashboard").classList.add("active");
 }
 
-async function carregarUltimaBase(opcoes={}){
-  const saved=await encontrarUltimaBaseSalvaAsync();
+function carregarUltimaBase(opcoes={}){
+  const saved=encontrarUltimaBaseSalva();
   if(!saved||!saved.rows?.length){
-    if(!opcoes.silencioso) setStatus("⚠️ Nenhuma última base salva neste navegador. Carregue uma planilha primeiro para criar o salvamento automático.");
+    setStatus("⚠️ Nenhuma última base salva neste navegador. Carregue uma planilha primeiro para criar o salvamento automático.");
     return;
   }
 
@@ -2364,7 +2363,7 @@ async function carregarUltimaBase(opcoes={}){
     currentSummary=processarResumo(filtrado);
     renderDashboard(currentSummary);
 
-    await salvarUltimaBase(rawRows,currentFileName);
+    salvarUltimaBase(rawRows,currentFileName);
     abrirAbaDashboard();
 
     const prefixo=opcoes.auto?"🚀 Sistema aberto carregando a última planilha salva":"🔁 Última base carregada";
@@ -2462,7 +2461,7 @@ async function carregarBase(){
     const filtrado=aplicarFiltros(processedRows);
     lastRenderRows=filtrado;
     renderDashboard(processarResumo(filtrado));
-    const signature=await salvarUltimaBase(rows,currentFileName);
+    const signature=salvarUltimaBase(rows,currentFileName);
     const historicoResultado=salvarHistorico({silencioso:true,signature});
     const z450=currentSummary.arr.find(t=>t.login==="Z450037");
     const avisoRepetida=historicoResultado.repetida?`<br>⚠️ Planilha repetida: já estava no histórico em <strong>${esc(historicoResultado.item.date)}</strong>. Não criei novo registro.`:"";
@@ -2486,6 +2485,7 @@ function limparTudo(){
   ["kpiBase","kpiTecnicos","balaoRevValor","balaoTec1Valor"].forEach(id=>{if($(id)) $(id).textContent="0";});
   if($("kpiRev")) $("kpiRev").textContent="0% / 0";
   if($("kpiTec1")) $("kpiTec1").textContent="0% / 0";
+  if($("kpiLogOfensor")) $("kpiLogOfensor").textContent="0";
   $("tabelaTecnicos").innerHTML='<tr><td colspan="10"><div class="empty">Carregue a base para visualizar.</div></td></tr>';
   if($("secRankingNode")) $("secRankingNode").style.display="none";
   if($("rankingNode")) $("rankingNode").innerHTML='<div class="empty">Aguardando base.</div>';
@@ -2598,6 +2598,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   if($("cardBaseTotal")) $("cardBaseTotal").addEventListener("click",abrirModalBaseTotal);
   if($("cardRevisitas")) $("cardRevisitas").addEventListener("click",()=>abrirModalIndicador("revisita"));
   if($("cardTec1")) $("cardTec1").addEventListener("click",()=>abrirModalIndicador("tec1"));
+  if($("cardLogOfensor")) $("cardLogOfensor").addEventListener("click",abrirModalLogOfensor);
   $("modalTecnicosFechar").addEventListener("click",fecharModalTecnicos);
   $("modalTecnicos").addEventListener("click",e=>{if(e.target===$("modalTecnicos")) fecharModalTecnicos();});
   $("modalIndicadorFechar").addEventListener("click",fecharModalIndicador);
@@ -2610,7 +2611,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
   });
   renderHistorico();
-  carregarUltimaBase({auto:true,silencioso:true});
+  if(encontrarUltimaBaseSalva()) carregarUltimaBase({auto:true});
 });
 </script>
 
@@ -2623,7 +2624,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   const ORIGINAL_PLANTOES=JSON.parse(plantaoDataTexto);
   let plantaoState=null;
   let plantaoTerceiroAberto=false;
-  let plantaoEditando=false;
   let plantaoMesAtualIndex=0;
 
   const $p=id=>document.getElementById(id);
@@ -2666,8 +2666,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     return 2026;
   }
   function tituloPDFPlantaoMes(month){
-    const mes=MESES_NOMES[numeroMesPlantao(month)]||String(month?.key||"").toUpperCase();
-    return `ESCALA DE PLANTÕES - VISITA TÉCNICA - ${mes} ${anoPlantaoMes(month)}`;
+    return "ESCALA DE PLANTÃO - VISITA TECNICA";
   }
   function ajustarTituloPlantao(month){
     const titulo=tituloPlantaoMes(month)||"PLANTÕES – MAIO 2026 | TERESINA / PIAUÍ";
@@ -2682,43 +2681,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(btn){
       btn.textContent=plantaoTerceiroAberto?"Ocultar Técnico C":"Adicionar Técnico C";
       btn.setAttribute("aria-expanded",plantaoTerceiroAberto?"true":"false");
-      btn.disabled=!plantaoEditando;
     }
-  }
-
-  function atualizarModoEdicaoPlantao(){
-    const section=$p("plantoes");
-    if(section) section.classList.toggle("plantoes-editando",plantaoEditando);
-    ["plantaoRedistribuirFolgas","plantaoRedistribuirPlantoes"].forEach(id=>{
-      const btn=$p(id);
-      if(btn) btn.disabled=!plantaoEditando;
-    });
-    atualizarToggleTerceiro();
-  }
-
-  function entrarEdicaoPlantao(){
-    plantaoEditando=true;
-    atualizarModoEdicaoPlantao();
-    renderConfigPlantoes();
-    renderTabelaPlantoes();
-    const feedback=$p("plantaoSalvarFeedback");
-    if(feedback) feedback.textContent="Modo edição ativo.";
-  }
-
-  function salvarEdicaoPlantao(){
-    const sel=$p("plantaoMes");
-    if(sel){
-      plantaoState.selectedMonthIndex=Number(sel.value)||0;
-      atualizarMesFromInputs(plantaoState.months[plantaoState.selectedMonthIndex]);
-    }
-    const ok=salvarStatePlantoes();
-    plantaoEditando=false;
-    atualizarModoEdicaoPlantao();
-    renderConfigPlantoes();
-    renderTabelaPlantoes();
-    const feedback=$p("plantaoSalvarFeedback");
-    if(feedback) feedback.textContent=ok?"Alterações salvas.":"Não foi possível salvar.";
-    setTimeout(()=>{ if(feedback) feedback.textContent=""; },3200);
   }
   function criarLinhaPlantao(dateIso,idx,anterior){
     const fer=FERIADOS_TERESINA_2026.find(f=>f.date===dateIso);
@@ -2809,9 +2772,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     const box=$p("plantaoFolgaConfig");
     if(!box||!plantaoState) return;
     garantirConfigPlantao();
-    const checks=[1,2,3,4,5,6].map(d=>`<label><input type="checkbox" data-folga-dia="${d}" ${plantaoState.allowedFolgaWeekdays.includes(d)?"checked":""} ${plantaoEditando?"":"disabled"}> ${folgaNomes[d]}</label>`).join("");
+    const checks=[1,2,3,4,5,6].map(d=>`<label><input type="checkbox" data-folga-dia="${d}" ${plantaoState.allowedFolgaWeekdays.includes(d)?"checked":""}> ${folgaNomes[d]}</label>`).join("");
     box.innerHTML=`<div class="plantoes-folga-options">${checks}</div>`;
-    if(!plantaoEditando) return;
     box.querySelectorAll("[data-folga-dia]").forEach(chk=>{
       chk.addEventListener("change",()=>{
         const dia=Number(chk.dataset.folgaDia);
@@ -2916,16 +2878,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderFolgaConfig();
     const body=$p("plantaoConfigBody");
     if(!body) return;
-    if(!plantaoEditando){
-      body.innerHTML=plantaoState.technicians.map((t,i)=>`<tr>
-        <td><strong>${t.label||("Técnico "+(i+1))}</strong></td>
-        <td><span class="plantoes-readonly-value">${escapePlantao(t.name||"-")}</span></td>
-        <td><span class="plantoes-readonly-value">${escapePlantao(t.status||"-")}</span></td>
-        <td><span class="plantoes-muted-value">${t.start?formatDateBR(t.start):"-"}</span></td>
-        <td><span class="plantoes-muted-value">${t.end?formatDateBR(t.end):"-"}</span></td>
-      </tr>`).join("");
-      return;
-    }
     body.innerHTML=plantaoState.technicians.map((t,i)=>`<tr>
       <td><strong>${t.label||("Técnico "+(i+1))}</strong></td>
       <td><input data-plantao-tech="${t.id}" data-field="name" value="${String(t.name||"").replace(/"/g,"&quot;")}"></td>
@@ -3119,12 +3071,19 @@ document.addEventListener("DOMContentLoaded",()=>{
         <td>${escapePlantao(calc.aviso)}</td>
       </tr>`;
     }).join("");
+    const totalTerceiro=month.rows.filter(r=>r.baseC).length;
+    const totalPlantoes=month.rows.length*2+totalTerceiro;
     const colunasTecnicoC=mostrarTecnicoC?"<th>Téc. C</th>":"";
     const colunasFolgaC=mostrarTecnicoC?"<th>Folga C</th>":"";
     const shell=document.createElement("div");
     shell.className="plantao-pdf-shell";
     shell.innerHTML=`<div class="plantao-pdf-header">
         <h1>${escapePlantao(tituloPDFPlantaoMes(month))}</h1>
+      </div>
+      <div class="plantao-pdf-kpis">
+        <div class="plantao-pdf-kpi"><span>Plantões</span><strong>${totalPlantoes}</strong></div>
+        <div class="plantao-pdf-kpi"><span>Folgas</span><strong>${totalPlantoes}</strong></div>
+        <div class="plantao-pdf-kpi"><span>Mês</span><strong>${escapePlantao(month.key||"")}</strong></div>
       </div>
       <div class="plantao-pdf-table">
         <table>
@@ -3206,38 +3165,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     atualizarToggleTerceiro();
 
     let avisos=0, redistribuidos=0, totalTerceiro=0;
-    if(!plantaoEditando){
-      const linhasLeitura=month.rows.map((row,idx)=>{
-        if(row.baseC) totalTerceiro++;
-        const calc=calcularLinhaPlantao(row);
-        const tecA=calc.tecA;
-        const tecB=calc.tecB;
-        const tecC=calc.tecC;
-        const folgaA=calc.folgaA;
-        const folgaB=calc.folgaB;
-        const folgaC=calc.folgaC;
-        let aviso=calc.aviso==="OK"?"✔ OK":(calc.aviso==="Redistribuído por férias"?"Redistribuído por férias":"Atenção: "+calc.aviso);
-        let avisoClasse=calc.aviso==="OK"?"plantoes-aviso-ok":"plantoes-aviso-alerta";
-        return `<tr data-row="${idx}">
-          <td><span class="plantoes-readonly-value">${escapePlantao(formatDateBR(row.date))}</span></td>
-          <td class="plantoes-readonly">${escapePlantao(semana(row.date))}</td>
-          <td><span class="plantoes-muted-value">${escapePlantao(row.type||"-")}</span></td>
-          <td><span class="plantoes-muted-value">${escapePlantao(row.description||"-")}</span></td>
-          <td class="plantoes-plantao">${escapePlantao(tecA?.name||"-")}</td>
-          <td class="plantoes-plantao">${escapePlantao(tecB?.name||"-")}</td>
-          <td class="plantoes-plantao plantoes-terceiro-col">${tecC?escapePlantao(tecC.name):"<span class='plantoes-terceiro-vazio'>opcional</span>"}</td>
-          <td class="plantoes-folga">${escapePlantao(folgaA)}</td>
-          <td class="plantoes-folga">${escapePlantao(folgaB)}</td>
-          <td class="plantoes-folga plantoes-terceiro-col">${folgaC?escapePlantao(folgaC):"<span class='plantoes-terceiro-vazio'>sem 3º técnico</span>"}</td>
-          <td class="${avisoClasse}">${escapePlantao(aviso)}</td>
-        </tr>`;
-      }).join("");
-      body.innerHTML=linhasLeitura;
-      ajustarTituloPlantao(month);
-      $p("plantaoKpiPlantoes").textContent=month.rows.length*2+totalTerceiro;
-      $p("plantaoKpiFolgas").textContent=month.rows.length*2+totalTerceiro;
-      return;
-    }
     const linhas=month.rows.map((row,idx)=>{
       if(row.baseC) totalTerceiro++;
       const calc=calcularLinhaPlantao(row);
@@ -3302,24 +3229,14 @@ document.addEventListener("DOMContentLoaded",()=>{
     const redistribuir=$p("plantaoRedistribuirFolgas");
     const redistribuirPlantoes=$p("plantaoRedistribuirPlantoes");
     const toggleTerceiro=$p("plantaoToggleTerceiro");
-    ["plantaoEditarConfig","plantaoEditarEscala"].forEach(id=>{
-      const btn=$p(id);
-      if(btn) btn.addEventListener("click",entrarEdicaoPlantao);
-    });
-    ["plantaoSalvarConfig","plantaoSalvarEscala"].forEach(id=>{
-      const btn=$p(id);
-      if(btn) btn.addEventListener("click",salvarEdicaoPlantao);
-    });
     if(toggleTerceiro){
       toggleTerceiro.addEventListener("click",()=>{
-        if(!plantaoEditando) return;
         plantaoTerceiroAberto=!plantaoTerceiroAberto;
         atualizarToggleTerceiro();
       });
       atualizarToggleTerceiro();
     }
     if(redistribuir) redistribuir.addEventListener("click",()=>{
-      if(!plantaoEditando) return;
       const sel=$p("plantaoMes");
       const month=plantaoState.months[Number(sel?.value)||0];
       if(!month) return;
@@ -3334,7 +3251,6 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(feedback) feedback.textContent=ok?"Folgas redistribuídas. Clique em Salvar alterações para manter.":"Não foi possível redistribuir.";
     });
     if(redistribuirPlantoes) redistribuirPlantoes.addEventListener("click",()=>{
-      if(!plantaoEditando) return;
       const sel=$p("plantaoMes");
       const month=plantaoState.months[Number(sel?.value)||0];
       if(!month) return;
@@ -3369,7 +3285,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
     if(pdfBtn) pdfBtn.addEventListener("click",gerarPDFPlantaoMes);
     if(imgBtn) imgBtn.addEventListener("click",gerarImagemPlantaoMes);
-    atualizarModoEdicaoPlantao();
     if(restaurar) restaurar.addEventListener("click",()=>{
       localStorage.removeItem(STORAGE_PLANTOES);
       plantaoState=clone(ORIGINAL_PLANTOES);
