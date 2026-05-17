@@ -1616,7 +1616,6 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   <div class="import-bar">
     <input type="file" id="fileInput" accept=".csv,.zip,.xlsx,.xls">
     <button id="btnCarregar" type="button">Carregar Base</button>
-    <button id="btnBaixarHtmlBase" type="button" class="secondary">Baixar HTML atualizado</button>
     <button id="btnLimpar" type="button" class="secondary">Limpar</button>
   </div>
 </div>
@@ -1997,6 +1996,11 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   </div>
 </div>
 
+<!-- Firebase - última base em nuvem -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
+
 <script>
 let arquivoSelecionado=null;
 let rawRows=[];
@@ -2010,6 +2014,155 @@ let tecnicoAtivoLogin="";
 
 const STORAGE_LAST="lumar_dashboard_last_dataset_v1";
 const STORAGE_HISTORY="lumar_dashboard_history_v1";
+/*
+  FIREBASE - ÚLTIMA BASE NA NUVEM
+
+  Cole abaixo o firebaseConfig do seu projeto Firebase.
+  Caminho:
+  Firebase Console > Configurações do projeto > Geral > Seus apps > App Web.
+*/
+const FIREBASE_CONFIG_INDICADORES_VT={
+  apiKey:"COLE_AQUI",
+  authDomain:"COLE_AQUI",
+  projectId:"COLE_AQUI",
+  storageBucket:"COLE_AQUI",
+  messagingSenderId:"COLE_AQUI",
+  appId:"COLE_AQUI"
+};
+
+const FIREBASE_DOC_ULTIMA_BASE={
+  collection:"indicadores_vt",
+  doc:"ultima_base"
+};
+const FIREBASE_STORAGE_ULTIMA_BASE="indicadores-vt/ultima_base.json";
+
+let firebaseIndicadoresApp=null;
+let firebaseIndicadoresDb=null;
+let firebaseIndicadoresStorage=null;
+
+function firebaseIndicadoresConfigurado(){
+  const cfg=FIREBASE_CONFIG_INDICADORES_VT||{};
+  return !!(
+    cfg.apiKey &&
+    cfg.projectId &&
+    cfg.storageBucket &&
+    !String(cfg.apiKey).includes("COLE_AQUI") &&
+    !String(cfg.projectId).includes("COLE_AQUI") &&
+    !String(cfg.storageBucket).includes("COLE_AQUI")
+  );
+}
+
+function inicializarFirebaseIndicadores(){
+  if(!firebaseIndicadoresConfigurado()) return null;
+  if(!window.firebase){
+    console.warn("Firebase SDK não carregado.");
+    return null;
+  }
+
+  if(firebaseIndicadoresApp && firebaseIndicadoresDb && firebaseIndicadoresStorage){
+    return {
+      app:firebaseIndicadoresApp,
+      db:firebaseIndicadoresDb,
+      storage:firebaseIndicadoresStorage
+    };
+  }
+
+  try{
+    firebaseIndicadoresApp=firebase.apps?.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG_INDICADORES_VT);
+    firebaseIndicadoresDb=firebase.firestore();
+    firebaseIndicadoresStorage=firebase.storage();
+    return {
+      app:firebaseIndicadoresApp,
+      db:firebaseIndicadoresDb,
+      storage:firebaseIndicadoresStorage
+    };
+  }catch(e){
+    console.warn("Firebase não inicializado.",e);
+    return null;
+  }
+}
+
+async function salvarUltimaBaseNuvem(rows,fileName,signature){
+  const fb=inicializarFirebaseIndicadores();
+  if(!fb) return false;
+
+  try{
+    const payload={
+      fileName:fileName||"Base indicadores VT",
+      date:new Date().toISOString(),
+      signature:signature||assinaturaPlanilha(rows),
+      rows:rows||[]
+    };
+
+    const blob=new Blob([JSON.stringify(payload)],{type:"application/json"});
+    await fb.storage.ref(FIREBASE_STORAGE_ULTIMA_BASE).put(blob,{contentType:"application/json"});
+
+    await fb.db.collection(FIREBASE_DOC_ULTIMA_BASE.collection).doc(FIREBASE_DOC_ULTIMA_BASE.doc).set({
+      fileName:payload.fileName,
+      date:payload.date,
+      signature:payload.signature,
+      rowsCount:Array.isArray(rows)?rows.length:0,
+      storagePath:FIREBASE_STORAGE_ULTIMA_BASE,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+
+    return true;
+  }catch(e){
+    console.warn("Não foi possível salvar a última base na nuvem.",e);
+    return false;
+  }
+}
+
+async function encontrarUltimaBaseNuvem(){
+  const fb=inicializarFirebaseIndicadores();
+  if(!fb) return null;
+
+  try{
+    const doc=await fb.db.collection(FIREBASE_DOC_ULTIMA_BASE.collection).doc(FIREBASE_DOC_ULTIMA_BASE.doc).get();
+    if(!doc.exists) return null;
+
+    const meta=doc.data()||{};
+    const storagePath=meta.storagePath||FIREBASE_STORAGE_ULTIMA_BASE;
+    const url=await fb.storage.ref(storagePath).getDownloadURL();
+    const res=await fetch(url,{cache:"no-store"});
+    if(!res.ok) throw new Error("Falha ao baixar última base da nuvem.");
+
+    const payload=await res.json();
+    const rows=payload?.rows||payload?.dados||payload?.data||[];
+    if(!Array.isArray(rows)||!rows.length) return null;
+
+    return {
+      fileName:payload.fileName||meta.fileName||"Base salva na nuvem",
+      date:payload.date||meta.date||new Date().toISOString(),
+      signature:payload.signature||meta.signature||assinaturaPlanilha(rows),
+      rows,
+      origem:"firebase"
+    };
+  }catch(e){
+    console.warn("Não foi possível carregar a última base da nuvem.",e);
+    return null;
+  }
+}
+
+async function carregarUltimaBaseFirebaseOuLocal(opcoes={}){
+  const nuvem=await encontrarUltimaBaseNuvem();
+  if(nuvem){
+    aplicarBaseSalvaEmTela(nuvem,opcoes);
+    return true;
+  }
+
+  const local=encontrarUltimaBaseSalva();
+  if(local){
+    aplicarBaseSalvaEmTela(local,opcoes);
+    return true;
+  }
+
+  if(!opcoes.auto){
+    setStatus("⚠️ Nenhuma última base encontrada. Configure o Firebase ou carregue uma planilha.");
+  }
+  return false;
+}
+
 
 /*
   ÚLTIMA BASE EMBUTIDA NO HTML
@@ -2072,7 +2225,7 @@ function aplicarBaseSalvaEmTela(saved,opcoes={}){
     salvarUltimaBase(rawRows,currentFileName);
     abrirAbaDashboard();
 
-    const origem=saved.origem==="html"?"HTML":"navegador";
+    const origem=saved.origem==="firebase"?"Firebase":(saved.origem==="html"?"HTML":"navegador");
     const dataTxt=saved.date?new Date(saved.date).toLocaleString("pt-BR"):"";
     const prefixo=opcoes.auto?"🚀 Sistema aberto carregando a última base":"🔁 Última base carregada";
     setStatus(`${prefixo} do ${origem}: <strong>${esc(currentFileName)}</strong>.<br>Registros carregados: <strong>${processedRows.length}</strong>${dataTxt?`<br>Atualizada em: <strong>${dataTxt}</strong>`:""}.`);
@@ -3715,8 +3868,7 @@ function removerHistorico(id){
 }
 window.removerHistorico=removerHistorico;
 window.carregarUltimaBase=carregarUltimaBase;
-window.carregarUltimaBaseEmbutidaOuLocal=carregarUltimaBaseEmbutidaOuLocal;
-window.baixarHtmlComBaseEmbutida=baixarHtmlComBaseEmbutida;
+window.carregarUltimaBaseFirebaseOuLocal=carregarUltimaBaseFirebaseOuLocal;
 
 async function carregarBase(){
   const file=arquivoSelecionado||$("fileInput").files[0];if(!file){setStatus("⚠️ Selecione uma base primeiro.");return}
@@ -3735,9 +3887,13 @@ async function carregarBase(){
     renderDashboard(processarResumo(filtrado));
     const signature=salvarUltimaBase(rows,currentFileName);
     const historicoResultado=salvarHistorico({silencioso:true,signature});
+    const salvaFirebase=await salvarUltimaBaseNuvem(rows,currentFileName,signature);
     const z450=currentSummary.arr.find(t=>t.login==="Z450037");
     const avisoRepetida=historicoResultado.repetida?`<br>⚠️ Planilha repetida: já estava no histórico em <strong>${esc(historicoResultado.item.date)}</strong>. Não criei novo registro.`:"";
-    setStatus(`✅ Base carregada.<br>Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}${avisoRepetida}`);
+    const avisoFirebase=firebaseIndicadoresConfigurado()
+      ? (salvaFirebase?`<br>☁️ Última base salva no Firebase.`:`<br>⚠️ Base carregada, mas não consegui salvar no Firebase. Verifique config/rules.`)
+      : `<br>ℹ️ Firebase ainda não configurado. Salvando apenas neste navegador.`;
+    setStatus(`✅ Base carregada.<br>Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}${avisoRepetida}${avisoFirebase}`);
   }catch(err){console.error(err);setStatus("❌ Erro ao carregar: <strong>"+err.message+"</strong>");}
 }
 function reaplicarFiltros(){
@@ -3869,7 +4025,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   on("btnCarregar","click",carregarBase);
   on("btnLimpar","click",limparTudo);
   on("btnCarregarUltima","click",carregarUltimaBase);
-  on("btnBaixarHtmlBase","click",baixarHtmlComBaseEmbutida);
   on("btnLimparHistorico","click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
   on("cardTecnicos","click",abrirModalTecnicos);
   on("cardBaseTotal","click",abrirModalBaseTotal);
@@ -3923,7 +4078,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
 
   renderHistorico();
-  carregarUltimaBaseEmbutidaOuLocal({auto:true});
+  carregarUltimaBaseFirebaseOuLocal({auto:true});
 });
 </script>
 
@@ -5107,15 +5262,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   outline:2px solid rgba(15,148,104,.16);
   outline-offset:2px;
   border-radius:10px;
-}
-</style>
-
-<script id="ultima-base-embutida" type="application/json">null</script>
-
-<style>
-#btnBaixarHtmlBase::before{
-  content:"⇩";
-  font-weight:900;
 }
 </style>
 
