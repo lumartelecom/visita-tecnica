@@ -1616,6 +1616,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   <div class="import-bar">
     <input type="file" id="fileInput" accept=".csv,.zip,.xlsx,.xls">
     <button id="btnCarregar" type="button">Carregar Base</button>
+    <button id="btnBaixarHtmlBase" type="button" class="secondary">Baixar HTML atualizado</button>
     <button id="btnLimpar" type="button" class="secondary">Limpar</button>
   </div>
 </div>
@@ -2009,6 +2010,133 @@ let tecnicoAtivoLogin="";
 
 const STORAGE_LAST="lumar_dashboard_last_dataset_v1";
 const STORAGE_HISTORY="lumar_dashboard_history_v1";
+
+/*
+  ÚLTIMA BASE EMBUTIDA NO HTML
+
+  Fluxo:
+  1. Carregue a planilha normalmente.
+  2. Clique em "Baixar HTML atualizado".
+  3. Substitua o index.html no GitHub.
+  4. Ao abrir o link, a base embutida será carregada automaticamente.
+*/
+
+function lerUltimaBaseEmbutida(){
+  try{
+    const el=document.getElementById("ultima-base-embutida");
+    if(!el) return null;
+    const txt=(el.textContent||"").trim();
+    if(!txt||txt==="null") return null;
+    const payload=JSON.parse(txt);
+    const rows=payload?.rows||payload?.dados||payload?.data||[];
+    if(!Array.isArray(rows)||!rows.length) return null;
+    return {
+      fileName:payload.fileName||"Base embutida no HTML",
+      date:payload.date||new Date().toISOString(),
+      signature:payload.signature||assinaturaPlanilha(rows),
+      rows,
+      origem:"html"
+    };
+  }catch(e){
+    console.warn("Falha ao ler a base embutida.",e);
+    return null;
+  }
+}
+
+function aplicarBaseSalvaEmTela(saved,opcoes={}){
+  if(!saved||!saved.rows?.length){
+    if(!opcoes.auto) setStatus("⚠️ Nenhuma base salva encontrada.");
+    return false;
+  }
+
+  try{
+    rawRows=saved.rows||[];
+    currentFileName=saved.fileName||"Base salva";
+    tecnicoAtivoLogin="";
+
+    const validation=validarBase(rawRows);
+    processedRows=filtrarBasePrincipal(rawRows);
+
+    if(!processedRows.length){
+      processedRows=[...rawRows];
+    }
+
+    preencherFiltros(processedRows);
+    renderValidacao(validation,processedRows.length);
+
+    const filtrado=aplicarFiltros(processedRows);
+    lastRenderRows=filtrado;
+    currentSummary=processarResumo(filtrado);
+    renderDashboard(currentSummary);
+
+    salvarUltimaBase(rawRows,currentFileName);
+    abrirAbaDashboard();
+
+    const origem=saved.origem==="html"?"HTML":"navegador";
+    const dataTxt=saved.date?new Date(saved.date).toLocaleString("pt-BR"):"";
+    const prefixo=opcoes.auto?"🚀 Sistema aberto carregando a última base":"🔁 Última base carregada";
+    setStatus(`${prefixo} do ${origem}: <strong>${esc(currentFileName)}</strong>.<br>Registros carregados: <strong>${processedRows.length}</strong>${dataTxt?`<br>Atualizada em: <strong>${dataTxt}</strong>`:""}.`);
+    return true;
+  }catch(e){
+    console.error(e);
+    setStatus("❌ Erro ao carregar base salva: <strong>"+e.message+"</strong>");
+    return false;
+  }
+}
+
+function carregarUltimaBaseEmbutidaOuLocal(opcoes={}){
+  const embutida=lerUltimaBaseEmbutida();
+  if(embutida){
+    aplicarBaseSalvaEmTela(embutida,opcoes);
+    return true;
+  }
+
+  const local=encontrarUltimaBaseSalva();
+  if(local){
+    aplicarBaseSalvaEmTela(local,opcoes);
+    return true;
+  }
+
+  if(!opcoes.auto){
+    setStatus("⚠️ Nenhuma última base encontrada. Carregue uma planilha e gere o HTML atualizado.");
+  }
+  return false;
+}
+
+function baixarHtmlComBaseEmbutida(){
+  if(!rawRows||!rawRows.length){
+    setStatus("⚠️ Carregue uma planilha primeiro para gerar o HTML atualizado.");
+    return;
+  }
+
+  try{
+    const payload={
+      fileName:currentFileName||"Base indicadores VT",
+      date:new Date().toISOString(),
+      signature:assinaturaPlanilha(rawRows),
+      rows:rawRows
+    };
+
+    const clone=document.documentElement.cloneNode(true);
+    const el=clone.querySelector("#ultima-base-embutida");
+    if(!el) throw new Error("Área de base embutida não encontrada no HTML.");
+    el.textContent=JSON.stringify(payload).replace(/</g,"\\u003c");
+
+    const html="<!DOCTYPE html>\n"+clone.outerHTML;
+    const blob=new Blob([html],{type:"text/html;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download="index.html";
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+
+    setStatus("✅ HTML atualizado gerado. Substitua o <strong>index.html</strong> no GitHub para o link abrir com esta base automaticamente.");
+  }catch(e){
+    console.error(e);
+    setStatus("❌ Erro ao gerar HTML atualizado: <strong>"+e.message+"</strong>");
+  }
+}
 
 function $(id){return document.getElementById(id)}
 function setStatus(msg){const el=$("status"); if(el) el.innerHTML=msg}
@@ -3587,6 +3715,8 @@ function removerHistorico(id){
 }
 window.removerHistorico=removerHistorico;
 window.carregarUltimaBase=carregarUltimaBase;
+window.carregarUltimaBaseEmbutidaOuLocal=carregarUltimaBaseEmbutidaOuLocal;
+window.baixarHtmlComBaseEmbutida=baixarHtmlComBaseEmbutida;
 
 async function carregarBase(){
   const file=arquivoSelecionado||$("fileInput").files[0];if(!file){setStatus("⚠️ Selecione uma base primeiro.");return}
@@ -3731,31 +3861,69 @@ async function exportarPDF(){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  $("btnCarregar").addEventListener("click",carregarBase);
-  $("btnLimpar").addEventListener("click",limparTudo);
-  $("fileInput").addEventListener("change",e=>{arquivoSelecionado=e.target.files[0]||null;if(arquivoSelecionado)setStatus("📁 Arquivo selecionado: <strong>"+arquivoSelecionado.name+"</strong>. Clique em <strong>Carregar Base</strong>.");});
-  if($("btnCarregarUltima")) $("btnCarregarUltima").addEventListener("click",carregarUltimaBase);
-  if($("btnLimparHistorico")) $("btnLimparHistorico").addEventListener("click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
-  $("cardTecnicos").addEventListener("click",abrirModalTecnicos);
-  $("cardTecnicos").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();abrirModalTecnicos();}});
-  if($("cardBaseTotal")) $("cardBaseTotal").addEventListener("click",abrirModalBaseTotal);
-  if($("cardRevisitas")) $("cardRevisitas").addEventListener("click",()=>abrirModalIndicador("revisita"));
-  if($("cardTec1")) $("cardTec1").addEventListener("click",()=>abrirModalIndicador("tec1"));
-  if($("cardLogOfensor")) $("cardLogOfensor").addEventListener("click",abrirModalLogOfensor);
-  if($("btnImagemCertificado")) $("btnImagemCertificado").addEventListener("click",exportarImagemTecnicoCertificado);
-  $("modalTecnicosFechar").addEventListener("click",fecharModalTecnicos);
-  $("modalTecnicos").addEventListener("click",e=>{if(e.target===$("modalTecnicos")) fecharModalTecnicos();});
-  $("modalIndicadorFechar").addEventListener("click",fecharModalIndicador);
-  $("modalIndicadorDetalhe").addEventListener("click",e=>{if(e.target===$("modalIndicadorDetalhe")) fecharModalIndicador();});
+  const on=(id,evento,fn)=>{
+    const el=$(id);
+    if(el) el.addEventListener(evento,fn);
+  };
+
+  on("btnCarregar","click",carregarBase);
+  on("btnLimpar","click",limparTudo);
+  on("btnCarregarUltima","click",carregarUltimaBase);
+  on("btnBaixarHtmlBase","click",baixarHtmlComBaseEmbutida);
+  on("btnLimparHistorico","click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
+  on("cardTecnicos","click",abrirModalTecnicos);
+  on("cardBaseTotal","click",abrirModalBaseTotal);
+  on("cardRevisitas","click",()=>abrirModalIndicador("revisita"));
+  on("cardTec1","click",()=>abrirModalIndicador("tec1"));
+  on("cardLogOfensor","click",abrirModalLogOfensor);
+  on("btnImagemCertificado","click",exportarImagemTecnicoCertificado);
+  on("modalTecnicosFechar","click",fecharModalTecnicos);
+  on("modalIndicadorFechar","click",fecharModalIndicador);
+
+  const fileInput=$("fileInput");
+  if(fileInput){
+    fileInput.addEventListener("change",e=>{
+      arquivoSelecionado=e.target.files[0]||null;
+      if(arquivoSelecionado) setStatus("📁 Arquivo selecionado: <strong>"+arquivoSelecionado.name+"</strong>. Clique em <strong>Carregar Base</strong>.");
+    });
+  }
+
+  const cardTecnicos=$("cardTecnicos");
+  if(cardTecnicos){
+    cardTecnicos.addEventListener("keydown",e=>{
+      if(e.key==="Enter"||e.key===" "){
+        e.preventDefault();
+        abrirModalTecnicos();
+      }
+    });
+  }
+
+  const modalTecnicos=$("modalTecnicos");
+  if(modalTecnicos){
+    modalTecnicos.addEventListener("click",e=>{
+      if(e.target===modalTecnicos) fecharModalTecnicos();
+    });
+  }
+
+  const modalIndicador=$("modalIndicadorDetalhe");
+  if(modalIndicador){
+    modalIndicador.addEventListener("click",e=>{
+      if(e.target===modalIndicador) fecharModalIndicador();
+    });
+  }
+
   document.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
       document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
       document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
-      btn.classList.add("active");$(btn.dataset.tab).classList.add("active");
+      btn.classList.add("active");
+      const panel=$(btn.dataset.tab);
+      if(panel) panel.classList.add("active");
     });
   });
+
   renderHistorico();
-  if(encontrarUltimaBaseSalva()) carregarUltimaBase({auto:true});
+  carregarUltimaBaseEmbutidaOuLocal({auto:true});
 });
 </script>
 
@@ -3812,6 +3980,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   function tituloPDFPlantaoMes(month){
     return "ESCALA DE PLANTÃO - VISITA TECNICA";
+  }
+  function tituloImagemPlantaoMes(month){
+    const mes=String(month?.key||"").toUpperCase();
+    const ano=anoPlantaoMes(month);
+    return `ESCALA DE PLANTÃO - VISITA TECNICA - ${mes} ${ano}`;
   }
   function ajustarTituloPlantao(month){
     const titulo=tituloPlantaoMes(month)||"PLANTÕES – MAIO 2026 | TERESINA / PIAUÍ";
@@ -4251,7 +4424,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     return `escala_plantoes_${nome}.${ext}`;
   }
 
-  function criarShellPlantaoMes(month){
+  function criarShellPlantaoMes(month,modo="pdf"){
     const mostrarTecnicoC=month.rows.some(row=>!!row.baseC);
     const linhas=month.rows.map(row=>{
       const calc=calcularLinhaPlantao(row);
@@ -4273,16 +4446,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     const totalPlantoes=month.rows.length*2+totalTerceiro;
     const colunasTecnicoC=mostrarTecnicoC?"<th>Téc. C</th>":"";
     const colunasFolgaC=mostrarTecnicoC?"<th>Folga C</th>":"";
-    const shell=document.createElement("div");
-    shell.className="plantao-pdf-shell";
-    shell.innerHTML=`<div class="plantao-pdf-header">
-        <h1>${escapePlantao(tituloPDFPlantaoMes(month))}</h1>
-      </div>
-      <div class="plantao-pdf-kpis">
+    const titulo=modo==="imagem" ? tituloImagemPlantaoMes(month) : tituloPDFPlantaoMes(month);
+    const blocoResumo=modo==="imagem" ? "" : `<div class="plantao-pdf-kpis">
         <div class="plantao-pdf-kpi"><span>Plantões</span><strong>${totalPlantoes}</strong></div>
         <div class="plantao-pdf-kpi"><span>Folgas</span><strong>${totalPlantoes}</strong></div>
         <div class="plantao-pdf-kpi"><span>Mês</span><strong>${escapePlantao(month.key||"")}</strong></div>
+      </div>`;
+    const shell=document.createElement("div");
+    shell.className="plantao-pdf-shell";
+    shell.innerHTML=`<div class="plantao-pdf-header">
+        <h1>${escapePlantao(titulo)}</h1>
       </div>
+      ${blocoResumo}
       <div class="plantao-pdf-table">
         <table>
           <thead><tr><th>Data</th><th>Semana</th><th>Tipo</th><th>Descrição</th><th>Técnico A</th><th>Técnico B</th>${colunasTecnicoC}<th>Folga A</th><th>Folga B</th>${colunasFolgaC}<th>Aviso</th></tr></thead>
@@ -4311,7 +4486,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let shell=null;
     try{
       if(!window.html2canvas){ alert("Biblioteca de imagem não carregada."); return; }
-      shell=criarShellPlantaoMes(month);
+      shell=criarShellPlantaoMes(month,"imagem");
       await new Promise(resolve=>requestAnimationFrame(resolve));
       const canvas=await html2canvas(shell,{scale:2,backgroundColor:"#f7f9fc",useCORS:true,scrollX:0,scrollY:0});
       const a=document.createElement("a");
@@ -4932,6 +5107,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   outline:2px solid rgba(15,148,104,.16);
   outline-offset:2px;
   border-radius:10px;
+}
+</style>
+
+<script id="ultima-base-embutida" type="application/json">null</script>
+
+<style>
+#btnBaixarHtmlBase::before{
+  content:"⇩";
+  font-weight:900;
 }
 </style>
 
