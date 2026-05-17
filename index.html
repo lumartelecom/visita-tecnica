@@ -330,6 +330,128 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .modal-detalhe-indicador .card{margin:0;box-shadow:none}
 .modal-detalhe-indicador .table-wrap{overflow:auto}
 @media(max-width:620px){.indicadores-baloes{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.indicador-balao{height:82px;grid-template-columns:42px minmax(0,1fr);padding:10px;border-radius:14px}.balao-valor{font-size:22px}.balao-titulo{font-size:9.5px;letter-spacing:.01em}}
+
+/* ─── ABA DIAS ─── */
+.dias-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-bottom:16px}
+.dias-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.dias-kpi{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow-sm);min-width:0}
+.dias-kpi:nth-child(2){border-left-color:var(--green)}
+.dias-kpi:nth-child(3){border-left-color:var(--orange)}
+.dias-kpi:nth-child(4){border-left-color:var(--cyan)}
+.dias-kpi:nth-child(5){border-left-color:var(--indigo)}
+.dias-kpi:nth-child(6){border-left-color:var(--red)}
+.dias-kpi span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:800;margin-bottom:6px}
+.dias-kpi strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1;color:var(--navy)}
+.dias-kpi small{display:block;margin-top:6px;color:var(--text-muted);font-weight:700;font-size:11px}
+.dias-note{background:#f5f8ff;border:1px solid #cfe0ff;border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;color:#24426c;font-weight:600;line-height:1.55}
+.dias-progress{height:10px;background:#e5edf8;border-radius:999px;overflow:hidden;margin-top:10px}
+.dias-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px}
+.dias-badge{display:inline-flex;align-items:center;justify-content:center;min-width:48px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:800;border:1px solid transparent}
+.dias-badge.ok{background:var(--green-light);color:#065f46;border-color:#a7f3d0}
+.dias-badge.off{background:var(--yellow-light);color:#78350f;border-color:#fde68a}
+.dia-nao-util td{background:#fbfdff;color:#64748b}
+@media(max-width:980px){.dias-hero{grid-template-columns:1fr}.dias-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.dias-kpis{grid-template-columns:1fr}.dias-kpi strong{font-size:22px}}
+
+
+/* ─── ABA PLANTÕES EDITÁVEL ─── */
+
+.plantoes-toolbar-baixo{margin:0 0 8px;padding:0;display:flex;justify-content:center;text-align:center}
+.plantoes-toolbar-baixo .plantoes-actions{width:fit-content;max-width:100%;margin:0 auto;display:flex;justify-content:center;gap:6px;align-items:center;flex-wrap:wrap}
+.plantoes-toolbar-baixo .plantoes-select{width:120px;min-width:120px}
+.plantoes-save-feedback{width:100%;min-height:18px;color:#166534;font-size:11px;font-weight:800;text-align:center}
+@media(max-width:900px){.plantoes-toolbar-baixo .plantoes-actions{grid-template-columns:1fr 1fr}.plantoes-toolbar-baixo .plantoes-select{grid-column:1/-1}}
+@media(max-width:520px){.plantoes-toolbar-baixo .plantoes-actions{grid-template-columns:1fr}.plantoes-toolbar-baixo .plantoes-actions button{width:100%;justify-content:center}}
+
+
+#plantoes{font-size:12px}
+.plantoes-config-ferias{margin-bottom:7px}
+#plantoes .card{padding:9px}
+#plantoes .plantoes-config-ferias{padding:8px}
+#plantoes .section-title-line{margin-bottom:7px}
+#plantoes .section-title-line h2{font-size:13px}
+#plantoes .plantoes-config-ferias .section-title-line{margin-bottom:6px}
+#plantoes .plantoes-config-ferias .section-title-line h2{font-size:13px}
+#plantoes .plantoes-config-ferias .section-caption{font-size:10px}
+.plantoes-dupla-row{display:grid;grid-template-columns:minmax(250px,520px);justify-content:center;gap:8px;margin-bottom:8px;align-items:stretch}
+.plantoes-dupla-row .card{height:100%}
+.plantoes-dupla-row .plantoes-folga-config{margin:0}
+.plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1180px){.plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.plantoes-dupla-row{grid-template-columns:1fr}}
+
+
+.plantao-titulo-dinamico{display:none}
+.plantao-titulo-dinamico:empty::before{content:"PLANTÕES – MAIO 2026 | TERESINA / PIAUÍ";color:#10213a}
+.plantoes-terceiro-vazio{color:#94a3b8;font-weight:800;font-size:12px}
+
+
+.plantao-pdf-shell{position:fixed;left:-9999px;top:0;width:1120px;background:#f7f9fc;padding:22px;font-family:'IBM Plex Sans','Segoe UI',sans-serif;color:#1e293b}
+.plantao-pdf-header{background:linear-gradient(135deg,#10213a,#155fc4);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.plantao-pdf-header h1{font-size:22px;margin:0 0 4px;font-weight:800}
+.plantao-pdf-header p{font-size:13px;margin:0;color:rgba(255,255,255,.78);font-weight:600}
+.plantao-pdf-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.plantao-pdf-kpi{background:#fff;border:1px solid #d9e2ee;border-radius:10px;padding:10px 12px}
+.plantao-pdf-kpi span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#66758a;font-weight:800;margin-bottom:4px}
+.plantao-pdf-kpi strong{font-family:'IBM Plex Mono',monospace;font-size:18px;color:#10213a}
+.plantao-pdf-table{background:#fff;border:1px solid #d9e2ee;border-radius:12px;overflow:hidden}
+.plantao-pdf-table table{width:100%;border-collapse:collapse;font-size:11px}
+.plantao-pdf-table th{background:#10213a;color:#fff;text-align:left;padding:9px 8px;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase}
+.plantao-pdf-table td{padding:8px;border-bottom:1px solid #edf2f8;vertical-align:top}
+.plantao-pdf-table tr:last-child td{border-bottom:0}
+
+
+.plantoes-folga-config{border:1px solid var(--border);border-radius:8px;background:#f8fbff;padding:6px 8px;margin-bottom:6px}
+.plantoes-folga-config strong{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);margin-bottom:6px}
+.plantoes-folga-options{display:flex;gap:6px;flex-wrap:wrap}
+.plantoes-folga-options label{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;color:var(--text-muted);cursor:pointer}
+.plantoes-folga-options input{width:auto!important;box-shadow:none!important}
+.plantoes-mini-note{font-size:9px;color:var(--text-muted);font-weight:700;margin-top:5px}
+.plantoes-select-cell{min-width:105px}
+.plantoes-folga-cell{min-width:108px}
+.plantoes-folga-date{margin-top:3px;font-size:10px;font-weight:800;color:#166534}
+
+.plantoes-toolbar{display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}
+.plantoes-actions{display:flex;gap:6px;flex-wrap:wrap}
+.plantoes-actions button{padding:7px 9px;font-size:11px}
+.plantoes-select{width:120px;min-width:120px;max-width:140px;border:1px solid var(--border-strong);border-radius:8px;padding:6px 8px;background:#fff;color:var(--text);font-family:inherit;font-weight:700;font-size:11px}
+.plantoes-grid{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.55fr);gap:10px;margin-bottom:10px}
+.plantoes-config-table{width:100%;min-width:0}
+.plantoes-config-table th{position:static}
+.plantoes-config-table input,.plantoes-config-table select,.plantoes-table input,.plantoes-table select{width:100%;border:1px solid var(--border-strong);border-radius:7px;padding:4px 5px;background:#fff;font-family:inherit;font-size:10px;color:var(--text);outline:none}
+.plantoes-config-table th,.plantoes-config-table td{padding:4px 5px;font-size:10px}
+.plantoes-config-table input:focus,.plantoes-config-table select:focus,.plantoes-table input:focus,.plantoes-table select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,95,196,.11)}
+.plantoes-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.plantoes-chip{border:1px solid var(--border);border-radius:8px;background:linear-gradient(180deg,#fff,#f8fbff);padding:6px;box-shadow:var(--shadow-sm);min-width:0}
+.plantoes-chip span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:800;margin-bottom:4px}
+.plantoes-chip strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--navy);line-height:1.1}
+.plantoes-month-title{margin:0 0 2px;font-size:12px;color:var(--navy);font-weight:800}
+.plantoes-month-note{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:8px}
+.plantoes-title-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;width:100%;text-align:center}
+.plantoes-inline-kpis{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.plantoes-inline-kpis .plantoes-chip{min-width:84px;padding:5px 7px;text-align:center}
+.plantoes-inline-kpis .plantoes-chip strong{font-size:14px}
+.plantoes-inline-kpis .plantoes-chip span{font-size:8px;margin-bottom:2px}
+.plantoes-folga-card .section-title-line{justify-content:center;text-align:center}
+.plantoes-resumo-card .section-title-line{justify-content:flex-start;text-align:left}
+.plantoes-resumo-card .section-caption{display:none}
+.plantoes-resumo-card .plantoes-summary{max-width:360px;margin:0 auto}
+.plantoes-title-actions .success,.plantoes-dupla-row .section-title-line .success{padding:6px 9px;font-size:10px;white-space:nowrap}
+.plantoes-table table{min-width:790px;font-size:10px}
+.plantoes-table th{position:sticky;top:0}
+.plantoes-table th,.plantoes-table td{padding:5px 5px}
+.plantoes-table td{white-space:normal;vertical-align:middle}
+.plantoes-terceiro-col{display:none}
+#plantoes.plantoes-terceiro-aberto .plantoes-terceiro-col{display:table-cell}
+.plantoes-readonly{font-weight:800;color:var(--navy)}
+.plantoes-plantao{color:#a16207;font-weight:800}
+.plantoes-folga{color:#166534;font-weight:800}
+.plantoes-aviso-ok{color:#166534;font-weight:800}
+.plantoes-aviso-alerta{color:#b45309;font-weight:800}
+.plantoes-help{font-size:10px;color:var(--text-muted);font-weight:600;line-height:1.35;margin-top:6px}
+@media(max-width:1100px){.plantoes-grid{grid-template-columns:1fr}.plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.plantoes-summary{grid-template-columns:1fr}.plantoes-actions{width:100%}.plantoes-actions button{flex:1;justify-content:center}.plantoes-toolbar{align-items:stretch}.plantoes-select{width:100%}}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){
@@ -597,6 +719,8 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 <div class="tabs">
   <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
   <button class="tab-btn" data-tab="acao">Plano de Ação</button>
+  <button class="tab-btn" data-tab="dias">Dias Trabalhados</button>
+  <button class="tab-btn" data-tab="plantoes">Plantões</button>
   <button class="tab-btn" data-tab="historico">Histórico Local</button>
 </div>
 
@@ -628,7 +752,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
   <!-- PERFORMANCE POR TÉCNICO -->
   <section class="grid" id="secPerformanceTecnico">
-    <div class="card">
+    <div class="card plantoes-folga-card">
       <div class="section-title-line">
         <h2>Performance por Técnico</h2>
         <span class="section-caption">Desktop em tabela · celular em cards</span>
@@ -666,14 +790,14 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
   <!-- RANKING OPERACIONAL + ACOMPANHAMENTO -->
   <section class="grid2" id="secRankingOperacional">
-    <div class="card">
+    <div class="card plantoes-resumo-card">
       <div class="section-title-line">
         <h2>Ranking Operacional</h2>
         <span class="section-caption">Melhores resultados no filtro atual</span>
       </div>
       <div id="rankingOperacional" class="mini-ranking"><div class="empty">Aguardando base.</div></div>
     </div>
-    <div class="card">
+    <div class="card plantoes-folga-card">
       <div class="section-title-line">
         <h2>Técnicos em Acompanhamento</h2>
         <span class="section-caption">Revisita &gt; 6% ou TEC1 &lt; 96%</span>
@@ -753,6 +877,111 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     </div>
   </div>
 </section>
+
+
+<!-- DIAS -->
+<section id="dias" class="tab-panel">
+  <div class="dias-hero">
+    <div class="card">
+      <div class="section-title-line">
+        <h2>Dias Trabalhados</h2>
+        <span class="section-caption">Planilha de meta dinâmica · MAIO-26</span>
+      </div>
+      <div class="dias-kpis">
+        <div class="dias-kpi"><span>Meta mínima mensal</span><strong>165</strong><small>Meta configurada</small></div>
+        <div class="dias-kpi"><span>Total já feito</span><strong>72</strong><small>43.6% da meta</small></div>
+        <div class="dias-kpi"><span>Falta meta</span><strong>93</strong><small>Meta - feito</small></div>
+        <div class="dias-kpi"><span>Dias úteis restantes</span><strong>14</strong><small>A partir de 12/05/2026</small></div>
+        <div class="dias-kpi"><span>Meta técnicos/dia</span><strong>7</strong><small>Arredondado para cima</small></div>
+        <div class="dias-kpi"><span>Competência</span><strong>MAIO-26</strong><small>01/05/2026 a 31/05/2026</small></div>
+      </div>
+      <div class="dias-progress" title="Progresso da meta"><span style="width:43.6%"></span></div>
+    </div>
+
+    <div class="card">
+      <h2>Regra da média</h2>
+      <div class="dias-note">
+        A planilha pega a meta mensal, subtrai o que já foi feito e divide pelos dias úteis restantes.
+        Quando o resultado tem casas decimais, ela arredonda para cima para não ficar abaixo da meta.
+        <br><br>
+        <strong>Conta atual:</strong> 165 - 72 = 93; 93 ÷ 14 = 6.64; arredondando = <strong>7</strong>.
+        <br><br>
+        <strong>Feriados:</strong> 01/05/2026 · Dia do Trabalhador.
+      </div>
+    </div>
+  </div>
+
+
+</section>
+
+
+
+<!-- PLANTÕES -->
+<section id="plantoes" class="tab-panel">
+  <div class="card plantoes-config-ferias">
+    <div class="section-title-line">
+      <h2>Configuração de Férias</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="plantoes-config-table">
+        <thead><tr><th>Técnico</th><th>Nome</th><th>Status</th><th>Início</th><th>Fim</th></tr></thead>
+        <tbody id="plantaoConfigBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="plantoes-dupla-row" style="grid-template-columns: minmax(280px, 0.8fr) minmax(250px, 1fr);">
+    <div class="card">
+      <div class="section-title-line">
+        <h2>Controles</h2>
+      </div>
+      <div class="plantoes-actions" style="display: flex; flex-direction: row; gap: 6px; align-items: center;">
+        <select id="plantaoMes" class="plantoes-select" aria-label="Selecionar mês" style="flex: 1; padding: 5px 8px; font-size: 11px;"></select>
+        <button id="plantaoSalvar" class="success" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap;">Salvar</button>
+        <button id="plantaoPdf" class="primary" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap;">PDF</button>
+      </div>
+      <div style="width: 100%;">
+        <span id="plantaoSalvarFeedback" class="plantoes-save-feedback" aria-live="polite" style="min-height: 16px; color: #166534; font-size: 10px; font-weight: 800; text-align: center; display: block;"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title-line">
+        <h2>Dias permitidos para distribuir folgas</h2>
+        <button id="plantaoRedistribuirFolgas" class="success" type="button">Redistribuir folgas</button>
+      </div>
+      <div id="plantaoFolgaConfig" class="plantoes-folga-config"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title-line">
+      <div>
+        <div class="plantoes-title-actions">
+          <div class="plantoes-month-title" id="plantaoTituloMes">Plantões</div>
+          <button id="plantaoRedistribuirPlantoes" class="success" type="button">Redistribuir plantões</button>
+          <button id="plantaoToggleTerceiro" class="secondary" type="button">Adicionar Técnico C</button>
+          <div class="plantoes-inline-kpis">
+            <div class="plantoes-chip"><span>Plantões</span><strong id="plantaoKpiPlantoes">0</strong></div>
+            <div class="plantoes-chip"><span>Folgas</span><strong id="plantaoKpiFolgas">0</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap plantoes-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th><th>Semana</th><th>Tipo</th><th>Descrição</th>
+            <th>Técnico A</th><th>Técnico B</th><th class="plantoes-terceiro-col">Técnico C</th><th>Folga A</th><th>Folga B</th><th class="plantoes-terceiro-col">Folga C</th><th>⚠ Aviso</th>
+          </tr>
+        </thead>
+        <tbody id="plantaoTabelaBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 
 <!-- HISTÓRICO -->
 <section id="historico" class="tab-panel">
@@ -2058,14 +2287,649 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(localStorage.getItem(STORAGE_LAST)) carregarUltimaBase();
 });
 </script>
+
+<script id="plantao-data" type="application/json">{"technicians": [{"id": "t1", "label": "Técnico 1", "name": "Matheus Henrique", "status": "Ativo", "start": "", "end": ""}, {"id": "t2", "label": "Técnico 2", "name": "Matheus Reis", "status": "Ativo", "start": "", "end": ""}, {"id": "t3", "label": "Técnico 3", "name": "Apolinário", "status": "Ativo", "start": "", "end": ""}, {"id": "t4", "label": "Técnico 4", "name": "José Francisco", "status": "Ativo", "start": "", "end": ""}, {"id": "t5", "label": "Técnico 5", "name": "Lailson", "status": "Ativo", "start": "", "end": ""}, {"id": "t6", "label": "Técnico 6", "name": "Alex", "status": "Ativo", "start": "", "end": ""}], "months": [{"key": "Maio", "title": "PLANTÕES – MAIO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-05-01", "type": "Feriado Nacional", "description": "Dia do Trabalho", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-05-03", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-05-10", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-05-17", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-05-24", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-05-31", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}]}, {"key": "Junho", "title": "PLANTÕES – JUNHO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-06-04", "type": "Feriado Nacional", "description": "Corpus Christi", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-06-07", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-06-14", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-06-21", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-06-28", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}]}, {"key": "Julho", "title": "PLANTÕES – JULHO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-07-05", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-07-12", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-07-19", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-07-26", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}]}, {"key": "Agosto", "title": "PLANTÕES – AGOSTO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-08-02", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-08-09", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-08-16", "type": "Feriado Municipal", "description": "Aniversário de Teresina", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-08-23", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-08-30", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}]}, {"key": "Setembro", "title": "PLANTÕES – SETEMBRO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-09-06", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-09-07", "type": "Feriado Nacional", "description": "Independência do Brasil", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-09-13", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-09-20", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-09-27", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}]}, {"key": "Outubro", "title": "PLANTÕES – OUTUBRO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-10-04", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-10-11", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-10-12", "type": "Feriado Nacional", "description": "Nossa Sra. Aparecida", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-10-18", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-10-19", "type": "Feriado Estadual", "description": "Dia da Batalha do Jenipapo", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-10-25", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}]}, {"key": "Novembro", "title": "PLANTÕES – NOVEMBRO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-11-01", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-11-02", "type": "Feriado Nacional", "description": "Finados", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-11-08", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-11-15", "type": "Feriado Nacional", "description": "Proclamação da República", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-11-20", "type": "Feriado Nacional", "description": "Consciência Negra", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-11-22", "type": "Domingo", "description": "", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-11-29", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}]}, {"key": "Dezembro", "title": "PLANTÕES – DEZEMBRO 2026 | TERESINA / PIAUÍ", "note": "Domingos e feriados.  🟡 Letra dourada = plantão  |  🟢 Letra verde = folga (Ter/Qua/Qui distribuídas, dias diferentes).", "rows": [{"date": "2026-12-06", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-12-08", "type": "Feriado Nacional", "description": "Nossa Sra. da Conceição", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-12-13", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}, {"date": "2026-12-20", "type": "Domingo", "description": "", "baseA": "t5", "baseB": "t6", "folgaAWeekday": 4, "folgaBWeekday": 2}, {"date": "2026-12-25", "type": "Feriado Nacional", "description": "Natal", "baseA": "t1", "baseB": "t2", "folgaAWeekday": 2, "folgaBWeekday": 3}, {"date": "2026-12-27", "type": "Domingo", "description": "", "baseA": "t3", "baseB": "t4", "folgaAWeekday": 3, "folgaBWeekday": 4}]}]}</script>
+<script>
+(function(){
+  const STORAGE_PLANTOES="lumar_escala_plantoes_2026_editavel_v3";
+  const plantaoDataEl=document.getElementById("plantao-data");
+  const plantaoDataTexto=(plantaoDataEl?.textContent||"").replace(/&quot;/g,'"').replace(/&#34;/g,'"').replace(/&amp;/g,'&');
+  const ORIGINAL_PLANTOES=JSON.parse(plantaoDataTexto);
+  let plantaoState=null;
+  let plantaoTerceiroAberto=false;
+  let plantaoMesAtualIndex=0;
+
+  const $p=id=>document.getElementById(id);
+  const clone=obj=>JSON.parse(JSON.stringify(obj));
+  const nomesDias=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  const folgaLower=["dom","seg","ter","qua","qui","sex","sáb"];
+  const folgaNomes=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+
+  const FERIADOS_TERESINA_2026=[
+    {date:"2026-01-01",type:"Feriado Nacional",description:"Confraternização Universal"},
+    {date:"2026-04-03",type:"Feriado Nacional",description:"Sexta-feira Santa"},
+    {date:"2026-04-21",type:"Feriado Nacional",description:"Tiradentes"},
+    {date:"2026-05-01",type:"Feriado Nacional",description:"Dia do Trabalho"},
+    {date:"2026-06-04",type:"Feriado Nacional",description:"Corpus Christi"},
+    {date:"2026-08-16",type:"Feriado Municipal",description:"Aniversário de Teresina"},
+    {date:"2026-09-07",type:"Feriado Nacional",description:"Independência do Brasil"},
+    {date:"2026-10-12",type:"Feriado Nacional",description:"Nossa Sra. Aparecida"},
+    {date:"2026-10-19",type:"Feriado Estadual",description:"Dia do Piauí"},
+    {date:"2026-11-02",type:"Feriado Nacional",description:"Finados"},
+    {date:"2026-11-15",type:"Feriado Nacional",description:"Proclamação da República"},
+    {date:"2026-11-20",type:"Feriado Nacional",description:"Consciência Negra"},
+    {date:"2026-12-08",type:"Feriado Municipal",description:"Nossa Senhora da Conceição"},
+    {date:"2026-12-25",type:"Feriado Nacional",description:"Natal"}
+  ];
+  const MESES_PT={"Janeiro":0,"Fevereiro":1,"Março":2,"Marco":2,"Abril":3,"Maio":4,"Junho":5,"Julho":6,"Agosto":7,"Setembro":8,"Outubro":9,"Novembro":10,"Dezembro":11};
+  const MESES_NOMES=["JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"];
+  function numeroMesPlantao(month){
+    if(!month) return 4;
+    if(month.rows&&month.rows[0]?.date) return isoToDate(month.rows[0].date).getMonth();
+    const key=String(month.key||"").trim();
+    return MESES_PT[key] ?? 4;
+  }
+  function tituloPlantaoMes(month){
+    const mes=MESES_NOMES[numeroMesPlantao(month)]||String(month.key||"").toUpperCase();
+    return `PLANTÕES – ${mes} 2026 | TERESINA / PIAUÍ`;
+  }
+  function ajustarTituloPlantao(month){
+    const titulo=tituloPlantaoMes(month)||"PLANTÕES – MAIO 2026 | TERESINA / PIAUÍ";
+    if(month) month.title=titulo;
+    if($p("plantaoTituloTopo")) $p("plantaoTituloTopo").textContent=titulo;
+    if($p("plantaoTituloMes")) $p("plantaoTituloMes").textContent=titulo;
+  }
+  function atualizarToggleTerceiro(){
+    const section=$p("plantoes");
+    const btn=$p("plantaoToggleTerceiro");
+    if(section) section.classList.toggle("plantoes-terceiro-aberto",plantaoTerceiroAberto);
+    if(btn){
+      btn.textContent=plantaoTerceiroAberto?"Ocultar Técnico C":"Adicionar Técnico C";
+      btn.setAttribute("aria-expanded",plantaoTerceiroAberto?"true":"false");
+    }
+  }
+  function criarLinhaPlantao(dateIso,idx,anterior){
+    const fer=FERIADOS_TERESINA_2026.find(f=>f.date===dateIso);
+    const dt=isoToDate(dateIso);
+    const tipo=fer ? fer.type : "Domingo";
+    const desc=fer ? fer.description : "";
+    const t=plantaoState.technicians||[];
+    const a=t[(idx*2)%t.length]?.id||"";
+    const b=t[(idx*2+1)%t.length]?.id||t[0]?.id||"";
+    const dias=plantaoState.allowedFolgaWeekdays||[2,3,4,6];
+    return {
+      date:dateIso,
+      type:anterior?.type||tipo,
+      description:anterior?.description||desc,
+      baseA:anterior?.baseA||a,
+      baseB:anterior?.baseB||b,
+      baseC:anterior?.baseC||"",
+      folgaAWeekday:Number(anterior?.folgaAWeekday ?? dias[0] ?? 2),
+      folgaBWeekday:Number(anterior?.folgaBWeekday ?? dias[Math.min(1,dias.length-1)] ?? 3),
+      folgaCWeekday:Number(anterior?.folgaCWeekday ?? dias[Math.min(2,dias.length-1)] ?? 4)
+    };
+  }
+  function sincronizarEventosMes(month){
+    if(!month||!plantaoState) return;
+    garantirConfigPlantao(false);
+    const mes=numeroMesPlantao(month);
+    const ano=2026;
+    const existentes=Object.fromEntries((month.rows||[]).map(r=>[r.date,r]));
+    const datas=[];
+    const d=new Date(ano,mes,1);
+    while(d.getMonth()===mes){
+      const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+      if(d.getDay()===0 || FERIADOS_TERESINA_2026.some(f=>f.date===iso)) datas.push(iso);
+      d.setDate(d.getDate()+1);
+    }
+    month.rows=datas.map((iso,idx)=>criarLinhaPlantao(iso,idx,existentes[iso]));
+    month.key=Object.keys(MESES_PT).find(k=>MESES_PT[k]===mes&&k!=="Marco")||month.key;
+    ajustarTituloPlantao(month);
+  }
+
+
+
+  function garantirConfigPlantao(sincronizar=true){
+    if(!plantaoState) return;
+    const existeIzidoro=(plantaoState.technicians||[]).some(t=>String(t.name||"").trim().toUpperCase()==="IZIDORO PEREIRA"||t.id==="t_izidoro");
+    if(!existeIzidoro){
+      plantaoState.technicians.push({id:"t_izidoro",label:"Técnico 7",name:"Izidoro Pereira",status:"Técnico noturno",start:"",end:""});
+    }
+    if(!Array.isArray(plantaoState.allowedFolgaWeekdays)||!plantaoState.allowedFolgaWeekdays.length){
+      plantaoState.allowedFolgaWeekdays=[2,3,4,6];
+    }
+    if(!plantaoState.sabadoFolgaAdicionado){
+      plantaoState.allowedFolgaWeekdays=[...plantaoState.allowedFolgaWeekdays,6];
+      plantaoState.sabadoFolgaAdicionado=true;
+    }
+    plantaoState.allowedFolgaWeekdays=[...new Set(plantaoState.allowedFolgaWeekdays.map(Number).filter(n=>n>=0&&n<=6))].sort((a,b)=>a-b);
+    if(!plantaoState.allowedFolgaWeekdays.length) plantaoState.allowedFolgaWeekdays=[2,3,4,6];
+
+    plantaoState.months.forEach(month=>{
+      if(sincronizar) sincronizarEventosMes(month);
+      month.rows.forEach((row,idx)=>{
+        const dias=plantaoState.allowedFolgaWeekdays;
+        if(!row.baseA) row.baseA=plantaoState.technicians[(idx*2)%plantaoState.technicians.length]?.id||"";
+        if(!row.baseB||row.baseB===row.baseA) row.baseB=plantaoState.technicians[(idx*2+1)%plantaoState.technicians.length]?.id||plantaoState.technicians.find(t=>t.id!==row.baseA)?.id||"";
+        if(row.baseC===undefined) row.baseC="";
+        if(!dias.includes(Number(row.folgaAWeekday))) row.folgaAWeekday=dias[0];
+        if(!dias.includes(Number(row.folgaBWeekday))) row.folgaBWeekday=dias[Math.min(1,dias.length-1)];
+        if(!dias.includes(Number(row.folgaCWeekday))) row.folgaCWeekday=dias[Math.min(2,dias.length-1)];
+        if(row.folgaAWeekday===row.folgaBWeekday&&dias.length>1) row.folgaBWeekday=dias.find(d=>d!==row.folgaAWeekday);
+      });
+    });
+  }
+
+  function opcoesTecnicos(selectedId,opcional=false){
+    const vazio=opcional?`<option value="" ${!selectedId?"selected":""}>Sem 3º técnico</option>`:"";
+    return vazio+plantaoState.technicians.map(t=>{
+      const extra = t.status==="Férias" ? " (férias)" : (t.status==="Inativo" ? " (inativo)" : (t.status==="Técnico noturno" ? " (noturno)" : ""));
+      return `<option value="${t.id}" ${t.id===selectedId?"selected":""}>${t.name}${extra}</option>`;
+    }).join("");
+  }
+
+  function opcoesFolga(selectedDay){
+    garantirConfigPlantao();
+    return plantaoState.allowedFolgaWeekdays.map(d=>`<option value="${d}" ${Number(selectedDay)===Number(d)?"selected":""}>${folgaNomes[d]}</option>`).join("");
+  }
+
+  function renderFolgaConfig(){
+    const box=$p("plantaoFolgaConfig");
+    if(!box||!plantaoState) return;
+    garantirConfigPlantao();
+    const checks=[1,2,3,4,5,6].map(d=>`<label><input type="checkbox" data-folga-dia="${d}" ${plantaoState.allowedFolgaWeekdays.includes(d)?"checked":""}> ${folgaNomes[d]}</label>`).join("");
+    box.innerHTML=`<div class="plantoes-folga-options">${checks}</div>`;
+    box.querySelectorAll("[data-folga-dia]").forEach(chk=>{
+      chk.addEventListener("change",()=>{
+        const dia=Number(chk.dataset.folgaDia);
+        let arr=new Set(plantaoState.allowedFolgaWeekdays||[]);
+        if(chk.checked) arr.add(dia); else arr.delete(dia);
+        if(!arr.size){
+          arr.add(dia);
+          chk.checked=true;
+        }
+        plantaoState.allowedFolgaWeekdays=[...arr].sort((a,b)=>a-b);
+        garantirConfigPlantao();
+        renderTabelaPlantoes();
+      });
+    });
+  }
+
+  function estadoValidoPlantoes(state){
+    return !!(
+      state &&
+      Array.isArray(state.technicians) &&
+      state.technicians.length &&
+      Array.isArray(state.months) &&
+      state.months.length &&
+      state.months.some(m=>m&&Array.isArray(m.rows)&&m.rows.length)
+    );
+  }
+
+  function carregarStatePlantoes(){
+    try{
+      const salvo=JSON.parse(localStorage.getItem(STORAGE_PLANTOES)||"null");
+      if(estadoValidoPlantoes(salvo)) return salvo;
+    }catch(e){console.warn("Plantões: falha ao ler localStorage",e);}
+    return clone(ORIGINAL_PLANTOES);
+  }
+
+  function salvarStatePlantoes(){
+    try{
+      const sel=$p("plantaoMes");
+      if(sel) plantaoState.selectedMonthIndex=Number(sel.value)||0;
+      garantirConfigPlantao();
+      localStorage.setItem(STORAGE_PLANTOES,JSON.stringify(plantaoState));
+      if(typeof setStatus==="function") setStatus("💾 Escala de plantões salva neste navegador.");
+      return true;
+    }catch(e){
+      console.error("Plantões: falha ao salvar",e);
+      if(typeof setStatus==="function") setStatus("❌ Não foi possível salvar os plantões neste navegador.");
+      return false;
+    }
+  }
+
+  function isoToDate(iso){
+    const [y,m,d]=String(iso||"").split("-").map(Number);
+    return new Date(y||2026,(m||1)-1,d||1);
+  }
+  function formatDateBR(iso){
+    if(!iso) return "";
+    const [y,m,d]=String(iso).split("-");
+    return `${d}/${m}/${y}`;
+  }
+  function semana(iso){
+    return nomesDias[isoToDate(iso).getDay()]||"";
+  }
+  function addDays(dt,days){
+    const d=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+    d.setDate(d.getDate()+days);
+    return d;
+  }
+  function formatFolga(dt){
+    const dd=String(dt.getDate()).padStart(2,"0");
+    const mm=String(dt.getMonth()+1).padStart(2,"0");
+    const yy=dt.getFullYear();
+    return `${folgaLower[dt.getDay()]} ${dd}/${mm}/${yy}`;
+  }
+  function proximaFolga(eventIso,targetWeekday){
+    const start=addDays(isoToDate(eventIso),1);
+    let diff=(Number(targetWeekday)-start.getDay()+7)%7;
+    return formatFolga(addDays(start,diff));
+  }
+  function tecnicoPorId(id){
+    return plantaoState.technicians.find(t=>t.id===id)||plantaoState.technicians[0];
+  }
+  function emFerias(tec,iso){
+    if(!tec||tec.status!=="Férias"||!tec.start||!tec.end) return false;
+    return iso>=tec.start&&iso<=tec.end;
+  }
+  function disponivel(tec,iso,excluidos=new Set()){
+    return tec && !["Inativo","Técnico noturno"].includes(tec.status) && !emFerias(tec,iso) && !excluidos.has(tec.id);
+  }
+  function escolherTecnico(preferidoId,iso,excluidos=new Set()){
+    const pref=tecnicoPorId(preferidoId);
+    if(disponivel(pref,iso,excluidos)) return pref;
+    const lista=plantaoState.technicians;
+    const idx=Math.max(0,lista.findIndex(t=>t.id===preferidoId));
+    for(let i=1;i<=lista.length;i++){
+      const cand=lista[(idx+i)%lista.length];
+      if(disponivel(cand,iso,excluidos)) return cand;
+    }
+    return pref;
+  }
+
+  function renderConfigPlantoes(){
+    renderFolgaConfig();
+    const body=$p("plantaoConfigBody");
+    if(!body) return;
+    body.innerHTML=plantaoState.technicians.map((t,i)=>`<tr>
+      <td><strong>${t.label||("Técnico "+(i+1))}</strong></td>
+      <td><input data-plantao-tech="${t.id}" data-field="name" value="${String(t.name||"").replace(/"/g,"&quot;")}"></td>
+      <td>
+        <select data-plantao-tech="${t.id}" data-field="status">
+          <option value="Ativo" ${t.status==="Ativo"?"selected":""}>Ativo</option>
+          <option value="Férias" ${t.status==="Férias"?"selected":""}>Férias</option>
+          <option value="Técnico noturno" ${t.status==="Técnico noturno"?"selected":""}>Técnico noturno</option>
+          <option value="Inativo" ${t.status==="Inativo"?"selected":""}>Inativo</option>
+        </select>
+      </td>
+      <td><input type="date" data-plantao-tech="${t.id}" data-field="start" value="${t.start||""}"></td>
+      <td><input type="date" data-plantao-tech="${t.id}" data-field="end" value="${t.end||""}"></td>
+    </tr>`).join("");
+
+    body.querySelectorAll("[data-plantao-tech]").forEach(el=>{
+      el.addEventListener("input",()=>{
+        const tec=tecnicoPorId(el.dataset.plantaoTech);
+        tec[el.dataset.field]=el.value;
+        if(el.dataset.field==="status") recalcularPlantoesPorDisponibilidade();
+        renderTabelaPlantoes();
+      });
+      el.addEventListener("change",()=>{
+        const tec=tecnicoPorId(el.dataset.plantaoTech);
+        tec[el.dataset.field]=el.value;
+        if(el.dataset.field==="status") recalcularPlantoesPorDisponibilidade();
+        renderTabelaPlantoes();
+      });
+    });
+  }
+
+  function renderMesSelect(){
+    const sel=$p("plantaoMes");
+    if(!sel) return;
+    const novo=sel.cloneNode(false);
+    novo.id=sel.id;
+    novo.className=sel.className;
+    novo.setAttribute("aria-label",sel.getAttribute("aria-label")||"Selecionar mês");
+    novo.innerHTML=plantaoState.months.map((m,i)=>`<option value="${i}">${m.key||m.title||("Mês "+(i+1))}</option>`).join("");
+    const selecionado=Number(plantaoState.selectedMonthIndex||plantaoMesAtualIndex||0);
+    novo.value=String(Math.min(Math.max(selecionado,0),plantaoState.months.length-1));
+    sel.replaceWith(novo);
+    novo.addEventListener("change",()=>{
+      const novoIndex=Number(novo.value)||0;
+      const body=$p("plantaoTabelaBody");
+      if(body&&body.querySelector("tr[data-row]")){
+        const anterior=plantaoState.months[plantaoMesAtualIndex];
+        if(anterior) atualizarMesFromInputs(anterior);
+        body.innerHTML="";
+      }
+      plantaoMesAtualIndex=novoIndex;
+      plantaoState.selectedMonthIndex=plantaoMesAtualIndex;
+      const month=plantaoState.months[plantaoMesAtualIndex];
+      if(month) ajustarTituloPlantao(month);
+      renderTabelaPlantoes();
+    });
+  }
+
+  function atualizarMesFromInputs(month){
+    const body=$p("plantaoTabelaBody");
+    if(!body) return;
+    body.querySelectorAll("tr[data-row]").forEach(tr=>{
+      const idx=Number(tr.dataset.row);
+      const row=month.rows[idx];
+      const dateEl=tr.querySelector('[data-field="date"]');
+      const typeEl=tr.querySelector('[data-field="type"]');
+      const descEl=tr.querySelector('[data-field="description"]');
+      const baseAEl=tr.querySelector('[data-field="baseA"]');
+      const baseBEl=tr.querySelector('[data-field="baseB"]');
+      const baseCEl=tr.querySelector('[data-field="baseC"]');
+      const folgaAEl=tr.querySelector('[data-field="folgaAWeekday"]');
+      const folgaBEl=tr.querySelector('[data-field="folgaBWeekday"]');
+      const folgaCEl=tr.querySelector('[data-field="folgaCWeekday"]');
+      if(dateEl) row.date=dateEl.value;
+      if(typeEl) row.type=typeEl.value;
+      if(descEl) row.description=descEl.value;
+      if(baseAEl) row.baseA=baseAEl.value;
+      if(baseBEl) row.baseB=baseBEl.value;
+      if(baseCEl) row.baseC=baseCEl.value;
+      if(folgaAEl) row.folgaAWeekday=Number(folgaAEl.value);
+      if(folgaBEl) row.folgaBWeekday=Number(folgaBEl.value);
+      if(folgaCEl) row.folgaCWeekday=Number(folgaCEl.value);
+    });
+    garantirConfigPlantao(false);
+  }
+
+  function recalcularPlantoesPorDisponibilidade(){
+    if(!plantaoState) return;
+    (plantaoState.months||[]).forEach(month=>{
+      (month.rows||[]).forEach(row=>{
+        const a=row.baseA?tecnicoPorId(row.baseA):null;
+        const b=row.baseB?tecnicoPorId(row.baseB):null;
+        const c=row.baseC?tecnicoPorId(row.baseC):null;
+        if(a&&!disponivel(a,row.date,new Set())) row.baseA="";
+        if(b&&!disponivel(b,row.date,new Set())) row.baseB="";
+        if(c&&!disponivel(c,row.date,new Set())) row.baseC="";
+      });
+      redistribuirPlantoesMes(month);
+    });
+  }
+
+  function redistribuirFolgasMes(month){
+    if(!month||!Array.isArray(month.rows)) return false;
+    garantirConfigPlantao(false);
+    const dias=plantaoState.allowedFolgaWeekdays||[2,3,4,6];
+    if(!dias.length) return false;
+    const offset=Number(month.redistribFolgasOffset||0);
+    month.rows.forEach((row,idx)=>{
+      row.folgaAWeekday=dias[(idx+offset)%dias.length];
+      row.folgaBWeekday=dias.length>1?dias[(idx+offset+1)%dias.length]:dias[0];
+      row.folgaCWeekday=dias.length>2?dias[(idx+offset+2)%dias.length]:row.folgaBWeekday;
+    });
+    month.redistribFolgasOffset=offset+1;
+    return true;
+  }
+
+  function redistribuirPlantoesMes(month){
+    if(!month||!Array.isArray(month.rows)) return false;
+    garantirConfigPlantao(false);
+    const ativos=(plantaoState.technicians||[]).filter(t=>disponivel(t,"2026-01-01",new Set()));
+    if(ativos.length<2) return false;
+    const mesIndex=(plantaoState.months||[]).indexOf(month);
+    const mesAnterior=mesIndex>0?plantaoState.months[mesIndex-1]:null;
+    let ultimoPlantao=mesAnterior?.rows?.length?mesAnterior.rows[mesAnterior.rows.length-1]:null;
+    let ultimosIds=ultimoPlantao?new Set([ultimoPlantao.baseA,ultimoPlantao.baseB,ultimoPlantao.baseC].filter(Boolean)):new Set();
+    const offset=Number(month.redistribPlantoesOffset||0);
+    month.rows.forEach((row,idx)=>{
+      const disponiveis=ativos.filter(t=>disponivel(t,row.date,new Set()));
+      const lista=disponiveis.length>=2?disponiveis:ativos;
+      const candidatos=lista.filter(t=>!ultimosIds.has(t.id));
+      const baseLista=candidatos.length>=2?candidatos:lista;
+      const base=(idx*2+offset)%baseLista.length;
+      const a=baseLista[base];
+      const b=baseLista[(base+1)%baseLista.length]||baseLista.find(t=>t.id!==a.id)||a;
+      row.baseA=a.id;
+      row.baseB=b.id;
+      if(row.baseC){
+        const c=baseLista.find(t=>t.id!==a.id&&t.id!==b.id)||lista.find(t=>t.id!==a.id&&t.id!==b.id);
+        row.baseC=c?c.id:"";
+      }
+      ultimosIds=new Set([row.baseA,row.baseB,row.baseC].filter(Boolean));
+    });
+    month.redistribPlantoesOffset=offset+1;
+    return true;
+  }
+
+  
+  function calcularLinhaPlantao(row){
+    const exclA=new Set();
+    const tecA=escolherTecnico(row.baseA,row.date,exclA);
+    const exclB=new Set([tecA.id]);
+    const tecB=escolherTecnico(row.baseB,row.date,exclB);
+    const exclC=new Set([tecA.id,tecB.id]);
+    const tecC=row.baseC?escolherTecnico(row.baseC,row.date,exclC):null;
+    const folgaA=proximaFolga(row.date,row.folgaAWeekday);
+    const folgaB=proximaFolga(row.date,row.folgaBWeekday);
+    const folgaC=tecC?proximaFolga(row.date,row.folgaCWeekday):"";
+    const mudou=tecA.id!==row.baseA || tecB.id!==row.baseB || (row.baseC&&tecC&&tecC.id!==row.baseC);
+    let aviso="OK";
+    const ids=[tecA.id,tecB.id].concat(tecC?[tecC.id]:[]);
+    if(new Set(ids).size!==ids.length) aviso="TÉCNICO REPETIDO";
+    else if([folgaA,folgaB,folgaC].filter(Boolean).length!==new Set([folgaA,folgaB,folgaC].filter(Boolean)).size) aviso="FOLGAS NO MESMO DIA";
+    else if(mudou) aviso="Redistribuído por férias";
+    return {tecA,tecB,tecC,folgaA,folgaB,folgaC,aviso,mudou};
+  }
+
+  function escapePlantao(v){
+    return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+  }
+
+  async function gerarPDFPlantaoMes(){
+    const sel=$p("plantaoMes");
+    if(!sel||!plantaoState) return;
+    const month=plantaoState.months[Number(sel.value)||0];
+    if(!month) return;
+    atualizarMesFromInputs(month);
+    sincronizarEventosMes(month);
+    garantirConfigPlantao(false);
+    renderTabelaPlantoes();
+
+    const linhas=month.rows.map(row=>{
+      const calc=calcularLinhaPlantao(row);
+      return `<tr>
+        <td>${escapePlantao(formatDateBR(row.date))}</td>
+        <td>${escapePlantao(semana(row.date))}</td>
+        <td>${escapePlantao(row.type)}</td>
+        <td>${escapePlantao(row.description)}</td>
+        <td>${escapePlantao(calc.tecA?.name||"")}</td>
+        <td>${escapePlantao(calc.tecB?.name||"")}</td>
+        <td>${escapePlantao(calc.tecC?.name||"-")}</td>
+        <td>${escapePlantao(calc.folgaA)}</td>
+        <td>${escapePlantao(calc.folgaB)}</td>
+        <td>${escapePlantao(calc.folgaC||"-")}</td>
+        <td>${escapePlantao(calc.aviso)}</td>
+      </tr>`;
+    }).join("");
+    const totalTerceiro=month.rows.filter(r=>r.baseC).length;
+    const shell=document.createElement("div");
+    shell.className="plantao-pdf-shell";
+    shell.innerHTML=`<div class="plantao-pdf-header">
+        <h1>${escapePlantao(tituloPlantaoMes(month))}</h1>
+        <p>Domingos e feriados de Teresina/PI · Gerado em ${new Date().toLocaleString("pt-BR")}</p>
+      </div>
+      <div class="plantao-pdf-kpis">
+        <div class="plantao-pdf-kpi"><span>Dias especiais</span><strong>${month.rows.length}</strong></div>
+        <div class="plantao-pdf-kpi"><span>Plantões</span><strong>${month.rows.length*2+totalTerceiro}</strong></div>
+        <div class="plantao-pdf-kpi"><span>Folgas</span><strong>${month.rows.length*2+totalTerceiro}</strong></div>
+        <div class="plantao-pdf-kpi"><span>Mês</span><strong>${escapePlantao(month.key||"")}</strong></div>
+      </div>
+      <div class="plantao-pdf-table">
+        <table>
+          <thead><tr><th>Data</th><th>Semana</th><th>Tipo</th><th>Descrição</th><th>Técnico A</th><th>Técnico B</th><th>Téc. C</th><th>Folga A</th><th>Folga B</th><th>Folga C</th><th>Aviso</th></tr></thead>
+          <tbody>${linhas}</tbody>
+        </table>
+      </div>`;
+    document.body.appendChild(shell);
+    try{
+      if(!window.html2canvas||!window.jspdf){ alert("Bibliotecas de PDF não carregadas."); return; }
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      const canvas=await html2canvas(shell,{scale:2,backgroundColor:"#f7f9fc",useCORS:true,scrollX:0,scrollY:0});
+      const img=canvas.toDataURL("image/png");
+      const {jsPDF}=window.jspdf;
+      const pdf=new jsPDF("l","mm","a4");
+      const pageW=pdf.internal.pageSize.getWidth();
+      const pageH=pdf.internal.pageSize.getHeight();
+      const margin=8;
+      const imgW=pageW-(margin*2);
+      const imgH=(canvas.height*imgW)/canvas.width;
+      let heightLeft=imgH;
+      let position=margin;
+      pdf.addImage(img,"PNG",margin,position,imgW,imgH);
+      heightLeft-=pageH-(margin*2);
+      while(heightLeft>0){ pdf.addPage(); position=margin-(imgH-heightLeft); pdf.addImage(img,"PNG",margin,position,imgW,imgH); heightLeft-=pageH-(margin*2); }
+      const nome=String(month.key||"plantao").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9_-]+/gi,"_").toLowerCase();
+      pdf.save(`escala_plantoes_${nome}.pdf`);
+    }catch(e){ console.error(e); if(typeof setStatus==="function") setStatus("❌ Erro ao gerar PDF dos plantões: <strong>"+e.message+"</strong>"); }
+    finally{ shell.remove(); }
+  }
+
+  function renderTabelaPlantoes(){
+    const sel=$p("plantaoMes");
+    const body=$p("plantaoTabelaBody");
+    if(!sel||!body||!plantaoState) return;
+    const month=plantaoState.months[Number(sel.value)||0];
+    if(!month) return;
+
+    const existingRows=body.querySelectorAll("tr[data-row]");
+    if(existingRows.length) atualizarMesFromInputs(month);
+    sincronizarEventosMes(month);
+    garantirConfigPlantao(false);
+    atualizarToggleTerceiro();
+
+    let avisos=0, redistribuidos=0, totalTerceiro=0;
+    const linhas=month.rows.map((row,idx)=>{
+      if(row.baseC) totalTerceiro++;
+      const calc=calcularLinhaPlantao(row);
+      const tecA=calc.tecA;
+      const tecB=calc.tecB;
+      const tecC=calc.tecC;
+      const folgaA=calc.folgaA;
+      const folgaB=calc.folgaB;
+      const folgaC=calc.folgaC;
+      let aviso=calc.aviso==="OK"?"✔ OK":(calc.aviso==="Redistribuído por férias"?"🔄 Redistribuído (férias)":"⚠ "+calc.aviso+"!");
+      let avisoClasse=calc.aviso==="OK"?"plantoes-aviso-ok":"plantoes-aviso-alerta";
+      if(calc.aviso!=="OK"){
+        if(calc.aviso==="Redistribuído por férias") redistribuidos++;
+        else avisos++;
+      }
+      return `<tr data-row="${idx}">
+        <td><input type="date" data-field="date" value="${row.date}"></td>
+        <td class="plantoes-readonly">${semana(row.date)}</td>
+        <td><input data-field="type" value="${String(row.type||"").replace(/"/g,"&quot;")}"></td>
+        <td><input data-field="description" value="${String(row.description||"").replace(/"/g,"&quot;")}"></td>
+        <td class="plantoes-plantao"><select class="plantoes-select-cell" data-field="baseA">${opcoesTecnicos(tecA.id)}</select></td>
+        <td class="plantoes-plantao"><select class="plantoes-select-cell" data-field="baseB">${opcoesTecnicos(tecB.id)}</select></td>
+        <td class="plantoes-plantao plantoes-terceiro-col"><select class="plantoes-select-cell" data-field="baseC">${opcoesTecnicos(tecC?.id||row.baseC||"",true)}</select>${tecC?"":"<div class='plantoes-terceiro-vazio'>opcional</div>"}</td>
+        <td class="plantoes-folga"><select class="plantoes-folga-cell" data-field="folgaAWeekday">${opcoesFolga(row.folgaAWeekday)}</select><div class="plantoes-folga-date">${folgaA}</div></td>
+        <td class="plantoes-folga"><select class="plantoes-folga-cell" data-field="folgaBWeekday">${opcoesFolga(row.folgaBWeekday)}</select><div class="plantoes-folga-date">${folgaB}</div></td>
+        <td class="plantoes-folga plantoes-terceiro-col">${tecC?`<select class="plantoes-folga-cell" data-field="folgaCWeekday">${opcoesFolga(row.folgaCWeekday)}</select><div class="plantoes-folga-date">${folgaC}</div>`:"<span class='plantoes-terceiro-vazio'>sem 3º técnico</span>"}</td>
+        <td class="${avisoClasse}">${aviso}</td>
+      </tr>`;
+    }).join("");
+
+    body.innerHTML=linhas;
+    body.querySelectorAll("input,select").forEach(el=>{
+      el.addEventListener("change",()=>{ atualizarMesFromInputs(month); renderTabelaPlantoes(); });
+      if(el.tagName==="INPUT" && el.type!=="date"){
+        el.addEventListener("blur",()=>{ atualizarMesFromInputs(month); renderTabelaPlantoes(); });
+      }
+    });
+
+    ajustarTituloPlantao(month);
+    $p("plantaoKpiPlantoes").textContent=month.rows.length*2+totalTerceiro;
+    $p("plantaoKpiFolgas").textContent=month.rows.length*2+totalTerceiro;
+  }
+
+  function initPlantoes(){
+    if(!$p("plantoes")) return;
+    plantaoState=carregarStatePlantoes();
+    garantirConfigPlantao();
+    renderMesSelect();
+    const selInicial=$p("plantaoMes");
+    plantaoMesAtualIndex=Number(selInicial?.value ?? plantaoState.selectedMonthIndex)||0;
+    plantaoState.selectedMonthIndex=plantaoMesAtualIndex;
+    const mesInicial=plantaoState.months[plantaoMesAtualIndex]||plantaoState.months[0];
+    plantaoTerceiroAberto=!!mesInicial?.rows?.some(r=>r.baseC);
+    if(mesInicial) ajustarTituloPlantao(mesInicial);
+    renderConfigPlantoes();
+    renderTabelaPlantoes();
+
+    const salvar=$p("plantaoSalvar");
+    const pdfBtn=$p("plantaoPdf");
+    const restaurar=$p("plantaoRestaurar");
+    const redistribuir=$p("plantaoRedistribuirFolgas");
+    const redistribuirPlantoes=$p("plantaoRedistribuirPlantoes");
+    const toggleTerceiro=$p("plantaoToggleTerceiro");
+    if(toggleTerceiro){
+      toggleTerceiro.addEventListener("click",()=>{
+        plantaoTerceiroAberto=!plantaoTerceiroAberto;
+        atualizarToggleTerceiro();
+      });
+      atualizarToggleTerceiro();
+    }
+    if(redistribuir) redistribuir.addEventListener("click",()=>{
+      const sel=$p("plantaoMes");
+      const month=plantaoState.months[Number(sel?.value)||0];
+      if(!month) return;
+      plantaoState.selectedMonthIndex=Number(sel?.value)||0;
+      atualizarMesFromInputs(month);
+      const ok=redistribuirFolgasMes(month);
+      const body=$p("plantaoTabelaBody");
+      if(body) body.innerHTML="";
+      renderTabelaPlantoes();
+      if(typeof setStatus==="function") setStatus(ok?"Folgas redistribuídas para o mês selecionado. Clique em <strong>Salvar alterações</strong> para manter.":"Não foi possível redistribuir as folgas deste mês.");
+      const feedback=$p("plantaoSalvarFeedback");
+      if(feedback) feedback.textContent=ok?"Folgas redistribuídas. Clique em Salvar alterações para manter.":"Não foi possível redistribuir.";
+    });
+    if(redistribuirPlantoes) redistribuirPlantoes.addEventListener("click",()=>{
+      const sel=$p("plantaoMes");
+      const month=plantaoState.months[Number(sel?.value)||0];
+      if(!month) return;
+      plantaoState.selectedMonthIndex=Number(sel?.value)||0;
+      atualizarMesFromInputs(month);
+      const ok=redistribuirPlantoesMes(month);
+      const body=$p("plantaoTabelaBody");
+      if(body) body.innerHTML="";
+      renderTabelaPlantoes();
+      if(typeof setStatus==="function") setStatus(ok?"Plantões redistribuídos para o mês selecionado. Clique em <strong>Salvar alterações</strong> para manter.":"Não foi possível redistribuir os plantões deste mês.");
+      const feedback=$p("plantaoSalvarFeedback");
+      if(feedback) feedback.textContent=ok?"Plantões redistribuídos. Clique em Salvar alterações para manter.":"Não foi possível redistribuir plantões.";
+    });
+    if(salvar) salvar.addEventListener("click",()=>{
+      const sel=$p("plantaoMes");
+      if(sel){
+        plantaoState.selectedMonthIndex=Number(sel.value)||0;
+        atualizarMesFromInputs(plantaoState.months[plantaoState.selectedMonthIndex]);
+      }
+      const textoOriginal=salvar.dataset.labelOriginal||salvar.textContent;
+      salvar.dataset.labelOriginal=textoOriginal;
+      const ok=salvarStatePlantoes();
+      const feedback=$p("plantaoSalvarFeedback");
+      salvar.textContent=ok?"Salvo neste navegador":"Erro ao salvar";
+      if(feedback) feedback.textContent=ok?"Alterações salvas neste navegador. Ao reabrir esta página no mesmo navegador, a escala continua como você deixou.":"Não foi possível salvar. Verifique se o navegador permite armazenamento local.";
+      salvar.disabled=true;
+      setTimeout(()=>{
+        salvar.textContent=textoOriginal;
+        salvar.disabled=false;
+        if(feedback) feedback.textContent="";
+      },4500);
+    });
+    if(pdfBtn) pdfBtn.addEventListener("click",gerarPDFPlantaoMes);
+    if(restaurar) restaurar.addEventListener("click",()=>{
+      localStorage.removeItem(STORAGE_PLANTOES);
+      plantaoState=clone(ORIGINAL_PLANTOES);
+      garantirConfigPlantao();
+      renderMesSelect();
+      plantaoMesAtualIndex=Number($p("plantaoMes")?.value)||0;
+      renderConfigPlantoes();
+      renderTabelaPlantoes();
+      if(typeof setStatus==="function") setStatus("🔁 Escala de plantões restaurada conforme a planilha enviada.");
+    });
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initPlantoes);
+  else initPlantoes();
+})();
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
