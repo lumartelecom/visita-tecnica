@@ -4293,50 +4293,122 @@ function buscarGvizJSONPDias(item){
     document.head.appendChild(script);
   });
 }
-async function buscarCSVPlanilhaDias(mesInfo){
-  const urls=urlsDiasPlanilha(mesInfo);
-  let ultimoErro="";
-  for(const item of urls){
-    const cacheKey=`gviz:${item.sheet||item.gid||item.nome}`;
-    if(diasCachePlanilha[cacheKey]) return {matriz:diasCachePlanilha[cacheKey],fonte:item.nome};
+async function fetchDiasComTimeout(url,options={},timeoutMs=22000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+    return await fetch(url,{cache:"no-store",...options,signal:controller.signal});
+  }finally{
+    clearTimeout(timer);
+  }
+}
+function matrizTemCabecalhoDias(matriz){
+  return Array.isArray(matriz) && matriz.length && encontrarLinhaCabecalhoDias(matriz)>=0;
+}
+function matrizFromOpenSheetRows(rows){
+  const headers=[];
+  (rows||[]).forEach(obj=>{
+    Object.keys(obj||{}).forEach(k=>{
+      const nome=norm(k);
+      if(nome && !headers.includes(nome)) headers.push(nome);
+    });
+  });
+  return [headers,...(rows||[]).map(obj=>headers.map(h=>norm(obj?.[h]??"")))];
+}
+function nomesAbasDias(mesInfo){
+  const nomes=[];
+  const add=(n)=>{n=norm(n); if(n && !nomes.includes(n)) nomes.push(n);};
+  (mesInfo.tabs||[]).forEach(add);
+  add(`VT ${mesInfo.nome} ${DIAS_SHEET_CONFIG.anoPadrao}`);
+  add(`VT ${mesInfo.label} ${DIAS_SHEET_CONFIG.anoPadrao}`);
+  return nomes;
+}
+async function buscarOpenSheetDias(mesInfo,erros){
+  const id=DIAS_SHEET_CONFIG.spreadsheetId;
+  for(const nome of nomesAbasDias(mesInfo)){
+    const cacheKey=`opensheet:${nome}`;
+    if(diasCachePlanilha[cacheKey] && matrizTemCabecalhoDias(diasCachePlanilha[cacheKey])) return {matriz:diasCachePlanilha[cacheKey],fonte:`${nome} · OpenSheet`};
+    const url=`https://opensheet.elk.sh/${id}/${encodeURIComponent(nome)}`;
     try{
-      const matriz=await buscarGvizJSONPDias(item);
-      if(!matriz.length) throw new Error("a aba retornou vazia");
+      const resp=await fetchDiasComTimeout(url,{},22000);
+      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const rows=await resp.json();
+      if(!Array.isArray(rows)||!rows.length) throw new Error("retorno vazio");
+      const matriz=matrizFromOpenSheetRows(rows);
+      if(!matrizTemCabecalhoDias(matriz)) throw new Error("não localizou TECNICO/TOTAL GERAL/DT/PD");
       diasCachePlanilha[cacheKey]=matriz;
-      return {matriz,fonte:item.nome};
+      return {matriz,fonte:`${nome} · OpenSheet`};
     }catch(e){
-      ultimoErro=e.message;
+      erros.push(`OpenSheet ${nome}: ${e.message}`);
     }
   }
-
-  // Plano B: tenta CSV direto/proxy. Em muitos navegadores o Google bloqueia por CORS,
-  // por isso o JSONP acima é o caminho principal.
+  throw new Error("OpenSheet não retornou uma aba válida");
+}
+async function buscarCSVComProxyDias(urls,erros){
+  const montarFontes=(url)=>[
+    {nome:"CSV direto",url},
+    {nome:"AllOrigins",url:`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`},
+    {nome:"CorsProxy",url:`https://corsproxy.io/?${encodeURIComponent(url)}`}
+  ];
   for(const item of urls){
-    const cacheKey=item.url;
-    if(diasCachePlanilha[cacheKey]) return {text:diasCachePlanilha[cacheKey],fonte:item.nome};
-    try{
-      let resp=await fetch(item.url,{cache:"no-store"});
-      if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      let text=await resp.text();
-      if(/<html|DOCTYPE html|Ocorreu um erro|Sign in|Fazer login/i.test(text)) throw new Error("Google retornou uma página HTML em vez do CSV");
-      diasCachePlanilha[cacheKey]=text;
-      return {text,fonte:item.nome};
-    }catch(e){
-      ultimoErro=e.message;
+    for(const fonte of montarFontes(item.url)){
+      const cacheKey=`csv:${fonte.nome}:${fonte.url}`;
+      if(diasCachePlanilha[cacheKey]){
+        const matriz=parseMatrizCSV(diasCachePlanilha[cacheKey]);
+        if(matrizTemCabecalhoDias(matriz)) return {text:diasCachePlanilha[cacheKey],fonte:`${item.nome} · ${fonte.nome}`};
+      }
       try{
-        const proxy=`https://api.allorigins.win/raw?url=${encodeURIComponent(item.url)}`;
-        const resp=await fetch(proxy,{cache:"no-store"});
+        const resp=await fetchDiasComTimeout(fonte.url,{},22000);
         if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const text=await resp.text();
-        if(/<html|DOCTYPE html|Ocorreu um erro|Sign in|Fazer login/i.test(text)) throw new Error("Proxy retornou HTML em vez do CSV");
+        if(/<html|DOCTYPE html|Ocorreu um erro|Sign in|Fazer login|ServiceLogin/i.test(text)) throw new Error("retornou HTML/login em vez de CSV");
+        const matriz=parseMatrizCSV(text);
+        if(!matrizTemCabecalhoDias(matriz)) throw new Error("CSV sem cabeçalho TECNICO/TOTAL GERAL/DT/PD");
         diasCachePlanilha[cacheKey]=text;
-        return {text,fonte:item.nome};
-      }catch(e2){
-        ultimoErro=e2.message;
+        return {text,fonte:`${item.nome} · ${fonte.nome}`};
+      }catch(e){
+        erros.push(`${fonte.nome} ${item.nome}: ${e.name==="AbortError"?"tempo limite":e.message}`);
       }
     }
   }
-  throw new Error(`Não consegui abrir a aba VT de ${mesInfo.nome}. Último erro: ${ultimoErro}`);
+  throw new Error("CSV direto/proxy não retornou uma aba válida");
+}
+async function buscarCSVPlanilhaDias(mesInfo){
+  const urls=urlsDiasPlanilha(mesInfo);
+  const erros=[];
+
+  // 1º: Google Visualization por JSONP. Não sofre CORS e funciona em HTML puro.
+  // Agora a matriz é validada antes de aceitar, para não parar numa aba errada/vazia.
+  for(const item of urls){
+    const cacheKey=`gviz:${item.sheet||item.gid||item.nome}`;
+    if(diasCachePlanilha[cacheKey] && matrizTemCabecalhoDias(diasCachePlanilha[cacheKey])) return {matriz:diasCachePlanilha[cacheKey],fonte:`${item.nome} · Google Visualization`};
+    try{
+      const matriz=await buscarGvizJSONPDias(item);
+      if(!matriz.length) throw new Error("a aba retornou vazia");
+      if(!matrizTemCabecalhoDias(matriz)) throw new Error("não localizou TECNICO/TOTAL GERAL/DT/PD");
+      diasCachePlanilha[cacheKey]=matriz;
+      return {matriz,fonte:`${item.nome} · Google Visualization`};
+    }catch(e){
+      erros.push(`GViz ${item.nome}: ${e.name==="AbortError"?"tempo limite":e.message}`);
+    }
+  }
+
+  // 2º: OpenSheet, serviço público que transforma a aba compartilhada em JSON com CORS liberado.
+  try{
+    return await buscarOpenSheetDias(mesInfo,erros);
+  }catch(e){
+    erros.push(e.message);
+  }
+
+  // 3º: CSV direto e proxies CORS. Fica por último porque alguns navegadores bloqueiam o Google direto.
+  try{
+    return await buscarCSVComProxyDias(urls,erros);
+  }catch(e){
+    erros.push(e.message);
+  }
+
+  const resumo=erros.slice(-8).join(" | ");
+  throw new Error(`Não consegui abrir a aba VT de ${mesInfo.nome}. ${resumo}`);
 }
 function preencherSelectDias(){
   const sel=$("diasMes");
