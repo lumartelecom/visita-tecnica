@@ -1520,6 +1520,102 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   }
 }
 
+
+
+/* === CORREÇÃO: PERFORMANCE POR TÉCNICO SEM ESTOURAR A TELA === */
+#secPerformanceTecnico,
+#secPerformanceTecnico .card,
+#secPerformanceTecnico .table-wrap{
+  min-width:0;
+  max-width:100%;
+}
+#secPerformanceTecnico .card{
+  overflow:hidden;
+}
+#secPerformanceTecnico .table-wrap{
+  width:100%;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+#secPerformanceTecnico table{
+  width:100%;
+  min-width:920px;
+  table-layout:fixed;
+  font-size:11px;
+}
+#secPerformanceTecnico thead th,
+#secPerformanceTecnico td{
+  padding:8px 7px;
+  line-height:1.22;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  vertical-align:middle;
+}
+#secPerformanceTecnico thead th{
+  font-size:8.2px;
+  letter-spacing:.045em;
+}
+#secPerformanceTecnico .tech-name{
+  font-size:12px;
+  overflow-wrap:anywhere;
+}
+#secPerformanceTecnico .tech-code{
+  font-size:9px;
+}
+#secPerformanceTecnico .meta-vt,
+#secPerformanceTecnico .badge{
+  min-width:0;
+  max-width:100%;
+  padding:3px 6px;
+  font-size:9.5px;
+  white-space:normal;
+  text-align:center;
+  line-height:1.15;
+}
+#secPerformanceTecnico table th:nth-child(1),
+#secPerformanceTecnico table td:nth-child(1){width:18%}
+#secPerformanceTecnico table th:nth-child(2),
+#secPerformanceTecnico table td:nth-child(2){width:8%}
+#secPerformanceTecnico table th:nth-child(3),
+#secPerformanceTecnico table td:nth-child(3){width:7%}
+#secPerformanceTecnico table th:nth-child(4),
+#secPerformanceTecnico table td:nth-child(4){width:8%}
+#secPerformanceTecnico table th:nth-child(5),
+#secPerformanceTecnico table td:nth-child(5){width:8%}
+#secPerformanceTecnico table th:nth-child(6),
+#secPerformanceTecnico table td:nth-child(6){width:10%}
+#secPerformanceTecnico table th:nth-child(7),
+#secPerformanceTecnico table td:nth-child(7){width:8%}
+#secPerformanceTecnico table th:nth-child(8),
+#secPerformanceTecnico table td:nth-child(8){width:8%}
+#secPerformanceTecnico table th:nth-child(9),
+#secPerformanceTecnico table td:nth-child(9){width:10%}
+#secPerformanceTecnico table th:nth-child(10),
+#secPerformanceTecnico table td:nth-child(10){width:15%}
+@media(max-width:1180px){
+  #secPerformanceTecnico table{min-width:860px;font-size:10px}
+  #secPerformanceTecnico thead th{font-size:7.8px;padding:7px 5px}
+  #secPerformanceTecnico td{padding:7px 5px}
+  #secPerformanceTecnico .tech-name{font-size:11px}
+}
+@media(min-width:981px){
+  #secPerformanceTecnico .mobile-tech-cards{display:none!important}
+}
+@media(max-width:980px){
+  #secPerformanceTecnico .table-wrap{display:none!important}
+  #secPerformanceTecnico .mobile-tech-cards{display:flex!important}
+  #secPerformanceTecnico .section-title-line{align-items:flex-start;text-align:left}
+  #secPerformanceTecnico .section-caption{white-space:normal;text-align:left}
+}
+@media(max-width:520px){
+  #secPerformanceTecnico .mobile-metrics{grid-template-columns:1fr 1fr}
+  #secPerformanceTecnico .tech-mobile-head{display:grid;grid-template-columns:1fr;gap:6px}
+  #secPerformanceTecnico .tech-mobile-head .badge{width:fit-content}
+}
+/* === FIM CORREÇÃO PERFORMANCE === */
+
 </style>
 
 <style>
@@ -1784,8 +1880,8 @@ button:hover,.btn:hover{transform:translateY(-1px)}
         <table>
           <thead>
             <tr>
-              <th>Técnico</th><th>Contratos Executados</th><th>Produção</th><th>Revisitas 10d</th><th>% Rev. 10d</th>
-              <th>VT p/ Meta Rev.</th><th>Fora Janela 30d</th><th>TEC1 30d</th><th>VT p/ Meta TEC1</th><th>Situação</th>
+              <th>Técnico</th><th>Contratos</th><th>Prod.</th><th>Rev. 10d</th><th>% Rev.</th>
+              <th>Meta Rev.</th><th>Fora Jan.</th><th>TEC1</th><th>Meta TEC1</th><th>Situação</th>
             </tr>
           </thead>
           <tbody id="tabelaTecnicos"><tr><td colspan="10"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
