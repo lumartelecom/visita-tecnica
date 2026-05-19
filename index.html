@@ -1610,6 +1610,101 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 @media(max-width:720px){.dias-toolbar{display:grid;grid-template-columns:1fr}.dias-toolbar-actions{display:grid;grid-template-columns:1fr 1fr}.dias-toolbar-actions label{grid-column:1/-1}.dias-toolbar-actions select{min-width:0;width:100%}}
 </style>
 
+
+<style>
+/* === RETENÇÃO DE VALORES - TÉCNICO CERTIFICADO === */
+#tecnicoCertificado .certificado-ciclo-controle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+#tecnicoCertificado .certificado-ciclo-controle label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-muted);
+}
+#tecnicoCertificado .certificado-ciclo-controle select{
+  width:auto;
+  min-width:118px;
+  min-height:32px;
+  padding:5px 8px;
+  font-size:11px;
+  font-weight:800;
+}
+#tecnicoCertificado .certificado-ciclo-controle button{
+  min-height:32px;
+  padding:6px 9px;
+  font-size:10px;
+}
+#tecnicoCertificado .cert-retencao-regra{
+  margin:-4px 0 10px;
+  padding:9px 11px;
+  border-radius:10px;
+  background:#f5f8ff;
+  border:1px solid #cfe0ff;
+  color:#24426c;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.4;
+}
+#tecnicoCertificado .cert-valor-detalhe{
+  display:grid;
+  gap:4px;
+  justify-items:center;
+}
+#tecnicoCertificado .cert-valor-retido,
+#tecnicoCertificado .cert-valor-recuperado{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  max-width:100%;
+  padding:3px 6px;
+  border-radius:999px;
+  font-size:8.5px;
+  font-weight:900;
+  line-height:1;
+  white-space:nowrap;
+}
+#tecnicoCertificado .cert-valor-retido{
+  background:var(--yellow-light);
+  border:1px solid #fde68a;
+  color:#78350f;
+}
+#tecnicoCertificado .cert-valor-recuperado{
+  background:var(--green-light);
+  border:1px solid #a7f3d0;
+  color:#065f46;
+}
+#tecnicoCertificado .cert-valor-zero{
+  background:#f1f5f9!important;
+  border-color:#d9e2ee!important;
+  color:#64748b!important;
+}
+#tecnicoCertificado .cert-retido-linha td{
+  background:#fffdf5;
+}
+#tecnicoCertificado .cert-export-clean .cert-retencao-regra{
+  margin-bottom:8px!important;
+  font-size:10px!important;
+}
+#tecnicoCertificado .cert-export-clean .cert-valor-retido,
+#tecnicoCertificado .cert-export-clean .cert-valor-recuperado{
+  font-size:7.8px!important;
+  padding:3px 5px!important;
+}
+@media(max-width:900px){
+  #tecnicoCertificado .certificado-toolbar{align-items:flex-start!important;}
+  #tecnicoCertificado .certificado-ciclo-controle{width:100%;justify-content:flex-start;}
+}
+</style>
+
 </head>
 <body>
 
@@ -1959,7 +2054,16 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <div class="card certificado-card" id="certificadoExportArea">
       <div class="section-title-line certificado-toolbar">
         <h2>Técnico Certificado</h2>
-        <button id="btnImagemCertificado" class="success nao-exportar-certificado" type="button">Imagem</button>
+        <div class="certificado-ciclo-controle nao-exportar-certificado">
+          <label for="certificadoCiclo">Ciclo
+            <select id="certificadoCiclo" aria-label="Selecionar ciclo do Técnico Certificado"></select>
+          </label>
+          <button id="btnLimparRetencoesCertificado" class="secondary" type="button">Limpar retenções</button>
+          <button id="btnImagemCertificado" class="success" type="button">Imagem</button>
+        </div>
+      </div>
+      <div class="cert-retencao-regra">
+        Regra de retenção: quando o técnico não bate um indicador, o valor daquele indicador fica retido por 1 ciclo. Se no próximo ciclo ele bater o mesmo indicador, recebe o valor do ciclo atual + o valor retido. Se não bater no próximo ciclo, o retido vence.
       </div>
 
       <div class="table-wrap certificado-table-wrap">
@@ -3481,8 +3585,18 @@ function filtrarBasePrincipal(rows){
 
 
 const STORAGE_CERTIFICADO_SISTEMICO="lumar_tecnico_certificado_sistemicos_v1";
+const STORAGE_CERTIFICADO_RETIDO="lumar_tecnico_certificado_retidos_v1";
+const STORAGE_CERTIFICADO_CICLO="lumar_tecnico_certificado_ciclo_v1";
 const METAS_CERTIFICADO={t1:95,alfa:90,certidao:90};
 const VALORES_CERTIFICADO={revisitas:200,tec1:165,produtividade:135,certidao:100,t1:65,alfa:35};
+const INDICADORES_CERTIFICADO=[
+  {campo:"revisitas",label:"Revisitas"},
+  {campo:"tec1",label:"TEC1"},
+  {campo:"produtividade",label:"Produtividade"},
+  {campo:"t1",label:"T1 prazo"},
+  {campo:"alfa",label:"Alfa Gestor"},
+  {campo:"certidao",label:"Certidão"}
+];
 
 function moedaCertificado(v){
   return new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(v)||0);
@@ -3497,6 +3611,126 @@ function valorLinhaCertificado(flags){
 }
 function pillValorCertificado(v){
   return `<span class="cert-valor-pill">${moedaCertificado(v)}</span>`;
+}
+function cicloPadraoCertificado(){
+  const hoje=new Date();
+  return `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}`;
+}
+function formatarCicloCertificado(ciclo){
+  const [ano,mes]=String(ciclo||"").split("-").map(Number);
+  const nomes=["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+  if(!ano||!mes) return String(ciclo||"");
+  return `${nomes[mes-1]||String(mes).padStart(2,"0")}/${String(ano).slice(-2)}`;
+}
+function cicloAnteriorCertificado(ciclo){
+  const [ano,mes]=String(ciclo||cicloPadraoCertificado()).split("-").map(Number);
+  const d=new Date(ano,mes-2,1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+function proximoCicloCertificado(ciclo){
+  const [ano,mes]=String(ciclo||cicloPadraoCertificado()).split("-").map(Number);
+  const d=new Date(ano,mes,1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+function competenciaCertificado(){
+  return $("certificadoCiclo")?.value || localStorage.getItem(STORAGE_CERTIFICADO_CICLO) || cicloPadraoCertificado();
+}
+function inicializarCicloCertificado(){
+  const sel=$("certificadoCiclo");
+  if(!sel) return;
+  const hoje=new Date();
+  const anos=[hoje.getFullYear()-1,hoje.getFullYear(),hoje.getFullYear()+1];
+  const atual=localStorage.getItem(STORAGE_CERTIFICADO_CICLO)||cicloPadraoCertificado();
+  const opcoes=[];
+  anos.forEach(ano=>{
+    for(let mes=1;mes<=12;mes++){
+      const ciclo=`${ano}-${String(mes).padStart(2,"0")}`;
+      opcoes.push(`<option value="${ciclo}">${formatarCicloCertificado(ciclo)}</option>`);
+    }
+  });
+  sel.innerHTML=opcoes.join("");
+  sel.value=[...sel.options].some(o=>o.value===atual)?atual:cicloPadraoCertificado();
+}
+function carregarRetidosCertificado(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_CERTIFICADO_RETIDO)||"{}")||{};}
+  catch(e){return {};}
+}
+function salvarRetidosCertificado(dados){
+  try{localStorage.setItem(STORAGE_CERTIFICADO_RETIDO,JSON.stringify(dados||{}));}
+  catch(e){console.warn("Não foi possível salvar retenções do Técnico Certificado",e);}
+}
+function valorRetidoValidoCertificado(retidos,login,campo,ciclo){
+  const key=loginKey(login);
+  const reg=retidos?.[key]?.[campo];
+  if(!reg) return 0;
+  return String(reg.ciclo)===cicloAnteriorCertificado(ciclo) ? Number(reg.valor)||0 : 0;
+}
+function limparRetidosExpiradosCertificado(retidos,ciclo){
+  const anterior=cicloAnteriorCertificado(ciclo);
+  Object.keys(retidos||{}).forEach(login=>{
+    Object.keys(retidos[login]||{}).forEach(campo=>{
+      const reg=retidos[login][campo];
+      if(!reg || (String(reg.ciclo)!==anterior && String(reg.ciclo)!==ciclo)){
+        delete retidos[login][campo];
+      }
+    });
+    if(!Object.keys(retidos[login]||{}).length) delete retidos[login];
+  });
+}
+function calcularPagamentoCertificado(login,flags,ciclo,opcoes={salvar:true}){
+  const key=loginKey(login);
+  const retidos=carregarRetidosCertificado();
+  if(!retidos[key]) retidos[key]={};
+  const detalhes=[];
+  let valorAtual=0;
+  let valorRecuperado=0;
+  let valorRetidoProximo=0;
+
+  INDICADORES_CERTIFICADO.forEach(ind=>{
+    const campo=ind.campo;
+    const valor=Number(VALORES_CERTIFICADO[campo])||0;
+    const bateu=!!flags[campo];
+    const retidoValido=valorRetidoValidoCertificado(retidos,key,campo,ciclo);
+
+    if(bateu){
+      valorAtual+=valor;
+      if(retidoValido>0){
+        valorRecuperado+=retidoValido;
+        detalhes.push(`${ind.label}: retido recuperado ${moedaCertificado(retidoValido)}`);
+      }
+      delete retidos[key][campo];
+    }else{
+      valorRetidoProximo+=valor;
+      retidos[key][campo]={
+        valor,
+        ciclo,
+        venceEm:proximoCicloCertificado(ciclo),
+        label:ind.label,
+        atualizadoEm:new Date().toISOString()
+      };
+    }
+  });
+
+  limparRetidosExpiradosCertificado(retidos,ciclo);
+  if(opcoes.salvar) salvarRetidosCertificado(retidos);
+  return {
+    valorAtual,
+    valorRecuperado,
+    valorRetidoProximo,
+    valorTotal:valorAtual+valorRecuperado,
+    detalhes
+  };
+}
+function htmlValorCertificado(pagamento){
+  const total=Number(pagamento?.valorTotal)||0;
+  const recuperado=Number(pagamento?.valorRecuperado)||0;
+  const retido=Number(pagamento?.valorRetidoProximo)||0;
+  const title=(pagamento?.detalhes||[]).join(" | ");
+  return `<div class="cert-valor-detalhe" title="${escapeHTML(title)}">
+    <span class="cert-valor-pill ${total<=0?"cert-valor-zero":""}">${moedaCertificado(total)}</span>
+    ${recuperado>0?`<span class="cert-valor-recuperado">+ retido ${moedaCertificado(recuperado)}</span>`:""}
+    ${retido>0?`<span class="cert-valor-retido">retém ${moedaCertificado(retido)}</span>`:""}
+  </div>`;
 }
 
 function carregarSistemicosCertificado(){
@@ -3564,14 +3798,19 @@ function atualizarLinhaCertificado(tr){
   const final=tr.querySelector(".certificado-final");
   const valorEl=tr.querySelector(".cert-valor-final");
   const ok=Object.values(flags).every(Boolean);
+  const login=tr.getAttribute("data-cert-login")||"";
+  const ciclo=competenciaCertificado();
+  const pagamento=calcularPagamentoCertificado(login,flags,ciclo,{salvar:true});
+
   if(final){
     final.textContent=ok?"SIM":"NÃO";
     final.classList.toggle("cert-sim",ok);
     final.classList.toggle("cert-nao",!ok);
   }
   if(valorEl){
-    valorEl.textContent=moedaCertificado(valorLinhaCertificado(flags));
+    valorEl.innerHTML=htmlValorCertificado(pagamento);
   }
+  tr.classList.toggle("cert-retido-linha",Number(pagamento.valorRetidoProximo)>0);
 }
 function ativarInputsCertificado(){
   const dados=carregarSistemicosCertificado();
@@ -3729,7 +3968,7 @@ function renderTecnicoCertificado(summary){
       <td>${alfaHtml}</td>
       <td>${certidaoHtml}</td>
       <td>${certBadge(false,"certificado-final")}</td>
-      <td>${pillValorCertificado(valorLinhaCertificado(flagsIniciais)).replace('cert-valor-pill','cert-valor-pill cert-valor-final')}</td>
+      <td><div class="cert-valor-final">${htmlValorCertificado(calcularPagamentoCertificado(t.login,flagsIniciais,competenciaCertificado(),{salvar:false}))}</div></td>
     </tr>`;
   }).join("");
 
@@ -4517,6 +4756,19 @@ document.addEventListener("DOMContentLoaded",()=>{
   on("cardRevisitas","click",()=>abrirModalIndicador("revisita"));
   on("cardTec1","click",()=>abrirModalIndicador("tec1"));
   on("cardLogOfensor","click",abrirModalLogOfensor);
+  inicializarCicloCertificado();
+  on("certificadoCiclo","change",()=>{
+    const ciclo=competenciaCertificado();
+    localStorage.setItem(STORAGE_CERTIFICADO_CICLO,ciclo);
+    if(currentSummary) renderTecnicoCertificado(currentSummary);
+    if(typeof setStatus==="function") setStatus(`Ciclo do Técnico Certificado alterado para <strong>${formatarCicloCertificado(ciclo)}</strong>.`);
+  });
+  on("btnLimparRetencoesCertificado","click",()=>{
+    if(!confirm("Deseja limpar todos os valores retidos salvos neste navegador?")) return;
+    localStorage.removeItem(STORAGE_CERTIFICADO_RETIDO);
+    if(currentSummary) renderTecnicoCertificado(currentSummary);
+    if(typeof setStatus==="function") setStatus("Retenções do Técnico Certificado foram limpas neste navegador.");
+  });
   on("btnImagemCertificado","click",exportarImagemTecnicoCertificado);
   on("modalTecnicosFechar","click",fecharModalTecnicos);
   on("modalIndicadorFechar","click",fecharModalIndicador);
