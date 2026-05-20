@@ -368,7 +368,7 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 
 
 #plantoes{font-size:12px}
-.plantoes-config-ferias{margin-bottom:7px}
+.plantoes-config-ferias{margin-top:8px}
 #plantoes .card{padding:9px}
 #plantoes .plantoes-config-ferias{padding:8px}
 #plantoes .section-title-line{margin-bottom:7px}
@@ -380,6 +380,7 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-dupla-row .card{height:100%}
 .plantoes-dupla-row .plantoes-folga-config{margin:0}
 .plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
+.plantoes-folga-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:1180px){.plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.plantoes-dupla-row{grid-template-columns:1fr}}
 
@@ -2058,19 +2059,6 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 <!-- PLANTÕES -->
 <section id="plantoes" class="tab-panel">
-  <div class="card plantoes-config-ferias">
-    <div class="section-title-line">
-      <h2>Configuração de Férias</h2>
-      <button id="plantaoEditarFerias" class="secondary" type="button">Editar</button>
-    </div>
-    <div class="table-wrap">
-      <table class="plantoes-config-table">
-        <thead><tr><th>Técnico</th><th>Nome</th><th>Status</th><th>Início</th><th>Fim</th></tr></thead>
-        <tbody id="plantaoConfigBody"></tbody>
-      </table>
-    </div>
-  </div>
-
   <div class="plantoes-dupla-row" style="grid-template-columns: minmax(280px, 0.8fr) minmax(250px, 1fr);">
     <div class="card">
       <div class="section-title-line">
@@ -2090,7 +2078,10 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <div class="card">
       <div class="section-title-line">
         <h2>Dias permitidos para distribuir folgas</h2>
-        <button id="plantaoRedistribuirFolgas" class="success" type="button">Redistribuir folgas</button>
+        <div class="plantoes-folga-actions">
+          <button id="plantaoEditarFerias" class="secondary" type="button">Editar</button>
+          <button id="plantaoRedistribuirFolgas" class="success" type="button">Redistribuir folgas</button>
+        </div>
       </div>
       <div id="plantaoFolgaConfig" class="plantoes-folga-config"></div>
     </div>
@@ -2119,6 +2110,18 @@ button:hover,.btn:hover{transform:translateY(-1px)}
           </tr>
         </thead>
         <tbody id="plantaoTabelaBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card plantoes-config-ferias">
+    <div class="section-title-line">
+      <h2>Configuração de Férias</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="plantoes-config-table">
+        <thead><tr><th>Técnico</th><th>Nome</th><th>Status</th><th>Início</th><th>Fim</th></tr></thead>
+        <tbody id="plantaoConfigBody"></tbody>
       </table>
     </div>
   </div>
