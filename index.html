@@ -1534,6 +1534,39 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   min-width:0;
   max-width:100%;
 }
+#secPerformanceTecnico .performance-date-filter{
+  display:flex;
+  align-items:end;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:8px 0 12px;
+}
+#secPerformanceTecnico .performance-date-filter label{
+  display:grid;
+  gap:3px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+}
+#secPerformanceTecnico .performance-date-filter input[type=date]{
+  min-height:30px;
+  height:30px;
+  padding:4px 7px;
+  font-size:11px;
+}
+#secPerformanceTecnico .performance-date-filter button{
+  min-height:30px;
+  padding:5px 9px;
+  font-size:10px;
+}
+@media(max-width:720px){
+  #secPerformanceTecnico .performance-date-filter{justify-content:flex-start}
+  #secPerformanceTecnico .performance-date-filter label{width:calc(50% - 6px)}
+  #secPerformanceTecnico .performance-date-filter input[type=date]{width:100%}
+}
 #secPerformanceTecnico .card{
   overflow:hidden;
 }
@@ -1878,6 +1911,12 @@ button:hover,.btn:hover{transform:translateY(-1px)}
       <div class="section-title-line">
         <h2>Performance por Técnico</h2>
         <span class="section-caption">Desktop em tabela · celular em cards</span>
+      </div>
+      <div class="performance-date-filter" aria-label="Filtro de data da Performance por Técnico">
+        <label>De<input type="date" id="filtroPerformanceDataIni"></label>
+        <label>Até<input type="date" id="filtroPerformanceDataFim"></label>
+        <button id="btnPerformanceCiclo" class="secondary" type="button">20 a 20</button>
+        <button id="btnPerformanceLimparData" class="secondary" type="button">Limpar data</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -2686,6 +2725,41 @@ function dataAgendaPrincipal(row){
   const datas=datasAgenda(row);
   return datas[0]||formatarData(getField(row,["DATA_AGENDA","DATA AGENDA"]));
 }
+function dataReferenciaPerformance(row){
+  return dataAgendaPrincipal(row)||formatarData(campoPrimeiroValor(row,[
+    ["DATA"],
+    ["DATA_ATENDIMENTO","DATA ATENDIMENTO","DT_ATENDIMENTO","DT ATENDIMENTO"],
+    ["DATA_BAIXA","DATA BAIXA","DT_BAIXA","DT BAIXA"],
+    ["DATA_FECHAMENTO","DATA FECHAMENTO","DT_FECHAMENTO","DT FECHAMENTO"]
+  ]));
+}
+function dataInputParaOrdem(valor){
+  const s=norm(valor);
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return 0;
+  return new Date(Number(m[1]),Number(m[2])-1,Number(m[3])).getTime();
+}
+function dataISODeDate(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,"0");
+  const day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function dataDateDeOrdem(ts){
+  const d=new Date(Number(ts)||0);
+  return isNaN(d.getTime())?null:d;
+}
+function intervaloCiclo20PorBase(rows){
+  const datas=(Array.isArray(rows)?rows:[]).map(r=>dataParaOrdem(dataReferenciaPerformance(r))).filter(Boolean);
+  if(!datas.length) return null;
+  const ref=new Date(Math.max(...datas));
+  const ano=ref.getFullYear();
+  const mes=ref.getMonth();
+  const dia=ref.getDate();
+  const inicio=dia>=20?new Date(ano,mes,20):new Date(ano,mes-1,20);
+  const fim=dia>=20?new Date(ano,mes+1,20):new Date(ano,mes,20);
+  return {inicio:dataISODeDate(inicio),fim:dataISODeDate(fim)};
+}
 
 const TECNICOS_NOMES={
   "Z132322":"Apolinario",
@@ -2817,10 +2891,21 @@ function aplicarFiltros(rows){
   const tecnico=$("filtroTecnico")?.value||"";
   const node=$("filtroNode")?.value||"";
   const status=$("filtroStatus")?.value||"";
+  const dataIni=dataInputParaOrdem($("filtroPerformanceDataIni")?.value||"");
+  const dataFim=dataInputParaOrdem($("filtroPerformanceDataFim")?.value||"");
   let filtrado=[...rows];
   if(tecnico) filtrado=filtrado.filter(r=>loginKey(getField(r,["LOGIN_TECNICO","LOGIN TECNICO","TECNICO"]))===tecnico);
   if(node) filtrado=filtrado.filter(r=>norm(getField(r,["NODE"]))===node);
   if(status==="revisita") filtrado=filtrado.filter(r=>ehRevisita(r));
+  if(dataIni||dataFim){
+    filtrado=filtrado.filter(r=>{
+      const ts=dataParaOrdem(dataReferenciaPerformance(r));
+      if(!ts) return false;
+      if(dataIni&&ts<dataIni) return false;
+      if(dataFim&&ts>dataFim) return false;
+      return true;
+    });
+  }
   return filtrado;
 }
 function preencherFiltros(rows){
@@ -4333,15 +4418,37 @@ async function carregarBase(){
     setStatus(`✅ Base carregada.<br>Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}${avisoRepetida}${avisoFirebase}`);
   }catch(err){console.error(err);setStatus("❌ Erro ao carregar: <strong>"+err.message+"</strong>");}
 }
+function mensagemFiltrosAplicados(qtd){
+  const ini=$("filtroPerformanceDataIni")?.value||"";
+  const fim=$("filtroPerformanceDataFim")?.value||"";
+  const partes=[];
+  if(ini||fim) partes.push(`Período: <strong>${ini||"início"}</strong> até <strong>${fim||"fim"}</strong>`);
+  partes.push(`Registros no filtro: <strong>${Number(qtd)||0}</strong>`);
+  return `✅ Filtros aplicados. ${partes.join(" · ")}.`;
+}
 function reaplicarFiltros(){
   if(!processedRows.length){setStatus("⚠️ Carregue uma base primeiro.");return}
   const filtrado=aplicarFiltros(processedRows);lastRenderRows=filtrado;
-  renderDashboard(processarResumo(filtrado));setStatus("✅ Filtros aplicados.");
+  renderDashboard(processarResumo(filtrado));setStatus(mensagemFiltrosAplicados(filtrado.length));
 }
 function limparFiltros(){
   if($("filtroTecnico")) $("filtroTecnico").value="";
   if($("filtroNode")) $("filtroNode").value="";
   if($("filtroStatus")) $("filtroStatus").value="";
+  if($("filtroPerformanceDataIni")) $("filtroPerformanceDataIni").value="";
+  if($("filtroPerformanceDataFim")) $("filtroPerformanceDataFim").value="";
+  reaplicarFiltros();
+}
+function aplicarCicloPerformance20(){
+  const ciclo=intervaloCiclo20PorBase(processedRows.length?processedRows:rawRows);
+  if(!ciclo){setStatus("⚠️ Não encontrei datas na base para montar o ciclo 20 a 20.");return;}
+  if($("filtroPerformanceDataIni")) $("filtroPerformanceDataIni").value=ciclo.inicio;
+  if($("filtroPerformanceDataFim")) $("filtroPerformanceDataFim").value=ciclo.fim;
+  reaplicarFiltros();
+}
+function limparDataPerformance(){
+  if($("filtroPerformanceDataIni")) $("filtroPerformanceDataIni").value="";
+  if($("filtroPerformanceDataFim")) $("filtroPerformanceDataFim").value="";
   reaplicarFiltros();
 }
 function limparTudo(){
@@ -5189,6 +5296,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   on("btnCarregar","click",carregarBase);
   on("btnLimpar","click",limparTudo);
   on("btnCarregarUltima","click",carregarUltimaBase);
+  on("btnPerformanceCiclo","click",aplicarCicloPerformance20);
+  on("btnPerformanceLimparData","click",limparDataPerformance);
+  on("filtroPerformanceDataIni","change",reaplicarFiltros);
+  on("filtroPerformanceDataFim","change",reaplicarFiltros);
   on("btnLimparHistorico","click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
   on("cardTecnicos","click",abrirModalTecnicos);
   on("cardBaseTotal","click",abrirModalBaseTotal);
@@ -6507,6 +6618,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 </body>
 </html>
+
+
+
+
 
 
 
