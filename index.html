@@ -1539,71 +1539,78 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 }
 #secPerformanceTecnico .table-wrap{
   width:100%;
-  overflow-x:auto!important;
+  overflow-x:hidden!important;
   overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
 }
 #secPerformanceTecnico table{
   width:100%;
-  min-width:1120px;
+  min-width:0!important;
   table-layout:fixed;
-  font-size:12.5px;
+  font-size:10.8px;
 }
 #secPerformanceTecnico thead th,
 #secPerformanceTecnico td{
-  padding:10px 9px;
-  line-height:1.28;
+  padding:7px 6px;
+  line-height:1.18;
   white-space:normal;
   overflow-wrap:anywhere;
   word-break:normal;
   vertical-align:middle;
 }
 #secPerformanceTecnico thead th{
-  font-size:9.6px;
-  letter-spacing:.04em;
+  font-size:8.7px;
+  letter-spacing:.03em;
+}
+#secPerformanceTecnico td:not(:first-child),
+#secPerformanceTecnico thead th:not(:first-child){
+  text-align:center;
 }
 #secPerformanceTecnico .tech-name{
-  font-size:13.5px;
+  font-size:11.6px;
   overflow-wrap:anywhere;
 }
 #secPerformanceTecnico .tech-code{
-  font-size:10px;
+  font-size:8.8px;
 }
 #secPerformanceTecnico .meta-vt,
 #secPerformanceTecnico .badge{
   min-width:0;
   max-width:100%;
-  padding:4px 7px;
-  font-size:10.5px;
+  padding:3px 6px;
+  font-size:9.8px;
   white-space:normal;
   text-align:center;
-  line-height:1.2;
+  line-height:1.1;
 }
 #secPerformanceTecnico table th:nth-child(1),
-#secPerformanceTecnico table td:nth-child(1){width:19%}
+#secPerformanceTecnico table td:nth-child(1){width:14.5%}
 #secPerformanceTecnico table th:nth-child(2),
-#secPerformanceTecnico table td:nth-child(2){width:9%}
+#secPerformanceTecnico table td:nth-child(2){width:7.5%}
 #secPerformanceTecnico table th:nth-child(3),
-#secPerformanceTecnico table td:nth-child(3){width:8%}
+#secPerformanceTecnico table td:nth-child(3){width:6%}
 #secPerformanceTecnico table th:nth-child(4),
-#secPerformanceTecnico table td:nth-child(4){width:8%}
+#secPerformanceTecnico table td:nth-child(4){width:6%}
 #secPerformanceTecnico table th:nth-child(5),
-#secPerformanceTecnico table td:nth-child(5){width:8%}
+#secPerformanceTecnico table td:nth-child(5){width:6%}
 #secPerformanceTecnico table th:nth-child(6),
-#secPerformanceTecnico table td:nth-child(6){width:10%}
+#secPerformanceTecnico table td:nth-child(6){width:7.5%}
 #secPerformanceTecnico table th:nth-child(7),
-#secPerformanceTecnico table td:nth-child(7){width:8%}
+#secPerformanceTecnico table td:nth-child(7){width:10.5%}
 #secPerformanceTecnico table th:nth-child(8),
-#secPerformanceTecnico table td:nth-child(8){width:8%}
+#secPerformanceTecnico table td:nth-child(8){width:6.5%}
 #secPerformanceTecnico table th:nth-child(9),
-#secPerformanceTecnico table td:nth-child(9){width:10%}
+#secPerformanceTecnico table td:nth-child(9){width:6.5%}
 #secPerformanceTecnico table th:nth-child(10),
-#secPerformanceTecnico table td:nth-child(10){width:12%}
+#secPerformanceTecnico table td:nth-child(10){width:8.5%}
+#secPerformanceTecnico table th:nth-child(11),
+#secPerformanceTecnico table td:nth-child(11){width:17.5%}
 @media(max-width:1180px){
-  #secPerformanceTecnico table{min-width:1040px;font-size:11.5px}
-  #secPerformanceTecnico thead th{font-size:9px;padding:9px 7px}
-  #secPerformanceTecnico td{padding:9px 7px}
-  #secPerformanceTecnico .tech-name{font-size:12.5px}
+  #secPerformanceTecnico table{font-size:10px}
+  #secPerformanceTecnico thead th{font-size:8.1px;padding:7px 4px}
+  #secPerformanceTecnico td{padding:7px 4px}
+  #secPerformanceTecnico .tech-name{font-size:11.4px}
+  #secPerformanceTecnico .meta-vt,
+  #secPerformanceTecnico .badge{font-size:8.6px;padding:3px 4px}
 }
 @media(min-width:981px){
   #secPerformanceTecnico .mobile-tech-cards{display:none!important}
@@ -1877,10 +1884,10 @@ button:hover,.btn:hover{transform:translateY(-1px)}
           <thead>
             <tr>
               <th>Técnico</th><th>Contratos</th><th>Prod.</th><th>Rev. 10d</th><th>% Rev.</th>
-              <th>Meta Rev.</th><th>Fora Jan.</th><th>TEC1</th><th>Meta TEC1</th><th>Situação</th>
+              <th>Meta Rev.</th><th>Margem de Rev.</th><th>Fora Jan.</th><th>TEC1</th><th>Meta TEC1</th><th>Situação</th>
             </tr>
           </thead>
-          <tbody id="tabelaTecnicos"><tr><td colspan="10"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
+          <tbody id="tabelaTecnicos"><tr><td colspan="11"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
         </table>
       </div>
       <div id="cardsTecnicosMobile" class="mobile-tech-cards"><div class="empty">Carregue a base para visualizar.</div></div>
@@ -2729,6 +2736,19 @@ function celulaMetaRevisitaVT(qtd){
   if(qtd<=0) return "";
   return `<span class="meta-vt need">${qtd} VT</span>`;
 }
+function margemRevisitaTecnico(t){
+  const total=Number(t?.total)||0;
+  const rev=Number(t?.revisitas)||0;
+  const limite=(Number(LIMITE_ACOMP_REVISITA)||0)/100;
+  if(total<=0||limite<=0||limite>=1) return 0;
+  const margem=Math.floor(((limite*total)-rev)/(1-limite));
+  return Math.max(0,margem);
+}
+function celulaMargemRevisita(t){
+  const margem=margemRevisitaTecnico(t);
+  const classe=margem>0?"meta-vt":"meta-vt need";
+  return `<span class="${classe}">${margem} rev.</span>`;
+}
 function celulaMetaVT(qtd){
   qtd=Number(qtd)||0;
   if(qtd<=0) return `<span class="meta-vt">Na meta</span>`;
@@ -2928,6 +2948,7 @@ function renderCardsMobile(summary){
       <div class="metric-box"><span>TEC1 30d</span><strong>${pct(t.tec1Pct)}</strong></div>
       <div class="metric-box"><span>Fora janela</span><strong>${t.tecFora}</strong></div>
       <div class="metric-box"><span>VT Meta Rev.</span><strong>${t.vtMetaRevisita?`${t.vtMetaRevisita} VT`:""}</strong></div>
+      <div class="metric-box"><span>Margem de revisita</span><strong>${margemRevisitaTecnico(t)} rev.</strong></div>
       <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:"Na meta"}</strong></div>
     </div>
   </div>`}).join(""):'<div class="empty">Sem dados para os filtros selecionados.</div>';
@@ -2979,10 +3000,11 @@ function renderDashboard(summary){
     <td>${celulaTecnico(t.login)}</td>
     <td>${t.contratosExecutados}</td><td>${num1(t.mediaContratos)}</td><td>${t.revisitas}</td><td>${pct(t.revPct)}</td>
     <td>${celulaMetaRevisitaVT(t.vtMetaRevisita)}</td>
+    <td>${celulaMargemRevisita(t)}</td>
     <td>${t.tecFora}</td><td>${pct(t.tec1Pct)}</td>
     <td>${celulaMetaVT(t.vtMetaTec1)}</td>
     <td><span class="badge ${cor}">${lab}</span></td>
-  </tr>`}).join(""):'<tr><td colspan="10"><div class="empty">Sem dados para os filtros selecionados.</div></td></tr>';
+  </tr>`}).join(""):'<tr><td colspan="11"><div class="empty">Sem dados para os filtros selecionados.</div></td></tr>';
 
   const secRankingNode=$("secRankingNode");
   const nodeFiltrado=$("filtroNode")?.value||"";
@@ -6485,4 +6507,9 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 </body>
 </html>
+
+
+
+
+
 
