@@ -365,19 +365,27 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 @media(max-width:620px){.indicadores-baloes{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.indicador-balao{height:82px;grid-template-columns:42px minmax(0,1fr);padding:10px;border-radius:14px}.balao-valor{font-size:22px}.balao-titulo{font-size:9.5px;letter-spacing:.01em}}
 
 /* ─── ABA DIAS ─── */
-.dias-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-bottom:16px}
-.dias-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.dias-kpi{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow-sm);min-width:0}
-.dias-kpi:nth-child(2){border-left-color:var(--green)}
-.dias-kpi:nth-child(3){border-left-color:var(--orange)}
-.dias-kpi:nth-child(4){border-left-color:var(--cyan)}
-.dias-kpi:nth-child(5){border-left-color:var(--indigo)}
-.dias-kpi:nth-child(6){border-left-color:var(--red)}
-.dias-kpi span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:800;margin-bottom:6px}
-.dias-kpi strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1;color:var(--navy)}
-.dias-kpi input.dias-meta-input{display:block;width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1;color:var(--navy);font-weight:800;outline:0}
+.dias-hero{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px;width:100%}
+.dias-kpis{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;width:100%}
+/* Resumo da Meta ocupa toda a largura da aba Dias */
+#dias .dias-hero>.card{width:100%;max-width:100%;min-width:0}
+#dias .dias-hero .section-title-line{align-items:center}
+.dias-kpi{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:10px;padding:10px 11px;box-shadow:var(--shadow-sm);min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px}
+.dias-kpi-principal,.dias-kpi-operacao,.dias-kpi-contexto{grid-column:span 2}
+.dias-kpi-meta{border-left-color:var(--blue)}
+.dias-kpi-realizado{border-left-color:var(--green)}
+.dias-kpi-pendente{border-left-color:var(--orange)}
+.dias-kpi-capacidade{border-left-color:var(--cyan)}
+.dias-kpi-equipe{border-left-color:var(--indigo)}
+.dias-kpi-competencia{border-left-color:var(--red)}
+.dias-kpi span{display:block;width:100%;font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);font-weight:800;margin:0;line-height:1.15;white-space:normal}
+.dias-kpi strong{display:block;width:100%;font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:1;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dias-kpi input.dias-meta-input{display:block;width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:1;color:var(--navy);font-weight:800;outline:0}
 .dias-kpi input.dias-meta-input:focus{box-shadow:0 2px 0 var(--blue)}
-.dias-kpi small{display:block;margin-top:6px;color:var(--text-muted);font-weight:700;font-size:11px}
+.dias-kpi-click{font-family:inherit;text-align:left;cursor:pointer}
+.dias-kpi-click:hover{background:#eef5ff;border-color:#b8cdea;transform:translateY(-1px)}
+
+.dias-kpi small{display:block;width:100%;margin-top:0;color:var(--text-muted);font-weight:700;font-size:9px;line-height:1.2;white-space:normal}
 .dias-note{background:#f5f8ff;border:1px solid #cfe0ff;border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;color:#24426c;font-weight:600;line-height:1.55}
 .dias-progress{height:10px;background:#e5edf8;border-radius:999px;overflow:hidden;margin-top:10px}
 .dias-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px}
@@ -385,7 +393,7 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .dias-badge.ok{background:var(--green-light);color:#065f46;border-color:#a7f3d0}
 .dias-badge.off{background:var(--yellow-light);color:#78350f;border-color:#fde68a}
 .dia-nao-util td{background:#fbfdff;color:#64748b}
-@media(max-width:980px){.dias-hero{grid-template-columns:1fr}.dias-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:980px){.dias-hero{grid-template-columns:1fr}.dias-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dias-kpi-principal,.dias-kpi-operacao,.dias-kpi-contexto{grid-column:span 1}}
 @media(max-width:520px){.dias-kpis{grid-template-columns:1fr}.dias-kpi strong{font-size:22px}}
 
 
@@ -468,6 +476,10 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-inline-kpis .plantoes-chip{min-width:84px;padding:5px 7px;text-align:center}
 .plantoes-inline-kpis .plantoes-chip strong{font-size:14px}
 .plantoes-inline-kpis .plantoes-chip span{font-size:8px;margin-bottom:2px}
+.plantoes-tecnico-resumo{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;width:100%;margin:2px 0 8px}
+.plantoes-tecnico-chip{display:inline-flex;align-items:center;gap:6px;background:#f8fbff;border:1px solid var(--border);border-radius:999px;padding:5px 8px;color:var(--navy);font-size:10px;font-weight:800}
+.plantoes-tecnico-chip strong{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue)}
+.plantoes-tecnico-chip span{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .plantoes-folga-card .section-title-line{justify-content:center;text-align:center}
 .plantoes-resumo-card .section-title-line{justify-content:flex-start;text-align:left}
 .plantoes-resumo-card .section-caption{display:none}
@@ -1838,16 +1850,20 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 <style>
 /* === DIAS TRABALHADOS DINÂMICO - Google Sheets === */
-.dias-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding:16px 18px}
-.dias-toolbar h2{margin:0 0 4px;padding:0;border:0}
-.dias-toolbar-actions{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
-.dias-toolbar-actions label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:800}
-.dias-toolbar-actions select{min-width:170px}
+.dias-toolbar{display:grid;grid-template-columns:minmax(280px,1fr) minmax(420px,.9fr);align-items:center;gap:18px;margin-bottom:14px;padding:16px 18px;border-left:4px solid var(--blue)}
+.dias-toolbar h2{margin:0 0 5px;padding:0;border:0;font-size:20px;letter-spacing:.08em}
+.dias-toolbar .meta-note{max-width:680px;margin:0;color:var(--text-muted);font-size:13px;line-height:1.45}
+.dias-toolbar-actions{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:10px;background:#f8fbff;border:1px solid var(--border);border-radius:10px;padding:10px}
+.dias-field{min-width:0}
+.dias-toolbar-actions label{display:block;margin:0 0 5px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:800}
+.dias-toolbar-actions select{width:100%;min-width:0;height:38px;border-radius:8px;font-size:13px}
+.dias-toolbar-actions button{height:38px;padding:0 14px;white-space:nowrap}
 .dias-table-card{margin-top:14px}
 .dias-table-wrap table{min-width:520px}
 .dias-table-wrap td:nth-child(2),.dias-table-wrap td:nth-child(3),.dias-table-wrap td:nth-child(4){font-family:'IBM Plex Mono',monospace;font-weight:800;color:var(--navy)}
 .dias-loading{opacity:.72}
-@media(max-width:720px){.dias-toolbar{display:grid;grid-template-columns:1fr}.dias-toolbar-actions{display:grid;grid-template-columns:1fr 1fr}.dias-toolbar-actions label{grid-column:1/-1}.dias-toolbar-actions select{min-width:0;width:100%}}
+@media(max-width:980px){.dias-toolbar{grid-template-columns:1fr}.dias-toolbar-actions{grid-template-columns:1fr 1fr auto}}
+@media(max-width:720px){.dias-toolbar-actions{grid-template-columns:1fr}.dias-toolbar-actions button{width:100%}}
 </style>
 
 
@@ -2212,8 +2228,14 @@ button:hover,.btn:hover{transform:translateY(-1px)}
       <p class="meta-note">Dados carregados automaticamente da planilha online Controle Lumar, procurando a aba VT do mês selecionado.</p>
     </div>
     <div class="dias-toolbar-actions">
-      <label for="diasMes">Mês</label>
-      <select id="diasMes" aria-label="Selecionar mês dos dias trabalhados"></select>
+      <div class="dias-field">
+        <label for="diasMes">Mês</label>
+        <select id="diasMes" aria-label="Selecionar mês dos dias trabalhados"></select>
+      </div>
+      <div class="dias-field">
+        <label for="capacidadeMesSelectTopo">Capacidade</label>
+        <select id="capacidadeMesSelectTopo" aria-label="Selecionar mês da capacidade"></select>
+      </div>
       <button id="btnAtualizarDias" class="secondary" type="button">Atualizar</button>
     </div>
   </div>
@@ -2221,39 +2243,20 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   <div class="dias-hero">
     <div class="card">
       <div class="section-title-line">
-        <h2>Resumo da Meta</h2>
+        <h2>Painel de Produtividade</h2>
         <span class="section-caption" id="diasFonteLegenda">Planilha online · aguardando carga</span>
       </div>
       <div class="dias-kpis">
-        <div class="dias-kpi"><span>Meta mínima mensal</span><input id="diasMetaMensal" class="dias-meta-input" type="number" min="0" step="1" value="175" aria-label="Meta mínima mensal"><small id="diasMetaMensalSub">Editável</small></div>
-        <div class="dias-kpi"><span>Total já feito</span><strong id="diasTotalFeito">-</strong><small id="diasTotalFeitoSub">Soma do TOTAL DO DIA</small></div>
-        <div class="dias-kpi"><span>Falta meta</span><strong id="diasFaltaMeta">-</strong><small>Meta - feito</small></div>
-        <div class="dias-kpi"><span>Capacidade em dias</span><strong id="diasUteisRestantes">-</strong><small id="diasUteisSub">Soma dos técnicos ativos restantes</small></div>
-        <div class="dias-kpi"><span>Logins ativos</span><strong id="diasMetaDia">7</strong><small>Valor fixo/travado</small></div>
-        <div class="dias-kpi"><span>Competência</span><strong id="diasCompetencia">-</strong><small id="diasCompetenciaSub">Mês selecionado</small></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-meta"><span>Meta mensal mínima</span><input id="diasMetaMensal" class="dias-meta-input" type="number" min="0" step="1" value="175" aria-label="Meta mensal mínima"></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-realizado"><span>Produção acumulada</span><strong id="diasTotalFeito">-</strong></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-pendente"><span>Saldo para meta</span><strong id="diasFaltaMeta">-</strong></div>
+        <button class="dias-kpi dias-kpi-operacao dias-kpi-click capacidade-kpi dias-kpi-capacidade" id="cardCapacidadeDias" type="button" aria-label="Ver dias disponíveis para produção"><span>Dias produtivos disponíveis</span><strong id="diasUteisRestantes">-</strong></button>
+        <div class="dias-kpi dias-kpi-operacao dias-kpi-equipe"><span>Equipe ativa</span><strong id="diasMetaDia">7</strong></div>
+        <div class="dias-kpi dias-kpi-contexto dias-kpi-competencia"><span>Competência analisada</span><strong id="diasCompetencia">-</strong><small id="diasCompetenciaSub">Mês selecionado</small></div>
       </div>
       <div class="dias-progress" title="Progresso da meta"><span id="diasProgresso" style="width:0%"></span></div>
     </div>
 
-    <div class="card">
-      <h2>Regra da média</h2>
-      <div class="dias-note" id="diasRegraMedia">
-        Carregando a aba do mês selecionado...
-      </div>
-    </div>
-  </div>
-
-  <div class="card dias-table-card">
-    <div class="section-title-line">
-      <h2>Média diária por técnico</h2>
-      <span class="section-caption">Colunas DT e PD da planilha online</span>
-    </div>
-    <div class="table-wrap dias-table-wrap">
-      <table>
-        <thead><tr><th>Técnico</th><th>Total Geral</th><th>DT</th><th>PD</th></tr></thead>
-        <tbody id="diasTabelaTecnicos"><tr><td colspan="4"><div class="empty">Aguardando planilha online.</div></td></tr></tbody>
-      </table>
-    </div>
   </div>
 </section>
 
@@ -2301,6 +2304,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
             <div class="plantoes-chip"><span>Folgas</span><strong id="plantaoKpiFolgas">0</strong></div>
           </div>
         </div>
+        <div id="plantaoResumoTecnicos" class="plantoes-tecnico-resumo" aria-label="Plantões por técnico no mês selecionado"></div>
       </div>
     </div>
     <div class="table-wrap plantoes-table">
@@ -2914,17 +2918,23 @@ function dataDateDeOrdem(ts){
   const d=new Date(Number(ts)||0);
   return isNaN(d.getTime())?null:d;
 }
+function limiteInicioProximaCompetencia(d){
+  const ultimoDiaMes=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+  return ultimoDiaMes===31?22:21;
+}
 function mesAnoCompetencia(d){
   const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-  const ref=new Date(d.getFullYear(),d.getMonth()+(d.getDate()>20?1:0),1);
+  const ref=new Date(d.getFullYear(),d.getMonth()+(d.getDate()>=limiteInicioProximaCompetencia(d)?1:0),1);
   return `${meses[ref.getMonth()]}/${ref.getFullYear()}`;
 }
 function intervaloCompetenciaIndicador(d){
   const ano=d.getFullYear();
   const mes=d.getMonth();
   const dia=d.getDate();
-  const inicio=dia<=20?new Date(ano,mes-1,20):new Date(ano,mes,21);
-  const fim=dia<=20?new Date(ano,mes,20):new Date(ano,mes+1,20);
+  const inicioProximo=limiteInicioProximaCompetencia(d);
+  const novoCiclo=dia>=inicioProximo;
+  const inicio=novoCiclo?new Date(ano,mes,inicioProximo):new Date(ano,mes-1,20);
+  const fim=novoCiclo?new Date(ano,mes+1,20):new Date(ano,mes,20);
   return {inicio:dataISODeDate(inicio),fim:dataISODeDate(fim),competencia:mesAnoCompetencia(d)};
 }
 function intervaloCiclo20PorBase(rows){
@@ -3004,7 +3014,7 @@ function celulaMargemRevisita(t){
 }
 function celulaMetaVT(qtd){
   qtd=Number(qtd)||0;
-  if(qtd<=0) return `<span class="meta-vt">Na meta</span>`;
+  if(qtd<=0) return "";
   return `<span class="meta-vt need">${qtd} VT</span>`;
 }
 
@@ -3338,7 +3348,7 @@ function renderCardsMobilePerformance(id,summary){
       <div class="metric-box"><span>Fora janela</span><strong>${t.tecFora}</strong></div>
       <div class="metric-box"><span>VT Meta Rev.</span><strong>${t.vtMetaRevisita?`${t.vtMetaRevisita} VT`:""}</strong></div>
       <div class="metric-box"><span>Margem de revisita</span><strong>${margemRevisitaTecnico(t)} rev.</strong></div>
-      <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:"Na meta"}</strong></div>
+      <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:""}</strong></div>
     </div>
   </div>`}).join(""):'<div class="empty">Sem dados para os filtros selecionados.</div>';
 }
@@ -3366,11 +3376,11 @@ function linhaMediaPerformance(arr){
     <td>${num1(mediaProd)}</td>
     <td>${num1(mediaRevQtd)}</td>
     <td>${pct(revGeral)}</td>
-    <td>${mediaMetaRev>0?`<span class="meta-vt need">${num1(mediaMetaRev)} VT</span>`:""}</td>
-    <td><span class="meta-vt">${num1(mediaMargem)} rev.</span></td>
-    <td>${num1(mediaFora)}</td>
+    <td></td>
+    <td></td>
+    <td></td>
     <td>${pct(tec1Geral)}</td>
-    <td>${mediaMetaTec1>0?`<span class="meta-vt need">${num1(mediaMetaTec1)} VT</span>`:`<span class="meta-vt">Na meta</span>`}</td>
+    <td>${mediaMetaTec1>0?`<span class="meta-vt need">${num1(mediaMetaTec1)} VT</span>`:""}</td>
     <td><span class="badge green">${certificados}/${qtd} certificado</span></td>
   </tr>`;
 }
@@ -4981,6 +4991,7 @@ let diasCachePlanilha={};
 let diasDadosAtuais=null;
 let diasMesInfoAtual=null;
 let diasFonteAtual="";
+let capacidadeMesSelecionado=null;
 
 function setDiasText(id,valor){const el=$(id); if(el){ if("value" in el) el.value=String(valor).replace(/\./g,""); else el.textContent=valor; }}
 function formatNumeroDias(v,casas=0){
@@ -5118,15 +5129,25 @@ function contarDiasTrabalhoRestantes(ano,mes,inicioDia,opcoes={}){
   const incluirSabado=!!opcoes.incluirSabado;
   const multiplicador=Math.max(1,Number(opcoes.multiplicador)||1);
   for(let dia=Math.max(1,Number(inicioDia)||1);dia<=ultimo;dia++){
+    const d=new Date(ano,mes,dia);
     if(typeof opcoes.capacidadePorDia==="function"){
       const capacidade=Number(opcoes.capacidadePorDia(ano,mes,dia))||0;
-      if(capacidade>0){total+=capacidade;detalhes.push(dataBR(new Date(ano,mes,dia)));}
+      if(capacidade>0){
+        const rowPlantao=rowPlantaoPorDataDias(ano,mes,dia);
+        const qtdPlantao=qtdTecnicosPlantaoDias(rowPlantao);
+        const qtdFolga=qtdFolgasPlantaoDiaDias(ano,mes,dia);
+        const status=[];
+        if(qtdPlantao>0) status.push(`Plantão: ${qtdPlantao}`);
+        if(qtdFolga>0) status.push(`Folga: ${qtdFolga}`);
+        if(!status.length) status.push("Normal");
+        total+=capacidade;
+        detalhes.push({dia,data:dataBR(d),capacidade,status:status.join(" · ")});
+      }
       continue;
     }
-    const d=new Date(ano,mes,dia);
     const dow=d.getDay();
     const util=dow!==0 && (incluirSabado || dow!==6) && (incluirSabado || !ehFeriadoTeresinaData(d));
-    if(util){total+=multiplicador;detalhes.push(dataBR(d));}
+    if(util){total+=multiplicador;detalhes.push({dia,data:dataBR(d),capacidade:multiplicador});}
   }
   return {total,detalhes};
 }
@@ -5182,7 +5203,7 @@ function regraCalendarioDias(mesInfo){
   return {
     capacidadePorDia:(ano,mes,dia)=>capacidadeDiaDias(ano,mes,dia,mesInfo),
     disponivelPorDia:(ano,mes,dia)=>diaDisponivelTrabalhoDias(ano,mes,dia,mesInfo),
-    descricao:"Capacidade em dias baseada na aba Plantões: soma os técnicos ativos/escalados por data; 7 técnicos = 7 dias, 2 técnicos = 2 dias."
+    descricao:"Capacidade em dias baseada na aba Plantões: domingos/feriados contam os técnicos escalados; dias normais descontam plantão e folga."
   };
 }
 function capacidadeDiaDias(ano,mes,dia,mesInfo){
@@ -5194,14 +5215,11 @@ function capacidadeDiaDias(ano,mes,dia,mesInfo){
   const folgasNoDia=qtdFolgasPlantaoDiaDias(ano,mes,dia);
   const feriado=ehFeriadoTeresinaData(d);
 
-  // Capacidade em dias = quantidade de técnicos que conseguem produzir naquele dia,
-  // puxada da aba Plantões.
-  // - Se a data está na tabela de plantões, conta os técnicos escalados na linha.
-  // - Em dia normal, conta os 7 logins ativos menos as folgas geradas pela tabela.
-  // - Domingo/feriado sem linha na tabela não entra como capacidade.
-  if(rowPlantao) return qtdPlantao;
-  if(dow===0 || feriado) return 0;
-  if(dow>=1 && dow<=6) return Math.max(0,loginsAtivos-folgasNoDia);
+  // Capacidade em dias = técnicos disponíveis para produção.
+  // Domingo/feriado só entra quando existe plantão, contando os técnicos escalados.
+  // Em dia normal, técnicos em plantão são retirados da capacidade produtiva normal.
+  if(dow===0 || feriado) return qtdPlantao;
+  if(dow>=1 && dow<=6) return Math.max(0,loginsAtivos-folgasNoDia-qtdPlantao);
   return 0;
 }
 function diaDisponivelTrabalhoDias(ano,mes,dia,mesInfo){
@@ -5325,10 +5343,10 @@ function extrairDadosDias(matriz,mesInfo){
   const capacidadeRestante=contarDiasTrabalhoRestantes(DIAS_SHEET_CONFIG.anoPadrao,mesInfo.num,inicioRestante,regraCalendario);
   const diasRestantes=contarDatasRestantesMes(DIAS_SHEET_CONFIG.anoPadrao,mesInfo.num,inicioRestante,regraCalendario);
   // O divisor agora é a capacidade real de produção restante:
-  // dia normal = 7 logins, dia com folga aplicada = 6, plantão = 2.
+  // domingo/feriado com plantão = técnicos escalados; dia normal = 7 logins menos folgas e plantões.
   const diasUteisRestantes=capacidadeRestante.total;
   const metaDia=diasUteisRestantes?Math.ceil(falta/diasUteisRestantes):0;
-  return {tecnicoRows,totalJaFeito,totalPelosDias,totalPeloDT,totalPeloDTTecnicos,totalValidosEquipe:totalValidosEquipe?.total||0,pdEquipe,ultimoDiaComValor,meta:metaInfo.valor,metaOrigem:metaInfo.origem,falta,inicioRestante,diasUteis:diasUteisRestantes,diasDatasRestantes:diasRestantes.total,diasCapacidadeRestante:capacidadeRestante.total,metaDia,header,totalRow,regraCalendario};
+  return {tecnicoRows,totalJaFeito,totalPelosDias,totalPeloDT,totalPeloDTTecnicos,totalValidosEquipe:totalValidosEquipe?.total||0,pdEquipe,ultimoDiaComValor,meta:metaInfo.valor,metaOrigem:metaInfo.origem,falta,inicioRestante,diasUteis:diasUteisRestantes,diasDatasRestantes:diasRestantes.total,diasCapacidadeRestante:capacidadeRestante.total,diasCapacidadeDetalhes:capacidadeRestante.detalhes,metaDia,header,totalRow,regraCalendario};
 }
 function urlsDiasPlanilha(mesInfo){
   const id=DIAS_SHEET_CONFIG.spreadsheetId;
@@ -5547,17 +5565,13 @@ function renderDiasErro(msg){
   setDiasText("diasCompetencia","-");
   const mesInfo=mesDiasSelecionado();
   const tentativas=urlsDiasPlanilha(mesInfo).map(u=>esc(u.nome)).join(", ");
-  const regra=$("diasRegraMedia");
-  if(regra) regra.innerHTML=`<strong>Não foi possível carregar os dias trabalhados.</strong><br>${esc(msg)}<br><br><strong>Tentativas:</strong> ${tentativas || "nenhuma"}.<br><br>Confira se a planilha está em <strong>Compartilhar → Qualquer pessoa com o link → Leitor</strong>. Se ainda não abrir, use <strong>Arquivo → Compartilhar → Publicar na Web</strong> na planilha do Google e publique a aba VT do mês.`;
-  const tbody=$("diasTabelaTecnicos");
-  if(tbody) tbody.innerHTML='<tr><td colspan="4"><div class="empty">Sem dados para exibir.</div></td></tr>';
 }
 function aplicarMetaManualDias(valor){
   if(!diasDadosAtuais || !diasMesInfoAtual) return;
   const meta=Math.max(0,Math.round(parseNumeroDias(valor)));
   if(!meta) return;
   diasDadosAtuais.meta=meta;
-  diasDadosAtuais.metaOrigem="Meta editada manualmente";
+  diasDadosAtuais.metaOrigem="";
   diasDadosAtuais.falta=Math.max(0,meta-diasDadosAtuais.totalJaFeito);
   diasDadosAtuais.metaDia=diasDadosAtuais.diasUteis?Math.ceil(diasDadosAtuais.falta/diasDadosAtuais.diasUteis):0;
   renderDiasTrabalhados(diasDadosAtuais,diasMesInfoAtual,diasFonteAtual);
@@ -5572,28 +5586,59 @@ function renderDiasTrabalhados(dados,mesInfo,fonte){
   const progresso=dados.meta?Math.min(100,(dados.totalJaFeito/dados.meta)*100):0;
   setDiasText("diasFonteLegenda",`Planilha online · ${fonte}`);
   setDiasText("diasMetaMensal",formatNumeroDias(dados.meta,0));
-  setDiasText("diasMetaMensalSub",dados.metaOrigem||"Meta da planilha");
   setDiasText("diasTotalFeito",formatNumeroDias(dados.totalJaFeito,0));
-  setDiasText("diasTotalFeitoSub",`DT LUMAR · PD ${formatNumeroDias(dados.pdEquipe,1)} · ${progresso.toFixed(1).replace(".",",")}% da meta`);
   setDiasText("diasFaltaMeta",formatNumeroDias(dados.falta,0));
   setDiasText("diasUteisRestantes",formatNumeroDias(dados.diasUteis,0));
-  setDiasText("diasTotalFeitoSub",`Soma da coluna DT - sem MAZZINI - PD ${formatNumeroDias(dados.pdEquipe,1)} - ${progresso.toFixed(1).replace(".",",")}% da meta`);
-  setDiasText("diasUteisSub",dados.inicioRestante<=fim.getDate()?`Soma dos técnicos ativos restantes a partir de ${String(dados.inicioRestante).padStart(2,"0")}/${String(mesInfo.num+1).padStart(2,"0")}/${ano}`:"Mês encerrado");
   setDiasText("diasMetaDia",String(DIAS_SHEET_CONFIG.loginsAtivos||7));
   setDiasText("diasCompetencia",`${mesInfo.label}-26`);
   setDiasText("diasCompetenciaSub",`${dataBR(inicio)} a ${dataBR(fim)}`);
   const barra=$("diasProgresso");
   if(barra) barra.style.width=`${progresso}%`;
-  const regra=$("diasRegraMedia");
-  if(regra){
-    regra.innerHTML=`A tela usa a aba <strong>${fonte}</strong> da planilha online.<br><br>
-      <strong>Conta atual:</strong> ${formatNumeroDias(dados.meta,0)} - ${formatNumeroDias(dados.totalJaFeito,0)} = ${formatNumeroDias(dados.falta,0)}; ${formatNumeroDias(dados.falta,0)} dividido por ${formatNumeroDias(dados.diasUteis,0)} capacidade em dias = ${dados.diasUteis?formatNumeroDias(dados.falta/dados.diasUteis,2):"0"}.
-      <br><br><strong>Total já feito:</strong> soma da coluna DT, excluindo MAZZINI. <strong>Capacidade em dias:</strong> soma a quantidade de técnicos que conseguem produzir em cada data restante, conforme a aba <strong>Plantões</strong> do mês vigente. Se no dia constam <strong>7 técnicos</strong>, soma <strong>7 dias</strong>; se constam <strong>2 técnicos</strong>, soma <strong>2 dias</strong>. Folgas aplicadas reduzem a capacidade do dia. <strong>Logins ativos:</strong> travado em <strong>7</strong>.`;
+  preencherSelectCapacidadeInline();
+}
+function detalhesCapacidadeMes(mesInfo,inicioDia=1){
+  const ano=DIAS_SHEET_CONFIG.anoPadrao;
+  const regra=regraCalendarioDias(mesInfo);
+  return contarDiasTrabalhoRestantes(ano,mesInfo.num,inicioDia,regra);
+}
+function inicioCapacidadeSelecionadaDias(mesInfo){
+  const ano=DIAS_SHEET_CONFIG.anoPadrao;
+  const hoje=new Date();
+  const mesNum=Number(mesInfo?.num);
+  const ehMesCorrente=hoje.getFullYear()===ano && hoje.getMonth()===mesNum;
+  const ehMesAnalisado=diasDadosAtuais&&diasMesInfoAtual&&Number(diasMesInfoAtual.num)===mesNum;
+  if(ehMesAnalisado && (Number(diasDadosAtuais.totalJaFeito)||0)>0){
+    return Math.max(1,Number(diasDadosAtuais.inicioRestante)||1);
   }
-  const tbody=$("diasTabelaTecnicos");
-  if(tbody){
-    tbody.innerHTML=dados.tecnicoRows.length?dados.tecnicoRows.map(t=>`<tr><td>${esc(t.nome)}</td><td>${formatNumeroDias(t.total,0)}</td><td>${formatNumeroDias(t.dt,0)}</td><td>${formatNumeroDias(t.pd,1)}</td></tr>`).join(""):'<tr><td colspan="4"><div class="empty">Nenhum técnico encontrado na aba selecionada.</div></td></tr>';
+  if(ehMesCorrente){
+    return Math.max(1,hoje.getDate());
   }
+  return 1;
+}
+function renderModalCapacidadeMes(mesNum){
+  const conteudo=$("modalIndicadorConteudo");
+  if(!conteudo) return;
+  const mesInfo=DIAS_SHEET_CONFIG.meses.find(m=>Number(m.num)===Number(mesNum))||diasMesInfoAtual||mesDiasSelecionado();
+  const inicioDia=inicioCapacidadeSelecionadaDias(mesInfo);
+  const capacidade=detalhesCapacidadeMes(mesInfo,inicioDia);
+  const detalhes=Array.isArray(capacidade.detalhes)?capacidade.detalhes:[];
+  const total=Number(capacidade.total)||0;  const linhas=detalhes.length?detalhes.map(item=>`<tr><td>${esc(item.data||"-")}</td><td>${formatNumeroDias(item.capacidade,0)}</td><td>${esc(item.status||"Normal")}</td></tr>`).join(""):'<tr><td colspan="3"><div class="empty">Nenhum dia disponível para produção neste mês.</div></td></tr>';
+  $("modalIndicadorSub").textContent=`${formatNumeroDias(total,0)} dia(s) de capacidade produtiva em ${mesInfo.nome}/${DIAS_SHEET_CONFIG.anoPadrao}, a partir de ${String(inicioDia).padStart(2,"0")}/${String(Number(mesInfo.num)+1).padStart(2,"0")}, considerando folgas, feriados, domingos e escala de Plantões.`;
+  conteudo.innerHTML=`<div class="base-total-resumo"><span class="base-total-chip active">Total: ${formatNumeroDias(total,0)}</span><span class="base-total-chip">Datas: ${detalhes.length}</span><span class="base-total-chip">Mês: ${mesInfo.nome}</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Data disponível</th><th>Capacidade</th><th>Status</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+}
+function abrirModalCapacidadeDias(){
+  const modal=$("modalIndicadorDetalhe");
+  const conteudo=$("modalIndicadorConteudo");
+  if(!modal||!conteudo) return;
+  const mesInline=Number($("capacidadeMesSelectTopo")?.value ?? capacidadeMesSelecionado);
+  const mesBase=diasMesInfoAtual||mesDiasSelecionado();
+  const proximoNum=(Number(mesBase?.num)||0)+1;
+  const mesPadrao=DIAS_SHEET_CONFIG.meses.find(m=>m.num===mesInline)||DIAS_SHEET_CONFIG.meses.find(m=>m.num===proximoNum)||DIAS_SHEET_CONFIG.meses.find(m=>m.num===Number(mesBase?.num))||DIAS_SHEET_CONFIG.meses[0];
+  $("modalIndicadorTitulo").textContent="Capacidade em dias";
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden","false");
+  renderModalCapacidadeMes(mesPadrao.num);
 }
 function mesInfoPlantaoVigenteDias(fallbackMesInfo){
   try{
@@ -5626,8 +5671,6 @@ async function atualizarDiasTrabalhados(){
   const painel=$("dias");
   if(painel) painel.classList.add("dias-loading");
   setDiasText("diasFonteLegenda",`Planilha online · carregando ${mesInfo.nome}`);
-  const regra=$("diasRegraMedia");
-  if(regra) regra.innerHTML=`Carregando a aba VT de <strong>${mesInfo.nome} ${DIAS_SHEET_CONFIG.anoPadrao}</strong>...`;
   try{
     const csv=await buscarCSVPlanilhaDias(mesInfo);
     const matriz=csv.matriz||parseMatrizCSV(csv.text);
@@ -5640,8 +5683,34 @@ async function atualizarDiasTrabalhados(){
     if(painel) painel.classList.remove("dias-loading");
   }
 }
+function atualizarCardCapacidadeSelecionada(){
+  const sel=$("capacidadeMesSelectTopo");
+  const mesInfo=DIAS_SHEET_CONFIG.meses.find(m=>Number(m.num)===Number(sel?.value));
+  if(!mesInfo) return;
+  capacidadeMesSelecionado=Number(mesInfo.num);
+  const capacidade=detalhesCapacidadeMes(mesInfo,inicioCapacidadeSelecionadaDias(mesInfo));
+  setDiasText("diasUteisRestantes",formatNumeroDias(capacidade.total||0,0));
+}
+function preencherSelectCapacidadeInline(){
+  const sel=$("capacidadeMesSelectTopo");
+  if(!sel) return;
+  const mesBase=diasMesInfoAtual||mesDiasSelecionado();
+  const proximoNum=(Number(mesBase?.num)||0)+1;
+  const valorPadrao=DIAS_SHEET_CONFIG.meses.some(m=>m.num===proximoNum)?proximoNum:Number(mesBase?.num)||Number(DIAS_SHEET_CONFIG.mesVigente||4);
+  if(capacidadeMesSelecionado===null || !DIAS_SHEET_CONFIG.meses.some(m=>m.num===Number(capacidadeMesSelecionado))){
+    capacidadeMesSelecionado=valorPadrao;
+  }
+  sel.innerHTML=DIAS_SHEET_CONFIG.meses.map(m=>`<option value="${m.num}">${m.nome} ${DIAS_SHEET_CONFIG.anoPadrao}</option>`).join("");
+  sel.value=String(capacidadeMesSelecionado);
+  atualizarCardCapacidadeSelecionada();
+}
 function inicializarDiasTrabalhados(){
+  const cardCapacidade=$("cardCapacidadeDias");
+  if(cardCapacidade&&!cardCapacidade.dataset.bound){cardCapacidade.dataset.bound="1";cardCapacidade.addEventListener("click",abrirModalCapacidadeDias);}
+  const capacidadeTopo=$("capacidadeMesSelectTopo");
+  if(capacidadeTopo&&!capacidadeTopo.dataset.bound){capacidadeTopo.dataset.bound="1";capacidadeTopo.addEventListener("change",()=>{capacidadeMesSelecionado=Number(capacidadeTopo.value);atualizarCardCapacidadeSelecionada();});}
   preencherSelectDias();
+  preencherSelectCapacidadeInline();
   const sel=$("diasMes");
   if(sel) sel.addEventListener("change",atualizarDiasTrabalhados);
   const btn=$("btnAtualizarDias");
@@ -6300,6 +6369,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     return {tecA,tecB,tecC,folgaA,folgaB,folgaC,aviso,mudou};
   }
 
+  function renderResumoPlantaoTecnicos(month){
+    const alvo=$p("plantaoResumoTecnicos");
+    if(!alvo||!month) return;
+    const contagem=new Map();
+    (month.rows||[]).forEach(row=>{
+      [row.baseA,row.baseB,row.baseC].filter(Boolean).forEach(id=>{
+        contagem.set(id,(contagem.get(id)||0)+1);
+      });
+    });
+    const itens=tecnicosBase
+      .filter(t=>contagem.has(t.id))
+      .map(t=>({nome:t.name,qtd:contagem.get(t.id)||0}))
+      .sort((a,b)=>b.qtd-a.qtd || a.nome.localeCompare(b.nome,"pt-BR"));
+    alvo.innerHTML=itens.length
+      ? itens.map(item=>`<div class="plantoes-tecnico-chip"><span>${escapePlantao(item.nome)}</span><strong>${item.qtd}</strong></div>`).join("")
+      : '<div class="plantoes-tecnico-chip"><span>Sem plantões distribuídos</span><strong>0</strong></div>';
+  }
+
   function escapePlantao(v){
     return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
   }
@@ -6478,6 +6565,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     ajustarTituloPlantao(month);
     $p("plantaoKpiPlantoes").textContent=month.rows.length*2+totalTerceiro;
     $p("plantaoKpiFolgas").textContent=month.rows.length*2+totalTerceiro;
+    renderResumoPlantaoTecnicos(month);
     publicarEstadoPlantoes();
   }
 
@@ -7003,6 +7091,24 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
