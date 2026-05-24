@@ -416,11 +416,11 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 #plantoes .plantoes-config-ferias .section-title-line{margin-bottom:6px}
 #plantoes .plantoes-config-ferias .section-title-line h2{font-size:13px}
 #plantoes .plantoes-config-ferias .section-caption{font-size:10px}
-.plantoes-dupla-row{display:grid;grid-template-columns:minmax(250px,520px);justify-content:center;gap:8px;margin-bottom:8px;align-items:stretch}
+.plantoes-dupla-row{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);justify-content:stretch;gap:8px;margin-bottom:8px;align-items:stretch}
 .plantoes-dupla-row .card{height:100%}
 .plantoes-dupla-row .plantoes-folga-config{margin:0}
 .plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
-.plantoes-folga-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.plantoes-folga-actions{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;justify-content:flex-end}
 @media(max-width:1180px){.plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.plantoes-dupla-row{grid-template-columns:1fr}}
 
@@ -476,10 +476,10 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-inline-kpis .plantoes-chip{min-width:84px;padding:5px 7px;text-align:center}
 .plantoes-inline-kpis .plantoes-chip strong{font-size:14px}
 .plantoes-inline-kpis .plantoes-chip span{font-size:8px;margin-bottom:2px}
-.plantoes-tecnico-resumo{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;width:100%;margin:2px 0 8px}
-.plantoes-tecnico-chip{display:inline-flex;align-items:center;gap:6px;background:#f8fbff;border:1px solid var(--border);border-radius:999px;padding:5px 8px;color:var(--navy);font-size:10px;font-weight:800}
+.plantoes-tecnico-resumo{display:flex;align-items:center;justify-content:flex-start;gap:5px;flex-wrap:wrap;width:100%;margin:7px 0 0;padding-top:7px;border-top:1px solid var(--border)}
+.plantoes-tecnico-chip{display:inline-flex;align-items:center;gap:5px;background:#f8fbff;border:1px solid var(--border);border-radius:999px;padding:4px 7px;color:var(--navy);font-size:9.5px;font-weight:800}
 .plantoes-tecnico-chip strong{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue)}
-.plantoes-tecnico-chip span{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plantoes-tecnico-chip span{max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .plantoes-folga-card .section-title-line{justify-content:center;text-align:center}
 .plantoes-resumo-card .section-title-line{justify-content:flex-start;text-align:left}
 .plantoes-resumo-card .section-caption{display:none}
@@ -2264,7 +2264,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 <!-- PLANTÕES -->
 <section id="plantoes" class="tab-panel">
-  <div class="plantoes-dupla-row" style="grid-template-columns: minmax(280px, 0.8fr) minmax(250px, 1fr);">
+  <div class="plantoes-dupla-row">
     <div class="card">
       <div class="section-title-line">
         <h2>Controles</h2>
@@ -2288,6 +2288,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
         </div>
       </div>
       <div id="plantaoFolgaConfig" class="plantoes-folga-config"></div>
+      <div id="plantaoResumoTecnicos" class="plantoes-tecnico-resumo" aria-label="Plantões por técnico no mês selecionado"></div>
     </div>
   </div>
 
@@ -2303,7 +2304,6 @@ button:hover,.btn:hover{transform:translateY(-1px)}
             <div class="plantoes-chip"><span>Folgas</span><strong id="plantaoKpiFolgas">0</strong></div>
           </div>
         </div>
-        <div id="plantaoResumoTecnicos" class="plantoes-tecnico-resumo" aria-label="Plantões por técnico no mês selecionado"></div>
       </div>
     </div>
     <div class="table-wrap plantoes-table">
