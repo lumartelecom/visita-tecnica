@@ -5994,6 +5994,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         if(!dias.includes(Number(row.folgaCWeekday))) row.folgaCWeekday=dias[Math.min(2,dias.length-1)];
         if(row.folgaAWeekday===row.folgaBWeekday&&dias.length>1) row.folgaBWeekday=dias.find(d=>d!==row.folgaAWeekday);
       });
+      ajustarFolgasUnicasMes(month);
     });
   }
 
@@ -6090,10 +6091,42 @@ document.addEventListener("DOMContentLoaded",()=>{
     const yy=dt.getFullYear();
     return `${folgaLower[dt.getDay()]} ${dd}/${mm}/${yy}`;
   }
-  function proximaFolga(eventIso,targetWeekday){
+  function folgaISOFromEvent(eventIso,targetWeekday){
     const start=addDays(isoToDate(eventIso),1);
-    let diff=(Number(targetWeekday)-start.getDay()+7)%7;
-    return formatFolga(addDays(start,diff));
+    const diff=(Number(targetWeekday)-start.getDay()+7)%7;
+    const dt=addDays(start,diff);
+    return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
+  }
+  function proximaFolga(eventIso,targetWeekday){
+    return formatFolga(isoToDate(folgaISOFromEvent(eventIso,targetWeekday)));
+  }
+  function ajustarFolgasUnicasMes(month){
+    if(!month||!Array.isArray(month.rows)||!plantaoState) return false;
+    const dias=(plantaoState.allowedFolgaWeekdays||[2,3,4,6]).map(Number).filter(n=>n>=0&&n<=6);
+    if(!dias.length) return false;
+    const usadas=new Set();
+    let alterou=false;
+    const rows=[...month.rows].sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+    rows.forEach(row=>{
+      const campos=["folgaAWeekday","folgaBWeekday"].concat(row.baseC?["folgaCWeekday"]:[]);
+      campos.forEach((campo,idx)=>{
+        const candidatos=dias
+          .map(d=>({dia:d,iso:folgaISOFromEvent(row.date,d)}))
+          .sort((a,b)=>a.iso.localeCompare(b.iso));
+        const atual=Number(row[campo]);
+        let escolhido=candidatos.find(c=>c.dia===atual && !usadas.has(c.iso));
+        if(!escolhido || candidatos.findIndex(c=>c.dia===escolhido.dia)>idx){
+          escolhido=candidatos.find(c=>!usadas.has(c.iso))||escolhido||candidatos[Math.min(idx,candidatos.length-1)];
+        }
+        if(escolhido && Number(row[campo])!==Number(escolhido.dia)){
+          row[campo]=escolhido.dia;
+          alterou=true;
+        }
+        let iso=escolhido?.iso||folgaISOFromEvent(row.date,row[campo]);
+        usadas.add(iso);
+      });
+    });
+    return alterou;
   }
   function tecnicoPorId(id){
     return plantaoState.technicians.find(t=>t.id===id)||plantaoState.technicians[0];
@@ -6258,6 +6291,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(folgaCEl) row.folgaCWeekday=Number(folgaCEl.value);
     });
     garantirConfigPlantao(false);
+    ajustarFolgasUnicasMes(month);
   }
 
   function recalcularPlantoesPorDisponibilidade(){
@@ -6282,10 +6316,12 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(!dias.length) return false;
     const offset=Number(month.redistribFolgasOffset||0);
     month.rows.forEach((row,idx)=>{
-      row.folgaAWeekday=dias[(idx+offset)%dias.length];
-      row.folgaBWeekday=dias.length>1?dias[(idx+offset+1)%dias.length]:dias[0];
-      row.folgaCWeekday=dias.length>2?dias[(idx+offset+2)%dias.length]:row.folgaBWeekday;
+      const ordenados=[...dias].sort((a,b)=>folgaISOFromEvent(row.date,a).localeCompare(folgaISOFromEvent(row.date,b)));
+      row.folgaAWeekday=ordenados[(offset)%ordenados.length];
+      row.folgaBWeekday=ordenados.length>1?ordenados[(offset+1)%ordenados.length]:ordenados[0];
+      row.folgaCWeekday=ordenados.length>2?ordenados[(offset+2)%ordenados.length]:row.folgaBWeekday;
     });
+    ajustarFolgasUnicasMes(month);
     month.redistribFolgasOffset=offset+1;
     return true;
   }
