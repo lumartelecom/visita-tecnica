@@ -365,19 +365,35 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 @media(max-width:620px){.indicadores-baloes{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.indicador-balao{height:82px;grid-template-columns:42px minmax(0,1fr);padding:10px;border-radius:14px}.balao-valor{font-size:22px}.balao-titulo{font-size:9.5px;letter-spacing:.01em}}
 
 /* ─── ABA DIAS ─── */
-.dias-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-bottom:16px}
-.dias-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.dias-kpi{background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow-sm);min-width:0}
-.dias-kpi:nth-child(2){border-left-color:var(--green)}
-.dias-kpi:nth-child(3){border-left-color:var(--orange)}
-.dias-kpi:nth-child(4){border-left-color:var(--cyan)}
-.dias-kpi:nth-child(5){border-left-color:var(--indigo)}
-.dias-kpi:nth-child(6){border-left-color:var(--red)}
-.dias-kpi span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:800;margin-bottom:6px}
-.dias-kpi strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1;color:var(--navy)}
-.dias-kpi input.dias-meta-input{display:block;width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font-family:'IBM Plex Mono',monospace;font-size:24px;line-height:1;color:var(--navy);font-weight:800;outline:0}
+.dias-hero{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px;width:100%}
+.dias-kpis{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;width:100%}
+/* Resumo da Meta ocupa toda a largura da aba Dias */
+#dias .dias-hero>.card{width:100%;max-width:100%;min-width:0}
+#dias .dias-hero .section-title-line{align-items:center}
+.dias-kpi{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--radius-lg);padding:10px 11px;box-shadow:var(--shadow-sm);min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
+.dias-kpi:after{content:"";position:absolute;right:-28px;top:-28px;width:72px;height:72px;border-radius:50%;background:rgba(26,95,191,.05);pointer-events:none}
+.dias-kpi>*{position:relative;z-index:1}
+.dias-kpi-principal,.dias-kpi-operacao,.dias-kpi-contexto{grid-column:span 2}
+.dias-kpi-meta{border-top-color:var(--blue)}
+.dias-kpi-realizado{border-top-color:var(--green)}
+.dias-kpi-pendente{border-top-color:var(--orange)}
+.dias-kpi-capacidade{border-top-color:var(--cyan)}
+.dias-kpi-equipe{border-top-color:var(--indigo)}
+.dias-kpi-competencia{border-top-color:var(--red)}
+.dias-kpi-meta:after{background:rgba(26,95,191,.05)}
+.dias-kpi-realizado:after{background:rgba(13,153,104,.06)}
+.dias-kpi-pendente:after{background:rgba(234,88,12,.06)}
+.dias-kpi-capacidade:after{background:rgba(8,145,178,.06)}
+.dias-kpi-equipe:after{background:rgba(79,70,229,.06)}
+.dias-kpi-competencia:after{background:rgba(220,38,38,.05)}
+.dias-kpi span{display:block;width:100%;font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);font-weight:800;margin:0;line-height:1.15;white-space:normal}
+.dias-kpi strong{display:block;width:100%;font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:1;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dias-kpi input.dias-meta-input{display:block;width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:1;color:var(--navy);font-weight:800;outline:0}
 .dias-kpi input.dias-meta-input:focus{box-shadow:0 2px 0 var(--blue)}
-.dias-kpi small{display:block;margin-top:6px;color:var(--text-muted);font-weight:700;font-size:11px}
+.dias-kpi-click{font-family:inherit;text-align:left;cursor:pointer}
+.dias-kpi:hover,.dias-kpi-click:hover{background:var(--surface);border-color:#c7d5e8;box-shadow:var(--shadow);transform:translateY(-1px)}
+
+.dias-kpi small{display:block;width:100%;margin-top:0;color:var(--text-muted);font-weight:700;font-size:9px;line-height:1.2;white-space:normal}
 .dias-note{background:#f5f8ff;border:1px solid #cfe0ff;border-left:4px solid var(--blue);border-radius:12px;padding:14px 16px;color:#24426c;font-weight:600;line-height:1.55}
 .dias-progress{height:10px;background:#e5edf8;border-radius:999px;overflow:hidden;margin-top:10px}
 .dias-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px}
@@ -385,7 +401,7 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .dias-badge.ok{background:var(--green-light);color:#065f46;border-color:#a7f3d0}
 .dias-badge.off{background:var(--yellow-light);color:#78350f;border-color:#fde68a}
 .dia-nao-util td{background:#fbfdff;color:#64748b}
-@media(max-width:980px){.dias-hero{grid-template-columns:1fr}.dias-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:980px){.dias-hero{grid-template-columns:1fr}.dias-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dias-kpi-principal,.dias-kpi-operacao,.dias-kpi-contexto{grid-column:span 1}}
 @media(max-width:520px){.dias-kpis{grid-template-columns:1fr}.dias-kpi strong{font-size:22px}}
 
 
@@ -408,11 +424,11 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 #plantoes .plantoes-config-ferias .section-title-line{margin-bottom:6px}
 #plantoes .plantoes-config-ferias .section-title-line h2{font-size:13px}
 #plantoes .plantoes-config-ferias .section-caption{font-size:10px}
-.plantoes-dupla-row{display:grid;grid-template-columns:minmax(250px,520px);justify-content:center;gap:8px;margin-bottom:8px;align-items:stretch}
+.plantoes-dupla-row{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);justify-content:stretch;gap:8px;margin-bottom:8px;align-items:stretch}
 .plantoes-dupla-row .card{height:100%}
 .plantoes-dupla-row .plantoes-folga-config{margin:0}
 .plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(4,minmax(0,1fr))}
-.plantoes-folga-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.plantoes-folga-actions{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;justify-content:flex-end}
 @media(max-width:1180px){.plantoes-dupla-row .plantoes-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.plantoes-dupla-row{grid-template-columns:1fr}}
 
@@ -458,7 +474,10 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-config-table th,.plantoes-config-table td{padding:4px 5px;font-size:10px}
 .plantoes-config-table input:focus,.plantoes-config-table select:focus,.plantoes-table input:focus,.plantoes-table select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,95,196,.11)}
 .plantoes-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.plantoes-chip{border:1px solid var(--border);border-radius:8px;background:linear-gradient(180deg,#fff,#f8fbff);padding:6px;box-shadow:var(--shadow-sm);min-width:0}
+.plantoes-chip{border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--radius-lg);background:var(--surface);padding:6px;box-shadow:var(--shadow-sm);min-width:0;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
+.plantoes-chip:after{content:"";position:absolute;right:-22px;top:-24px;width:58px;height:58px;border-radius:50%;background:rgba(26,95,191,.05);pointer-events:none}
+.plantoes-chip>*{position:relative;z-index:1}
+.plantoes-chip:hover{border-color:#c7d5e8;box-shadow:var(--shadow);transform:translateY(-1px)}
 .plantoes-chip span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:800;margin-bottom:4px}
 .plantoes-chip strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--navy);line-height:1.1}
 .plantoes-month-title{margin:0 0 2px;font-size:12px;color:var(--navy);font-weight:800}
@@ -468,6 +487,11 @@ tr.contrato-encontrado td{background:#fff2b8!important;box-shadow:inset 4px 0 0 
 .plantoes-inline-kpis .plantoes-chip{min-width:84px;padding:5px 7px;text-align:center}
 .plantoes-inline-kpis .plantoes-chip strong{font-size:14px}
 .plantoes-inline-kpis .plantoes-chip span{font-size:8px;margin-bottom:2px}
+.plantoes-tecnico-resumo{display:flex;align-items:center;justify-content:flex-start;gap:5px;flex-wrap:wrap;width:100%;margin:7px 0 0;padding-top:7px;border-top:1px solid var(--border)}
+.plantoes-tecnico-chip{display:inline-flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--cyan);border-radius:var(--radius-lg);padding:5px 8px;color:var(--navy);font-size:9.5px;font-weight:800;box-shadow:var(--shadow-sm);transition:transform .18s,box-shadow .18s,border-color .18s}
+.plantoes-tecnico-chip:hover{border-color:#c7d5e8;box-shadow:var(--shadow);transform:translateY(-1px)}
+.plantoes-tecnico-chip strong{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blue)}
+.plantoes-tecnico-chip span{max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .plantoes-folga-card .section-title-line{justify-content:center;text-align:center}
 .plantoes-resumo-card .section-title-line{justify-content:flex-start;text-align:left}
 .plantoes-resumo-card .section-caption{display:none}
@@ -1790,13 +1814,27 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 #cardLogOfensor{
   border-left-color:var(--red);
 }
+#cardLogOfensor:hover{
+  border-left-color:#cbd5e1;
+}
 #cardLogOfensor:before{
   content:"LOG";
   display:flex;
   align-items:center;
   justify-content:center;
+  position:absolute;
+  right:16px;
+  top:16px;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:rgba(220,38,38,.08);
+  z-index:0;
   color:var(--red);
   font:700 10px 'IBM Plex Mono',monospace;
+}
+#cardLogOfensor:after{
+  background:rgba(220,38,38,.055);
 }
 #cardLogOfensor .kpi-value{
   color:#9c2634;
@@ -1838,16 +1876,20 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 <style>
 /* === DIAS TRABALHADOS DINÂMICO - Google Sheets === */
-.dias-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;padding:16px 18px}
-.dias-toolbar h2{margin:0 0 4px;padding:0;border:0}
-.dias-toolbar-actions{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
-.dias-toolbar-actions label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:800}
-.dias-toolbar-actions select{min-width:170px}
+.dias-toolbar{display:grid;grid-template-columns:minmax(280px,1fr) minmax(420px,.9fr);align-items:center;gap:18px;margin-bottom:14px;padding:16px 18px;border-left:4px solid var(--blue)}
+.dias-toolbar h2{margin:0 0 5px;padding:0;border:0;font-size:20px;letter-spacing:.08em}
+.dias-toolbar .meta-note{max-width:680px;margin:0;color:var(--text-muted);font-size:13px;line-height:1.45}
+.dias-toolbar-actions{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:10px;background:#f8fbff;border:1px solid var(--border);border-radius:10px;padding:10px}
+.dias-field{min-width:0}
+.dias-toolbar-actions label{display:block;margin:0 0 5px;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);font-weight:800}
+.dias-toolbar-actions select{width:100%;min-width:0;height:38px;border-radius:8px;font-size:13px}
+.dias-toolbar-actions button{height:38px;padding:0 14px;white-space:nowrap}
 .dias-table-card{margin-top:14px}
 .dias-table-wrap table{min-width:520px}
 .dias-table-wrap td:nth-child(2),.dias-table-wrap td:nth-child(3),.dias-table-wrap td:nth-child(4){font-family:'IBM Plex Mono',monospace;font-weight:800;color:var(--navy)}
 .dias-loading{opacity:.72}
-@media(max-width:720px){.dias-toolbar{display:grid;grid-template-columns:1fr}.dias-toolbar-actions{display:grid;grid-template-columns:1fr 1fr}.dias-toolbar-actions label{grid-column:1/-1}.dias-toolbar-actions select{min-width:0;width:100%}}
+@media(max-width:980px){.dias-toolbar{grid-template-columns:1fr}.dias-toolbar-actions{grid-template-columns:1fr 1fr auto}}
+@media(max-width:720px){.dias-toolbar-actions{grid-template-columns:1fr}.dias-toolbar-actions button{width:100%}}
 </style>
 
 
@@ -2081,11 +2123,6 @@ button:hover,.btn:hover{transform:translateY(-1px)}
       <div class="section-title-line">
         <h2>Performance por Técnico</h2>
       </div>
-      <div class="performance-date-filter" aria-label="Filtro de data da Performance por Técnico">
-        <label>De<input type="date" id="filtroPerformanceDataIni"></label>
-        <label>Até<input type="date" id="filtroPerformanceDataFim"></label>
-        <button id="btnPerformanceLimparData" class="secondary" type="button">Limpar data</button>
-      </div>
       <div class="table-wrap">
         <table>
           <thead>
@@ -2096,6 +2133,11 @@ button:hover,.btn:hover{transform:translateY(-1px)}
           </thead>
           <tbody id="tabelaTecnicos"><tr><td colspan="11"><div class="empty">Carregue a base para visualizar.</div></td></tr></tbody>
         </table>
+      </div>
+      <div class="performance-date-filter" aria-label="Filtro de data da Performance por Técnico">
+        <label>De<input type="date" id="filtroPerformanceDataIni"></label>
+        <label>Até<input type="date" id="filtroPerformanceDataFim"></label>
+        <button id="btnPerformanceLimparData" class="secondary" type="button">Limpar data</button>
       </div>
       <div id="cardsTecnicosMobile" class="mobile-tech-cards"><div class="empty">Carregue a base para visualizar.</div></div>
     </div>
@@ -2212,8 +2254,14 @@ button:hover,.btn:hover{transform:translateY(-1px)}
       <p class="meta-note">Dados carregados automaticamente da planilha online Controle Lumar, procurando a aba VT do mês selecionado.</p>
     </div>
     <div class="dias-toolbar-actions">
-      <label for="diasMes">Mês</label>
-      <select id="diasMes" aria-label="Selecionar mês dos dias trabalhados"></select>
+      <div class="dias-field">
+        <label for="diasMes">Mês</label>
+        <select id="diasMes" aria-label="Selecionar mês dos dias trabalhados"></select>
+      </div>
+      <div class="dias-field">
+        <label for="capacidadeMesSelectTopo">Capacidade</label>
+        <select id="capacidadeMesSelectTopo" aria-label="Selecionar mês da capacidade"></select>
+      </div>
       <button id="btnAtualizarDias" class="secondary" type="button">Atualizar</button>
     </div>
   </div>
@@ -2221,39 +2269,20 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   <div class="dias-hero">
     <div class="card">
       <div class="section-title-line">
-        <h2>Resumo da Meta</h2>
+        <h2>Painel de Produtividade</h2>
         <span class="section-caption" id="diasFonteLegenda">Planilha online · aguardando carga</span>
       </div>
       <div class="dias-kpis">
-        <div class="dias-kpi"><span>Meta mínima mensal</span><input id="diasMetaMensal" class="dias-meta-input" type="number" min="0" step="1" value="175" aria-label="Meta mínima mensal"><small id="diasMetaMensalSub">Editável</small></div>
-        <div class="dias-kpi"><span>Total já feito</span><strong id="diasTotalFeito">-</strong><small id="diasTotalFeitoSub">Soma do TOTAL DO DIA</small></div>
-        <div class="dias-kpi"><span>Falta meta</span><strong id="diasFaltaMeta">-</strong><small>Meta - feito</small></div>
-        <div class="dias-kpi"><span>Capacidade em dias</span><strong id="diasUteisRestantes">-</strong><small id="diasUteisSub">Soma dos técnicos ativos restantes</small></div>
-        <div class="dias-kpi"><span>Logins ativos</span><strong id="diasMetaDia">7</strong><small>Valor fixo/travado</small></div>
-        <div class="dias-kpi"><span>Competência</span><strong id="diasCompetencia">-</strong><small id="diasCompetenciaSub">Mês selecionado</small></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-meta"><span>Meta mensal mínima</span><input id="diasMetaMensal" class="dias-meta-input" type="number" min="0" step="1" value="175" aria-label="Meta mensal mínima"></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-realizado"><span>Produção acumulada</span><strong id="diasTotalFeito">-</strong></div>
+        <div class="dias-kpi dias-kpi-principal dias-kpi-pendente"><span>Saldo para meta</span><strong id="diasFaltaMeta">-</strong></div>
+        <button class="dias-kpi dias-kpi-operacao dias-kpi-click capacidade-kpi dias-kpi-capacidade" id="cardCapacidadeDias" type="button" aria-label="Ver capacidade disponível da equipe"><span>Capacidade equipe</span><strong id="diasUteisRestantes">-</strong></button>
+        <div class="dias-kpi dias-kpi-operacao dias-kpi-equipe"><span>Equipe ativa</span><strong id="diasMetaDia">7</strong></div>
+        <div class="dias-kpi dias-kpi-contexto dias-kpi-competencia"><span>Competência analisada</span><strong id="diasCompetencia">-</strong><small id="diasCompetenciaSub">Mês selecionado</small></div>
       </div>
       <div class="dias-progress" title="Progresso da meta"><span id="diasProgresso" style="width:0%"></span></div>
     </div>
 
-    <div class="card">
-      <h2>Regra da média</h2>
-      <div class="dias-note" id="diasRegraMedia">
-        Carregando a aba do mês selecionado...
-      </div>
-    </div>
-  </div>
-
-  <div class="card dias-table-card">
-    <div class="section-title-line">
-      <h2>Média diária por técnico</h2>
-      <span class="section-caption">Colunas DT e PD da planilha online</span>
-    </div>
-    <div class="table-wrap dias-table-wrap">
-      <table>
-        <thead><tr><th>Técnico</th><th>Total Geral</th><th>DT</th><th>PD</th></tr></thead>
-        <tbody id="diasTabelaTecnicos"><tr><td colspan="4"><div class="empty">Aguardando planilha online.</div></td></tr></tbody>
-      </table>
-    </div>
   </div>
 </section>
 
@@ -2261,14 +2290,13 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 <!-- PLANTÕES -->
 <section id="plantoes" class="tab-panel">
-  <div class="plantoes-dupla-row" style="grid-template-columns: minmax(280px, 0.8fr) minmax(250px, 1fr);">
+  <div class="plantoes-dupla-row">
     <div class="card">
       <div class="section-title-line">
         <h2>Controles</h2>
       </div>
       <div class="plantoes-actions" style="display: flex; flex-direction: row; gap: 6px; align-items: center;">
         <select id="plantaoMes" class="plantoes-select" aria-label="Selecionar mês" style="flex: 1; padding: 5px 8px; font-size: 11px;"></select>
-        <button id="plantaoSalvar" class="success" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">Salvar</button>
         <button id="plantaoPdf" class="success plantao-btn-plus" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">PDF</button>
         <button id="plantaoImagem" class="success plantao-btn-plus" type="button" style="flex: 1; padding: 6px 8px; font-size: 10px; white-space: nowrap; justify-content: center; text-align: center;">Imagem</button>
       </div>
@@ -2286,6 +2314,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
         </div>
       </div>
       <div id="plantaoFolgaConfig" class="plantoes-folga-config"></div>
+      <div id="plantaoResumoTecnicos" class="plantoes-tecnico-resumo" aria-label="Plantões por técnico no mês selecionado"></div>
     </div>
   </div>
 
@@ -2914,17 +2943,23 @@ function dataDateDeOrdem(ts){
   const d=new Date(Number(ts)||0);
   return isNaN(d.getTime())?null:d;
 }
+function limiteInicioProximaCompetencia(d){
+  const ultimoDiaMes=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+  return ultimoDiaMes===31?22:21;
+}
 function mesAnoCompetencia(d){
   const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-  const ref=new Date(d.getFullYear(),d.getMonth()+(d.getDate()>20?1:0),1);
+  const ref=new Date(d.getFullYear(),d.getMonth()+(d.getDate()>=limiteInicioProximaCompetencia(d)?1:0),1);
   return `${meses[ref.getMonth()]}/${ref.getFullYear()}`;
 }
 function intervaloCompetenciaIndicador(d){
   const ano=d.getFullYear();
   const mes=d.getMonth();
   const dia=d.getDate();
-  const inicio=dia<=20?new Date(ano,mes-1,20):new Date(ano,mes,21);
-  const fim=dia<=20?new Date(ano,mes,20):new Date(ano,mes+1,20);
+  const inicioProximo=limiteInicioProximaCompetencia(d);
+  const novoCiclo=dia>=inicioProximo;
+  const inicio=novoCiclo?new Date(ano,mes,inicioProximo):new Date(ano,mes-1,20);
+  const fim=novoCiclo?new Date(ano,mes+1,20):new Date(ano,mes,20);
   return {inicio:dataISODeDate(inicio),fim:dataISODeDate(fim),competencia:mesAnoCompetencia(d)};
 }
 function intervaloCiclo20PorBase(rows){
@@ -3004,7 +3039,7 @@ function celulaMargemRevisita(t){
 }
 function celulaMetaVT(qtd){
   qtd=Number(qtd)||0;
-  if(qtd<=0) return `<span class="meta-vt">Na meta</span>`;
+  if(qtd<=0) return "";
   return `<span class="meta-vt need">${qtd} VT</span>`;
 }
 
@@ -3338,7 +3373,7 @@ function renderCardsMobilePerformance(id,summary){
       <div class="metric-box"><span>Fora janela</span><strong>${t.tecFora}</strong></div>
       <div class="metric-box"><span>VT Meta Rev.</span><strong>${t.vtMetaRevisita?`${t.vtMetaRevisita} VT`:""}</strong></div>
       <div class="metric-box"><span>Margem de revisita</span><strong>${margemRevisitaTecnico(t)} rev.</strong></div>
-      <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:"Na meta"}</strong></div>
+      <div class="metric-box"><span>VT Meta TEC1</span><strong>${t.vtMetaTec1?`${t.vtMetaTec1} VT`:""}</strong></div>
     </div>
   </div>`}).join(""):'<div class="empty">Sem dados para os filtros selecionados.</div>';
 }
@@ -3366,11 +3401,11 @@ function linhaMediaPerformance(arr){
     <td>${num1(mediaProd)}</td>
     <td>${num1(mediaRevQtd)}</td>
     <td>${pct(revGeral)}</td>
-    <td>${mediaMetaRev>0?`<span class="meta-vt need">${num1(mediaMetaRev)} VT</span>`:""}</td>
-    <td><span class="meta-vt">${num1(mediaMargem)} rev.</span></td>
-    <td>${num1(mediaFora)}</td>
+    <td></td>
+    <td></td>
+    <td></td>
     <td>${pct(tec1Geral)}</td>
-    <td>${mediaMetaTec1>0?`<span class="meta-vt need">${num1(mediaMetaTec1)} VT</span>`:`<span class="meta-vt">Na meta</span>`}</td>
+    <td>${mediaMetaTec1>0?`<span class="meta-vt need">${num1(mediaMetaTec1)} VT</span>`:""}</td>
     <td><span class="badge green">${certificados}/${qtd} certificado</span></td>
   </tr>`;
 }
@@ -3403,8 +3438,10 @@ function renderDashboard(summary){
       const abre=r.login!==atual;atual=r.login;
       const contratoBusca=String(r.contrato||"").replace(/[^0-9a-zA-Z]/g,"").toLowerCase();
       const dataBusca=dataKeyFiltro(r.dataRevisita||r.dataPrimeira||"");
+      const codigoPrimeira=nomeCodigoIndicador(r.codigoPrimeira||"-");
+      const codigoRevisita=nomeCodigoIndicador(r.codigoRevisita||"-");
       return `${abre?`<tr class="group-row"><td colspan="8"><span>${nomeTecnico(r.login)}${TECNICOS_NOMES[loginKey(r.login)]?` <small>(${loginKey(r.login)})</small>`:""}</span></td></tr>`:""}
-      <tr data-contrato="${contratoBusca}" data-contrato-label="${r.contrato}" data-date="${dataBusca}"><td>${r.contrato}</td><td>${r.codigoPrimeira||"-"}</td><td>${r.dataPrimeira||"-"}</td><td>${r.codigoRevisita||"-"}</td><td>${r.dataRevisita||"-"}</td><td>${r.qt}</td><td>${r.tipo}</td><td>${r.node}</td></tr>`;
+      <tr data-contrato="${contratoBusca}" data-contrato-label="${r.contrato}" data-date="${dataBusca}"><td>${r.contrato}</td><td>${codigoPrimeira}</td><td>${r.dataPrimeira||"-"}</td><td>${codigoRevisita}</td><td>${r.dataRevisita||"-"}</td><td>${r.qt}</td><td>${r.tipo}</td><td>${r.node}</td></tr>`;
     }).join("");
   }else{
     $("tabelaRevisitas").innerHTML='<tr><td colspan="8"><div class="empty">Nenhuma revisita encontrada.</div></td></tr>';
@@ -4981,6 +5018,7 @@ let diasCachePlanilha={};
 let diasDadosAtuais=null;
 let diasMesInfoAtual=null;
 let diasFonteAtual="";
+let capacidadeMesSelecionado=null;
 
 function setDiasText(id,valor){const el=$(id); if(el){ if("value" in el) el.value=String(valor).replace(/\./g,""); else el.textContent=valor; }}
 function formatNumeroDias(v,casas=0){
@@ -5044,6 +5082,31 @@ function obterMesPlantaoDias(ano,mes){
     const [y,m]=String(row.date||"").split("-").map(Number);
     return y===ano && (m-1)===mes;
   }))||null;
+}
+function tecnicoFeriasNoDiaDias(tec,iso){
+  if(!tec || tec.status!=="Férias") return false;
+  if(!tec.start && !tec.end) return false;
+  const ini=tec.start||"0000-01-01";
+  const fim=tec.end||"9999-12-31";
+  return iso>=ini && iso<=fim;
+}
+function qtdTecnicosFeriasDiaDias(ano,mes,dia){
+  const estado=lerEstadoPlantoesDias();
+  const iso=dataISO(ano,mes,dia);
+  const tecnicos=estado?.technicians||[];
+  return tecnicos.filter(t=>tecnicoFeriasNoDiaDias(t,iso)).length;
+}
+function equipeAtivaDiaDias(ano,mes,dia){
+  const base=Number(DIAS_SHEET_CONFIG.loginsAtivos||7);
+  return Math.max(0,base-qtdTecnicosFeriasDiaDias(ano,mes,dia));
+}
+function equipeAtivaMesDias(mesInfo){
+  const ano=DIAS_SHEET_CONFIG.anoPadrao;
+  const mes=Number(mesInfo?.num);
+  const ultimo=new Date(ano,mes+1,0).getDate();
+  let menor=Number(DIAS_SHEET_CONFIG.loginsAtivos||7);
+  for(let dia=1;dia<=ultimo;dia++) menor=Math.min(menor,equipeAtivaDiaDias(ano,mes,dia));
+  return menor;
 }
 function rowPlantaoPorDataDias(ano,mes,dia){
   const month=obterMesPlantaoDias(ano,mes);
@@ -5118,15 +5181,25 @@ function contarDiasTrabalhoRestantes(ano,mes,inicioDia,opcoes={}){
   const incluirSabado=!!opcoes.incluirSabado;
   const multiplicador=Math.max(1,Number(opcoes.multiplicador)||1);
   for(let dia=Math.max(1,Number(inicioDia)||1);dia<=ultimo;dia++){
+    const d=new Date(ano,mes,dia);
     if(typeof opcoes.capacidadePorDia==="function"){
       const capacidade=Number(opcoes.capacidadePorDia(ano,mes,dia))||0;
-      if(capacidade>0){total+=capacidade;detalhes.push(dataBR(new Date(ano,mes,dia)));}
+      if(capacidade>0){
+        const rowPlantao=rowPlantaoPorDataDias(ano,mes,dia);
+        const qtdPlantao=qtdTecnicosPlantaoDias(rowPlantao);
+        const qtdFolga=qtdFolgasPlantaoDiaDias(ano,mes,dia);
+        const status=[];
+        if(qtdPlantao>0) status.push(`Plantão: ${qtdPlantao}`);
+        if(qtdFolga>0) status.push(`Folga: ${qtdFolga}`);
+        if(!status.length) status.push("Normal");
+        total+=capacidade;
+        detalhes.push({dia,data:dataBR(d),capacidade,status:status.join(" · ")});
+      }
       continue;
     }
-    const d=new Date(ano,mes,dia);
     const dow=d.getDay();
     const util=dow!==0 && (incluirSabado || dow!==6) && (incluirSabado || !ehFeriadoTeresinaData(d));
-    if(util){total+=multiplicador;detalhes.push(dataBR(d));}
+    if(util){total+=multiplicador;detalhes.push({dia,data:dataBR(d),capacidade:multiplicador});}
   }
   return {total,detalhes};
 }
@@ -5182,26 +5255,23 @@ function regraCalendarioDias(mesInfo){
   return {
     capacidadePorDia:(ano,mes,dia)=>capacidadeDiaDias(ano,mes,dia,mesInfo),
     disponivelPorDia:(ano,mes,dia)=>diaDisponivelTrabalhoDias(ano,mes,dia,mesInfo),
-    descricao:"Capacidade em dias baseada na aba Plantões: soma os técnicos ativos/escalados por data; 7 técnicos = 7 dias, 2 técnicos = 2 dias."
+    descricao:"Capacidade em dias baseada na aba Plantões: domingos/feriados contam os técnicos escalados; dias normais descontam plantão e folga."
   };
 }
 function capacidadeDiaDias(ano,mes,dia,mesInfo){
   const d=new Date(ano,mes,dia);
   const dow=d.getDay();
-  const loginsAtivos=Number(DIAS_SHEET_CONFIG.loginsAtivos||7);
+  const loginsAtivos=equipeAtivaDiaDias(ano,mes,dia);
   const rowPlantao=rowPlantaoPorDataDias(ano,mes,dia);
   const qtdPlantao=qtdTecnicosPlantaoDias(rowPlantao);
   const folgasNoDia=qtdFolgasPlantaoDiaDias(ano,mes,dia);
   const feriado=ehFeriadoTeresinaData(d);
 
-  // Capacidade em dias = quantidade de técnicos que conseguem produzir naquele dia,
-  // puxada da aba Plantões.
-  // - Se a data está na tabela de plantões, conta os técnicos escalados na linha.
-  // - Em dia normal, conta os 7 logins ativos menos as folgas geradas pela tabela.
-  // - Domingo/feriado sem linha na tabela não entra como capacidade.
-  if(rowPlantao) return qtdPlantao;
-  if(dow===0 || feriado) return 0;
-  if(dow>=1 && dow<=6) return Math.max(0,loginsAtivos-folgasNoDia);
+  // Capacidade em dias = técnicos disponíveis para produção.
+  // Domingo/feriado só entra quando existe plantão, contando os técnicos escalados.
+  // Em dia normal, técnicos em plantão, folga e férias são retirados da capacidade produtiva normal.
+  if(dow===0 || feriado) return qtdPlantao;
+  if(dow>=1 && dow<=6) return Math.max(0,loginsAtivos-folgasNoDia-qtdPlantao);
   return 0;
 }
 function diaDisponivelTrabalhoDias(ano,mes,dia,mesInfo){
@@ -5325,10 +5395,10 @@ function extrairDadosDias(matriz,mesInfo){
   const capacidadeRestante=contarDiasTrabalhoRestantes(DIAS_SHEET_CONFIG.anoPadrao,mesInfo.num,inicioRestante,regraCalendario);
   const diasRestantes=contarDatasRestantesMes(DIAS_SHEET_CONFIG.anoPadrao,mesInfo.num,inicioRestante,regraCalendario);
   // O divisor agora é a capacidade real de produção restante:
-  // dia normal = 7 logins, dia com folga aplicada = 6, plantão = 2.
+  // domingo/feriado com plantão = técnicos escalados; dia normal = 7 logins menos folgas e plantões.
   const diasUteisRestantes=capacidadeRestante.total;
   const metaDia=diasUteisRestantes?Math.ceil(falta/diasUteisRestantes):0;
-  return {tecnicoRows,totalJaFeito,totalPelosDias,totalPeloDT,totalPeloDTTecnicos,totalValidosEquipe:totalValidosEquipe?.total||0,pdEquipe,ultimoDiaComValor,meta:metaInfo.valor,metaOrigem:metaInfo.origem,falta,inicioRestante,diasUteis:diasUteisRestantes,diasDatasRestantes:diasRestantes.total,diasCapacidadeRestante:capacidadeRestante.total,metaDia,header,totalRow,regraCalendario};
+  return {tecnicoRows,totalJaFeito,totalPelosDias,totalPeloDT,totalPeloDTTecnicos,totalValidosEquipe:totalValidosEquipe?.total||0,pdEquipe,ultimoDiaComValor,meta:metaInfo.valor,metaOrigem:metaInfo.origem,falta,inicioRestante,diasUteis:diasUteisRestantes,diasDatasRestantes:diasRestantes.total,diasCapacidadeRestante:capacidadeRestante.total,diasCapacidadeDetalhes:capacidadeRestante.detalhes,metaDia,header,totalRow,regraCalendario};
 }
 function urlsDiasPlanilha(mesInfo){
   const id=DIAS_SHEET_CONFIG.spreadsheetId;
@@ -5547,17 +5617,13 @@ function renderDiasErro(msg){
   setDiasText("diasCompetencia","-");
   const mesInfo=mesDiasSelecionado();
   const tentativas=urlsDiasPlanilha(mesInfo).map(u=>esc(u.nome)).join(", ");
-  const regra=$("diasRegraMedia");
-  if(regra) regra.innerHTML=`<strong>Não foi possível carregar os dias trabalhados.</strong><br>${esc(msg)}<br><br><strong>Tentativas:</strong> ${tentativas || "nenhuma"}.<br><br>Confira se a planilha está em <strong>Compartilhar → Qualquer pessoa com o link → Leitor</strong>. Se ainda não abrir, use <strong>Arquivo → Compartilhar → Publicar na Web</strong> na planilha do Google e publique a aba VT do mês.`;
-  const tbody=$("diasTabelaTecnicos");
-  if(tbody) tbody.innerHTML='<tr><td colspan="4"><div class="empty">Sem dados para exibir.</div></td></tr>';
 }
 function aplicarMetaManualDias(valor){
   if(!diasDadosAtuais || !diasMesInfoAtual) return;
   const meta=Math.max(0,Math.round(parseNumeroDias(valor)));
   if(!meta) return;
   diasDadosAtuais.meta=meta;
-  diasDadosAtuais.metaOrigem="Meta editada manualmente";
+  diasDadosAtuais.metaOrigem="";
   diasDadosAtuais.falta=Math.max(0,meta-diasDadosAtuais.totalJaFeito);
   diasDadosAtuais.metaDia=diasDadosAtuais.diasUteis?Math.ceil(diasDadosAtuais.falta/diasDadosAtuais.diasUteis):0;
   renderDiasTrabalhados(diasDadosAtuais,diasMesInfoAtual,diasFonteAtual);
@@ -5572,28 +5638,59 @@ function renderDiasTrabalhados(dados,mesInfo,fonte){
   const progresso=dados.meta?Math.min(100,(dados.totalJaFeito/dados.meta)*100):0;
   setDiasText("diasFonteLegenda",`Planilha online · ${fonte}`);
   setDiasText("diasMetaMensal",formatNumeroDias(dados.meta,0));
-  setDiasText("diasMetaMensalSub",dados.metaOrigem||"Meta da planilha");
   setDiasText("diasTotalFeito",formatNumeroDias(dados.totalJaFeito,0));
-  setDiasText("diasTotalFeitoSub",`DT LUMAR · PD ${formatNumeroDias(dados.pdEquipe,1)} · ${progresso.toFixed(1).replace(".",",")}% da meta`);
   setDiasText("diasFaltaMeta",formatNumeroDias(dados.falta,0));
   setDiasText("diasUteisRestantes",formatNumeroDias(dados.diasUteis,0));
-  setDiasText("diasTotalFeitoSub",`Soma da coluna DT - sem MAZZINI - PD ${formatNumeroDias(dados.pdEquipe,1)} - ${progresso.toFixed(1).replace(".",",")}% da meta`);
-  setDiasText("diasUteisSub",dados.inicioRestante<=fim.getDate()?`Soma dos técnicos ativos restantes a partir de ${String(dados.inicioRestante).padStart(2,"0")}/${String(mesInfo.num+1).padStart(2,"0")}/${ano}`:"Mês encerrado");
-  setDiasText("diasMetaDia",String(DIAS_SHEET_CONFIG.loginsAtivos||7));
+  setDiasText("diasMetaDia",String(equipeAtivaMesDias(mesInfo)));
   setDiasText("diasCompetencia",`${mesInfo.label}-26`);
   setDiasText("diasCompetenciaSub",`${dataBR(inicio)} a ${dataBR(fim)}`);
   const barra=$("diasProgresso");
   if(barra) barra.style.width=`${progresso}%`;
-  const regra=$("diasRegraMedia");
-  if(regra){
-    regra.innerHTML=`A tela usa a aba <strong>${fonte}</strong> da planilha online.<br><br>
-      <strong>Conta atual:</strong> ${formatNumeroDias(dados.meta,0)} - ${formatNumeroDias(dados.totalJaFeito,0)} = ${formatNumeroDias(dados.falta,0)}; ${formatNumeroDias(dados.falta,0)} dividido por ${formatNumeroDias(dados.diasUteis,0)} capacidade em dias = ${dados.diasUteis?formatNumeroDias(dados.falta/dados.diasUteis,2):"0"}.
-      <br><br><strong>Total já feito:</strong> soma da coluna DT, excluindo MAZZINI. <strong>Capacidade em dias:</strong> soma a quantidade de técnicos que conseguem produzir em cada data restante, conforme a aba <strong>Plantões</strong> do mês vigente. Se no dia constam <strong>7 técnicos</strong>, soma <strong>7 dias</strong>; se constam <strong>2 técnicos</strong>, soma <strong>2 dias</strong>. Folgas aplicadas reduzem a capacidade do dia. <strong>Logins ativos:</strong> travado em <strong>7</strong>.`;
+  preencherSelectCapacidadeInline();
+}
+function detalhesCapacidadeMes(mesInfo,inicioDia=1){
+  const ano=DIAS_SHEET_CONFIG.anoPadrao;
+  const regra=regraCalendarioDias(mesInfo);
+  return contarDiasTrabalhoRestantes(ano,mesInfo.num,inicioDia,regra);
+}
+function inicioCapacidadeSelecionadaDias(mesInfo){
+  const ano=DIAS_SHEET_CONFIG.anoPadrao;
+  const hoje=new Date();
+  const mesNum=Number(mesInfo?.num);
+  const ehMesCorrente=hoje.getFullYear()===ano && hoje.getMonth()===mesNum;
+  const ehMesAnalisado=diasDadosAtuais&&diasMesInfoAtual&&Number(diasMesInfoAtual.num)===mesNum;
+  if(ehMesAnalisado && (Number(diasDadosAtuais.totalJaFeito)||0)>0){
+    return Math.max(1,Number(diasDadosAtuais.inicioRestante)||1);
   }
-  const tbody=$("diasTabelaTecnicos");
-  if(tbody){
-    tbody.innerHTML=dados.tecnicoRows.length?dados.tecnicoRows.map(t=>`<tr><td>${esc(t.nome)}</td><td>${formatNumeroDias(t.total,0)}</td><td>${formatNumeroDias(t.dt,0)}</td><td>${formatNumeroDias(t.pd,1)}</td></tr>`).join(""):'<tr><td colspan="4"><div class="empty">Nenhum técnico encontrado na aba selecionada.</div></td></tr>';
+  if(ehMesCorrente){
+    return Math.max(1,hoje.getDate());
   }
+  return 1;
+}
+function renderModalCapacidadeMes(mesNum){
+  const conteudo=$("modalIndicadorConteudo");
+  if(!conteudo) return;
+  const mesInfo=DIAS_SHEET_CONFIG.meses.find(m=>Number(m.num)===Number(mesNum))||diasMesInfoAtual||mesDiasSelecionado();
+  const inicioDia=inicioCapacidadeSelecionadaDias(mesInfo);
+  const capacidade=detalhesCapacidadeMes(mesInfo,inicioDia);
+  const detalhes=Array.isArray(capacidade.detalhes)?capacidade.detalhes:[];
+  const total=Number(capacidade.total)||0;  const linhas=detalhes.length?detalhes.map(item=>`<tr><td>${esc(item.data||"-")}</td><td>${formatNumeroDias(item.capacidade,0)}</td><td>${esc(item.status||"Normal")}</td></tr>`).join(""):'<tr><td colspan="3"><div class="empty">Nenhum dia disponível para produção neste mês.</div></td></tr>';
+  $("modalIndicadorSub").textContent=`${formatNumeroDias(total,0)} dia(s) de capacidade produtiva em ${mesInfo.nome}/${DIAS_SHEET_CONFIG.anoPadrao}, a partir de ${String(inicioDia).padStart(2,"0")}/${String(Number(mesInfo.num)+1).padStart(2,"0")}, considerando folgas, feriados, domingos e escala de Plantões.`;
+  conteudo.innerHTML=`<div class="base-total-resumo"><span class="base-total-chip active">Total: ${formatNumeroDias(total,0)}</span><span class="base-total-chip">Datas: ${detalhes.length}</span><span class="base-total-chip">Mês: ${mesInfo.nome}</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Data disponível</th><th>Capacidade</th><th>Status</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+}
+function abrirModalCapacidadeDias(){
+  const modal=$("modalIndicadorDetalhe");
+  const conteudo=$("modalIndicadorConteudo");
+  if(!modal||!conteudo) return;
+  const mesInline=Number($("capacidadeMesSelectTopo")?.value ?? capacidadeMesSelecionado);
+  const mesBase=diasMesInfoAtual||mesDiasSelecionado();
+  const proximoNum=(Number(mesBase?.num)||0)+1;
+  const mesPadrao=DIAS_SHEET_CONFIG.meses.find(m=>m.num===mesInline)||DIAS_SHEET_CONFIG.meses.find(m=>m.num===proximoNum)||DIAS_SHEET_CONFIG.meses.find(m=>m.num===Number(mesBase?.num))||DIAS_SHEET_CONFIG.meses[0];
+  $("modalIndicadorTitulo").textContent="Capacidade em dias";
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden","false");
+  renderModalCapacidadeMes(mesPadrao.num);
 }
 function mesInfoPlantaoVigenteDias(fallbackMesInfo){
   try{
@@ -5620,14 +5717,12 @@ function mesInfoPlantaoVigenteDias(fallbackMesInfo){
 
 
 async function atualizarDiasTrabalhados(){
-  const mesInfo=mesInfoPlantaoVigenteDias(mesDiasSelecionado());
+  const mesInfo=mesDiasSelecionado();
   const selDias=$("diasMes");
   if(selDias&&mesInfo) selDias.value=String(mesInfo.num);
   const painel=$("dias");
   if(painel) painel.classList.add("dias-loading");
   setDiasText("diasFonteLegenda",`Planilha online · carregando ${mesInfo.nome}`);
-  const regra=$("diasRegraMedia");
-  if(regra) regra.innerHTML=`Carregando a aba VT de <strong>${mesInfo.nome} ${DIAS_SHEET_CONFIG.anoPadrao}</strong>...`;
   try{
     const csv=await buscarCSVPlanilhaDias(mesInfo);
     const matriz=csv.matriz||parseMatrizCSV(csv.text);
@@ -5640,8 +5735,35 @@ async function atualizarDiasTrabalhados(){
     if(painel) painel.classList.remove("dias-loading");
   }
 }
+function atualizarCardCapacidadeSelecionada(){
+  const sel=$("capacidadeMesSelectTopo");
+  const mesInfo=DIAS_SHEET_CONFIG.meses.find(m=>Number(m.num)===Number(sel?.value));
+  if(!mesInfo) return;
+  capacidadeMesSelecionado=Number(mesInfo.num);
+  const capacidade=detalhesCapacidadeMes(mesInfo,inicioCapacidadeSelecionadaDias(mesInfo));
+  setDiasText("diasUteisRestantes",formatNumeroDias(capacidade.total||0,0));
+  setDiasText("diasMetaDia",String(equipeAtivaMesDias(mesInfo)));
+}
+function preencherSelectCapacidadeInline(){
+  const sel=$("capacidadeMesSelectTopo");
+  if(!sel) return;
+  const mesBase=diasMesInfoAtual||mesDiasSelecionado();
+  const proximoNum=(Number(mesBase?.num)||0)+1;
+  const valorPadrao=DIAS_SHEET_CONFIG.meses.some(m=>m.num===proximoNum)?proximoNum:Number(mesBase?.num)||Number(DIAS_SHEET_CONFIG.mesVigente||4);
+  if(capacidadeMesSelecionado===null || !DIAS_SHEET_CONFIG.meses.some(m=>m.num===Number(capacidadeMesSelecionado))){
+    capacidadeMesSelecionado=valorPadrao;
+  }
+  sel.innerHTML=DIAS_SHEET_CONFIG.meses.map(m=>`<option value="${m.num}">${m.nome} ${DIAS_SHEET_CONFIG.anoPadrao}</option>`).join("");
+  sel.value=String(capacidadeMesSelecionado);
+  atualizarCardCapacidadeSelecionada();
+}
 function inicializarDiasTrabalhados(){
+  const cardCapacidade=$("cardCapacidadeDias");
+  if(cardCapacidade&&!cardCapacidade.dataset.bound){cardCapacidade.dataset.bound="1";cardCapacidade.addEventListener("click",abrirModalCapacidadeDias);}
+  const capacidadeTopo=$("capacidadeMesSelectTopo");
+  if(capacidadeTopo&&!capacidadeTopo.dataset.bound){capacidadeTopo.dataset.bound="1";capacidadeTopo.addEventListener("change",()=>{capacidadeMesSelecionado=Number(capacidadeTopo.value);atualizarCardCapacidadeSelecionada();});}
   preencherSelectDias();
+  preencherSelectCapacidadeInline();
   const sel=$("diasMes");
   if(sel) sel.addEventListener("change",atualizarDiasTrabalhados);
   const btn=$("btnAtualizarDias");
@@ -5652,19 +5774,8 @@ function inicializarDiasTrabalhados(){
     metaInput.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();metaInput.blur();aplicarMetaManualDias(metaInput.value);}});
   }
   if(!inicializarDiasTrabalhados._plantaoListener){
-    document.addEventListener("change",e=>{
-      const plantaoSel=e.target;
-      if(!plantaoSel||plantaoSel.id!=="plantaoMes") return;
-      const txt=plantaoSel.options?.[plantaoSel.selectedIndex]?.text||plantaoSel.value||"";
-      const encontrado=DIAS_SHEET_CONFIG.meses.find(m=>head(txt).includes(head(m.nome))||head(txt).includes(m.label));
-      if(encontrado&&sel){sel.value=String(encontrado.num);atualizarDiasTrabalhados();}
-    });
     document.addEventListener("lumar:plantoes-atualizados",()=>{
-      const plantaoSel=document.getElementById("plantaoMes");
-      const txt=plantaoSel?.options?.[plantaoSel.selectedIndex]?.text||plantaoSel?.value||"";
-      const encontrado=DIAS_SHEET_CONFIG.meses.find(m=>head(txt).includes(head(m.nome))||head(txt).includes(m.label));
-      if(encontrado&&sel) sel.value=String(encontrado.num);
-      atualizarDiasTrabalhados();
+      atualizarCardCapacidadeSelecionada();
     });
     inicializarDiasTrabalhados._plantaoListener=true;
   }
@@ -5926,6 +6037,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         if(!dias.includes(Number(row.folgaCWeekday))) row.folgaCWeekday=dias[Math.min(2,dias.length-1)];
         if(row.folgaAWeekday===row.folgaBWeekday&&dias.length>1) row.folgaBWeekday=dias.find(d=>d!==row.folgaAWeekday);
       });
+      ajustarFolgasUnicasMes(month);
     });
   }
 
@@ -6022,20 +6134,76 @@ document.addEventListener("DOMContentLoaded",()=>{
     const yy=dt.getFullYear();
     return `${folgaLower[dt.getDay()]} ${dd}/${mm}/${yy}`;
   }
-  function proximaFolga(eventIso,targetWeekday){
+  function folgaISOFromEvent(eventIso,targetWeekday){
     const start=addDays(isoToDate(eventIso),1);
-    let diff=(Number(targetWeekday)-start.getDay()+7)%7;
-    return formatFolga(addDays(start,diff));
+    const diff=(Number(targetWeekday)-start.getDay()+7)%7;
+    const dt=addDays(start,diff);
+    return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
+  }
+  function proximaFolga(eventIso,targetWeekday){
+    return formatFolga(isoToDate(folgaISOFromEvent(eventIso,targetWeekday)));
+  }
+  function ajustarFolgasUnicasMes(month){
+    if(!month||!Array.isArray(month.rows)||!plantaoState) return false;
+    const dias=(plantaoState.allowedFolgaWeekdays||[2,3,4,6]).map(Number).filter(n=>n>=0&&n<=6);
+    if(!dias.length) return false;
+    const usadas=new Set();
+    let alterou=false;
+    const rows=[...month.rows].sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+    rows.forEach(row=>{
+      const campos=["folgaAWeekday","folgaBWeekday"].concat(row.baseC?["folgaCWeekday"]:[]);
+      campos.forEach((campo,idx)=>{
+        const candidatos=dias
+          .map(d=>({dia:d,iso:folgaISOFromEvent(row.date,d)}))
+          .sort((a,b)=>a.iso.localeCompare(b.iso));
+        const atual=Number(row[campo]);
+        let escolhido=candidatos.find(c=>c.dia===atual && !usadas.has(c.iso));
+        if(!escolhido){
+          escolhido=candidatos.find(c=>!usadas.has(c.iso))||escolhido||candidatos[Math.min(idx,candidatos.length-1)];
+        }
+        if(escolhido && Number(row[campo])!==Number(escolhido.dia)){
+          row[campo]=escolhido.dia;
+          alterou=true;
+        }
+        let iso=escolhido?.iso||folgaISOFromEvent(row.date,row[campo]);
+        usadas.add(iso);
+      });
+    });
+    return alterou;
+  }
+  function conflitoFolgaManual(month,rowIndex,campo,weekday){
+    const row=month?.rows?.[rowIndex];
+    if(!row||!campo) return null;
+    const iso=folgaISOFromEvent(row.date,weekday);
+    const campos=["folgaAWeekday","folgaBWeekday","folgaCWeekday"];
+    for(let i=0;i<(month.rows||[]).length;i++){
+      const outra=month.rows[i];
+      for(const c of campos){
+        if(i===rowIndex && c===campo) continue;
+        if(c==="folgaCWeekday"&&!outra.baseC) continue;
+        if(folgaISOFromEvent(outra.date,outra[c])===iso){
+          const tecnico=c==="folgaAWeekday"?tecnicoPorId(outra.baseA):c==="folgaBWeekday"?tecnicoPorId(outra.baseB):tecnicoPorId(outra.baseC);
+          return {iso,data:formatDateBR(iso),tecnico:tecnico?.name||"outro técnico"};
+        }
+      }
+    }
+    return null;
   }
   function tecnicoPorId(id){
     return plantaoState.technicians.find(t=>t.id===id)||plantaoState.technicians[0];
   }
   function emFerias(tec,iso){
-    if(!tec||tec.status!=="Férias"||!tec.start||!tec.end) return false;
-    return iso>=tec.start&&iso<=tec.end;
+    if(!tec||tec.status!=="Férias"||!iso) return false;
+    if(!tec.start&&!tec.end) return false;
+    const ini=tec.start||"0000-01-01";
+    const fim=tec.end||"9999-12-31";
+    return iso>=ini&&iso<=fim;
   }
   function disponivel(tec,iso,excluidos=new Set()){
     return tec && !["Inativo","Técnico noturno"].includes(tec.status) && !emFerias(tec,iso) && !excluidos.has(tec.id);
+  }
+  function tecnicoEscalavel(tec){
+    return tec && !["Inativo","Técnico noturno"].includes(tec.status);
   }
   function escolherTecnico(preferidoId,iso,excluidos=new Set()){
     const pref=tecnicoPorId(preferidoId);
@@ -6125,7 +6293,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(!plantaoEdicaoGeralAtiva) return;
       const tec=tecnicoPorId(el.dataset.plantaoTech);
       tec[el.dataset.field]=el.value;
-      if(el.dataset.field==="status") recalcularPlantoesPorDisponibilidade();
+      if(["status","start","end"].includes(el.dataset.field)) recalcularPlantoesPorDisponibilidade();
       renderTabelaPlantoes();
       salvarEdicaoPlantoesAutomaticamente();
     };
@@ -6190,25 +6358,22 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(folgaCEl) row.folgaCWeekday=Number(folgaCEl.value);
     });
     garantirConfigPlantao(false);
+    ajustarFolgasUnicasMes(month);
   }
 
   function recalcularPlantoesPorDisponibilidade(){
     if(!plantaoState) return;
-    const sel=$p("plantaoMes");
-    const idx=Number(sel?.value ?? plantaoState.selectedMonthIndex ?? plantaoMesAtualIndex)||0;
-    const month=plantaoState.months?.[idx];
-    if(!month) return;
-    plantaoState.selectedMonthIndex=idx;
-    plantaoMesAtualIndex=idx;
-    (month.rows||[]).forEach(row=>{
-      const a=row.baseA?tecnicoPorId(row.baseA):null;
-      const b=row.baseB?tecnicoPorId(row.baseB):null;
-      const c=row.baseC?tecnicoPorId(row.baseC):null;
-      if(a&&!disponivel(a,row.date,new Set())) row.baseA="";
-      if(b&&!disponivel(b,row.date,new Set())) row.baseB="";
-      if(c&&!disponivel(c,row.date,new Set())) row.baseC="";
+    (plantaoState.months||[]).forEach(month=>{
+      (month.rows||[]).forEach(row=>{
+        const a=row.baseA?tecnicoPorId(row.baseA):null;
+        const b=row.baseB?tecnicoPorId(row.baseB):null;
+        const c=row.baseC?tecnicoPorId(row.baseC):null;
+        if(a&&!disponivel(a,row.date,new Set())) row.baseA="";
+        if(b&&!disponivel(b,row.date,new Set())) row.baseB="";
+        if(c&&!disponivel(c,row.date,new Set())) row.baseC="";
+      });
+      redistribuirPlantoesMes(month);
     });
-    redistribuirPlantoesMes(month);
   }
 
   function redistribuirFolgasMes(month){
@@ -6218,17 +6383,19 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(!dias.length) return false;
     const offset=Number(month.redistribFolgasOffset||0);
     month.rows.forEach((row,idx)=>{
-      row.folgaAWeekday=dias[(idx+offset)%dias.length];
-      row.folgaBWeekday=dias.length>1?dias[(idx+offset+1)%dias.length]:dias[0];
-      row.folgaCWeekday=dias.length>2?dias[(idx+offset+2)%dias.length]:row.folgaBWeekday;
+      const ordenados=[...dias].sort((a,b)=>folgaISOFromEvent(row.date,a).localeCompare(folgaISOFromEvent(row.date,b)));
+      row.folgaAWeekday=ordenados[(offset)%ordenados.length];
+      row.folgaBWeekday=ordenados.length>1?ordenados[(offset+1)%ordenados.length]:ordenados[0];
+      row.folgaCWeekday=ordenados.length>2?ordenados[(offset+2)%ordenados.length]:row.folgaBWeekday;
     });
+    ajustarFolgasUnicasMes(month);
     month.redistribFolgasOffset=offset+1;
     return true;
   }
 
   function garantirTodosTecnicosNoMes(month){
     if(!month||!Array.isArray(month.rows)) return false;
-    const ativos=(plantaoState.technicians||[]).filter(t=>disponivel(t,"2026-01-01",new Set()));
+    const ativos=(plantaoState.technicians||[]).filter(tecnicoEscalavel);
     const vagas=month.rows.reduce((total,row)=>total+2+(row.baseC?1:0),0);
     const minimo=Math.min(ativos.length,vagas);
     const ativosIds=new Set(ativos.map(t=>t.id));
@@ -6245,7 +6412,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   function redistribuirPlantoesMes(month){
     if(!month||!Array.isArray(month.rows)) return false;
     garantirConfigPlantao(false);
-    const ativos=(plantaoState.technicians||[]).filter(t=>disponivel(t,"2026-01-01",new Set()));
+    const ativos=(plantaoState.technicians||[]).filter(tecnicoEscalavel);
     if(ativos.length<2) return false;
     const mesIndex=(plantaoState.months||[]).indexOf(month);
     const mesAnterior=mesIndex>0?plantaoState.months[mesIndex-1]:null;
@@ -6302,6 +6469,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     else if([folgaA,folgaB,folgaC].filter(Boolean).length!==new Set([folgaA,folgaB,folgaC].filter(Boolean)).size) aviso="FOLGAS NO MESMO DIA";
     else if(mudou) aviso="Redistribuído por status indisponível";
     return {tecA,tecB,tecC,folgaA,folgaB,folgaC,aviso,mudou};
+  }
+
+  function renderResumoPlantaoTecnicos(month){
+    const alvo=$p("plantaoResumoTecnicos");
+    if(!alvo||!month) return;
+    const contagem=new Map();
+    (month.rows||[]).forEach(row=>{
+      [row.baseA,row.baseB,row.baseC].filter(Boolean).forEach(id=>{
+        contagem.set(id,(contagem.get(id)||0)+1);
+      });
+    });
+    const itens=(plantaoState.technicians||[])
+      .filter(t=>contagem.has(t.id))
+      .map(t=>({nome:t.name,qtd:contagem.get(t.id)||0}))
+      .sort((a,b)=>b.qtd-a.qtd || a.nome.localeCompare(b.nome,"pt-BR"));
+    alvo.innerHTML=itens.length
+      ? itens.map(item=>`<div class="plantoes-tecnico-chip"><span>${escapePlantao(item.nome)}</span><strong>${item.qtd}</strong></div>`).join("")
+      : '<div class="plantoes-tecnico-chip"><span>Sem plantões distribuídos</span><strong>0</strong></div>';
   }
 
   function escapePlantao(v){
@@ -6462,8 +6647,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     body.querySelectorAll("input,select").forEach(el=>{
       el.disabled=!plantaoEdicaoGeralAtiva;
       el.title=plantaoEdicaoGeralAtiva?"Campo liberado para edição":"Clique em Editar para alterar os plantões";
+      el.addEventListener("focus",()=>{el.dataset.prevValue=el.value;});
       el.addEventListener("change",()=>{
         if(!plantaoEdicaoGeralAtiva) return;
+        if(el.dataset.field&&el.dataset.field.startsWith("folga")){
+          const tr=el.closest("tr[data-row]");
+          const rowIndex=Number(tr?.dataset.row);
+          const conflito=conflitoFolgaManual(month,rowIndex,el.dataset.field,Number(el.value));
+          if(conflito){
+            el.value=el.dataset.prevValue||el.defaultValue||el.value;
+            const msg=`Folga não alterada: ${conflito.tecnico} já está de folga em ${conflito.data}. Escolha outro dia disponível.`;
+            const feedback=$p("plantaoSalvarFeedback");
+            if(feedback) feedback.textContent=msg;
+            if(typeof setStatus==="function") setStatus(`⚠️ ${msg}`);
+            setTimeout(()=>{if(feedback&&feedback.textContent===msg) feedback.textContent="";},4200);
+            renderTabelaPlantoes();
+            return;
+          }
+        }
         atualizarMesFromInputs(month);
         renderTabelaPlantoes();
         salvarEdicaoPlantoesAutomaticamente();
@@ -6482,6 +6683,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     ajustarTituloPlantao(month);
     $p("plantaoKpiPlantoes").textContent=month.rows.length*2+totalTerceiro;
     $p("plantaoKpiFolgas").textContent=month.rows.length*2+totalTerceiro;
+    renderResumoPlantaoTecnicos(month);
     publicarEstadoPlantoes();
   }
 
@@ -6501,7 +6703,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderConfigPlantoes();
     renderTabelaPlantoes();
 
-    const salvar=$p("plantaoSalvar");
     const pdfBtn=$p("plantaoPdf");
     const imgBtn=$p("plantaoImagem");
     const editarFerias=$p("plantaoEditarFerias");
@@ -6542,7 +6743,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       const body=$p("plantaoTabelaBody");
       if(body) body.innerHTML="";
       renderTabelaPlantoes();
-      if(typeof setStatus==="function") setStatus(ok?"Folgas redistribuídas para o mês selecionado. Clique em <strong>Salvar alterações</strong> para manter.":"Não foi possível redistribuir as folgas deste mês.");
+      if(typeof setStatus==="function") setStatus(ok?"Folgas redistribuídas e salvas para o mês selecionado.":"Não foi possível redistribuir as folgas deste mês.");
       const feedback=$p("plantaoSalvarFeedback");
       if(feedback) feedback.textContent=ok?"Folgas redistribuídas e salvas.":"Não foi possível redistribuir.";
       if(ok) salvarEdicaoPlantoesAutomaticamente();
@@ -6558,31 +6759,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       const body=$p("plantaoTabelaBody");
       if(body) body.innerHTML="";
       renderTabelaPlantoes();
-      if(typeof setStatus==="function") setStatus(ok?"Plantões redistribuídos para o mês selecionado. Clique em <strong>Salvar alterações</strong> para manter.":"Não foi possível redistribuir os plantões deste mês.");
+      if(typeof setStatus==="function") setStatus(ok?"Plantões redistribuídos e salvos para o mês selecionado.":"Não foi possível redistribuir os plantões deste mês.");
       const feedback=$p("plantaoSalvarFeedback");
       if(feedback) feedback.textContent=ok?"Plantões redistribuídos e salvos.":"Não foi possível redistribuir plantões.";
       if(ok) salvarEdicaoPlantoesAutomaticamente();
-    });
-    if(salvar) salvar.addEventListener("click",()=>{
-      const sel=$p("plantaoMes");
-      if(sel){
-        plantaoState.selectedMonthIndex=Number(sel.value)||0;
-        atualizarMesFromInputs(plantaoState.months[plantaoState.selectedMonthIndex]);
-      }
-      const textoOriginal=salvar.dataset.labelOriginal||salvar.textContent;
-      salvar.dataset.labelOriginal=textoOriginal;
-      const ok=salvarStatePlantoes();
-      plantaoEdicaoGeralAtiva=false;
-      atualizarEstadoEdicaoPlantoes();
-      const feedback=$p("plantaoSalvarFeedback");
-      salvar.textContent=ok?"Salvo neste navegador":"Erro ao salvar";
-      if(feedback) feedback.textContent=ok?"Alterações salvas neste navegador. Ao reabrir esta página no mesmo navegador, a escala continua como você deixou.":"Não foi possível salvar. Verifique se o navegador permite armazenamento local.";
-      salvar.disabled=true;
-      setTimeout(()=>{
-        salvar.textContent=textoOriginal;
-        salvar.disabled=false;
-        if(feedback) feedback.textContent="";
-      },4500);
     });
     if(pdfBtn) pdfBtn.addEventListener("click",gerarPDFPlantaoMes);
     if(imgBtn) imgBtn.addEventListener("click",gerarImagemPlantaoMes);
@@ -7007,6 +7187,24 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
