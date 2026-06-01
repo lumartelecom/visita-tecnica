@@ -630,6 +630,9 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 
 .status-wrap-historico{max-width:none;padding:0 0 14px;margin:0}
 #historico .historico-import-bar{margin:14px 0 4px;padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.72)}
+.historico-competencia-bar{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:14px 0;padding:12px;border:1px solid var(--border);border-radius:10px;background:#f7fbff}
+.historico-competencia-bar label{display:grid;gap:5px;min-width:240px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.historico-competencia-bar select{min-width:240px}
 .status-wrap-historico .status{margin:0}
 .trend-value{display:inline-flex;align-items:center;gap:6px;font-weight:800}
 .trend-arrow{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;font-size:12px;font-weight:900;line-height:1;border:1px solid transparent}
@@ -2369,7 +2372,14 @@ button:hover,.btn:hover{transform:translateY(-1px)}
   </div>
   <div class="card">
     <h2>Histórico Local</h2>
-    <p class="small-note">O histórico fica salvo apenas neste navegador/dispositivo. <strong>Seta verde</strong> indica melhora e <strong>seta vermelha</strong> indica piora em relação ao registro anterior.</p>
+    <p class="small-note">Cada carga fica arquivada por competência mensal. Selecione um mês para reabrir os indicadores anteriores. <strong>Seta verde</strong> indica melhora e <strong>seta vermelha</strong> indica piora em relação ao registro anterior.</p>
+    <div class="historico-competencia-bar">
+      <label for="historicoCompetencia">Competência arquivada
+        <select id="historicoCompetencia"><option value="">Nenhuma competência salva</option></select>
+      </label>
+      <button id="btnCarregarCompetencia" type="button" class="primary">Carregar competência</button>
+      <button id="btnAtualizarCompetencias" type="button" class="secondary">Atualizar lista</button>
+    </div>
     <div class="import-bar historico-import-bar" id="historicoActions">
       <input type="file" id="fileInput" accept=".csv,.zip,.xlsx,.xls">
       <button id="btnCarregar" type="button">Carregar Base</button>
@@ -2378,9 +2388,9 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <div class="table-wrap" style="margin-top:14px">
       <table>
         <thead>
-          <tr><th>Data</th><th>Arquivo</th><th>Produção</th><th>Revisitas 10d</th><th>% Revisita 10d</th><th>TEC1 30d</th><th>Node Top</th><th>Ação</th></tr>
+          <tr><th>Competência</th><th>Data</th><th>Arquivo</th><th>Produção</th><th>Revisitas 10d</th><th>% Revisita 10d</th><th>TEC1 30d</th><th>Node Top</th><th>Ação</th></tr>
         </thead>
-        <tbody id="tabelaHistorico"><tr><td colspan="8"><div class="empty">Sem histórico salvo.</div></td></tr></tbody>
+        <tbody id="tabelaHistorico"><tr><td colspan="9"><div class="empty">Sem histórico salvo.</div></td></tr></tbody>
       </table>
     </div>
   </div>
@@ -2489,6 +2499,8 @@ let tecnicoAtivoLogin="";
 
 const STORAGE_LAST="lumar_dashboard_last_dataset_v1";
 const STORAGE_HISTORY="lumar_dashboard_history_v1";
+const STORAGE_MONTHLY="lumar_dashboard_monthly_datasets_v1";
+const DB_MONTHLY="lumar_dashboard_bases_mensais_v1";
 /*
   FIREBASE - ÚLTIMA BASE NA NUVEM / SOMENTE CLOUD FIRESTORE
 
@@ -2616,6 +2628,170 @@ async function salvarUltimaBaseNuvem(rows,fileName,signature){
     console.warn("Não foi possível salvar a última base no Firestore.",e);
     return false;
   }
+}
+
+function infoCompetenciaBase(rows){
+  const ciclo=intervaloCiclo20PorBase(rows);
+  if(ciclo?.fim){
+    return {key:String(ciclo.fim).slice(0,7),label:ciclo.competencia||String(ciclo.fim).slice(0,7)};
+  }
+  const agora=new Date();
+  return {key:`${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,"0")}`,label:mesAnoCompetencia(agora)};
+}
+
+function lerBasesMensaisLocais(){
+  try{
+    const obj=JSON.parse(localStorage.getItem(STORAGE_MONTHLY)||"{}");
+    return obj&&typeof obj==="object"&&!Array.isArray(obj)?obj:{};
+  }catch(e){
+    console.warn("Falha ao ler competências locais.",e);
+    return {};
+  }
+}
+
+function abrirBancoBasesMensais(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){reject(new Error("IndexedDB indisponível."));return;}
+    const req=indexedDB.open(DB_MONTHLY,1);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("competencias")) req.result.createObjectStore("competencias",{keyPath:"key"});};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error||new Error("Falha ao abrir IndexedDB."));
+  });
+}
+
+async function salvarBaseMensalLocal(rows,fileName,signature){
+  const competencia=infoCompetenciaBase(rows);
+  try{
+    const db=await abrirBancoBasesMensais();
+    const payload={key:competencia.key,fileName:fileName||"Base indicadores VT",date:new Date().toISOString(),signature:signature||assinaturaPlanilha(rows),competencia,rows:rows||[]};
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction("competencias","readwrite");
+      tx.objectStore("competencias").put(payload);
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error||new Error("Falha ao salvar competência local."));
+    });
+    db.close();
+  }catch(e){
+    console.warn("Não foi possível salvar a competência completa neste navegador.",e);
+  }
+  return competencia;
+}
+
+async function listarBasesMensaisLocais(){
+  const mapa={...lerBasesMensaisLocais()};
+  try{
+    const db=await abrirBancoBasesMensais();
+    const itens=await new Promise((resolve,reject)=>{
+      const req=db.transaction("competencias","readonly").objectStore("competencias").getAll();
+      req.onsuccess=()=>resolve(req.result||[]);
+      req.onerror=()=>reject(req.error||new Error("Falha ao listar competências locais."));
+    });
+    db.close();
+    itens.forEach(item=>{if(item?.key) mapa[item.key]=item;});
+  }catch(e){console.warn("Não foi possível listar competências no IndexedDB.",e);}
+  return mapa;
+}
+
+async function encontrarBaseMensalLocal(key){
+  if(!key) return null;
+  try{
+    const db=await abrirBancoBasesMensais();
+    const item=await new Promise((resolve,reject)=>{
+      const req=db.transaction("competencias","readonly").objectStore("competencias").get(key);
+      req.onsuccess=()=>resolve(req.result||null);
+      req.onerror=()=>reject(req.error||new Error("Falha ao carregar competência local."));
+    });
+    db.close();
+    if(item) return item;
+  }catch(e){console.warn("Não foi possível carregar competência do IndexedDB.",e);}
+  return lerBasesMensaisLocais()[key]||null;
+}
+
+async function salvarBaseMensalNuvem(rows,fileName,signature){
+  const fb=inicializarFirebaseIndicadores();
+  const competencia=infoCompetenciaBase(rows);
+  if(!fb) return {salvo:false,competencia};
+  try{
+    const payload={fileName:fileName||"Base indicadores VT",date:new Date().toISOString(),signature:signature||assinaturaPlanilha(rows),competencia,rows:rows||[]};
+    const partes=quebrarTextoFirestore(JSON.stringify(payload));
+    const version=String(Date.now());
+    const docRef=fb.db.collection(FIREBASE_DOC_ULTIMA_BASE.collection).doc(FIREBASE_DOC_ULTIMA_BASE.doc).collection("competencias").doc(competencia.key);
+    try{
+      const antigo=await docRef.get();
+      for(const id of (antigo.exists?(antigo.data()?.chunkIds||[]):[])){
+        await docRef.collection("chunks").doc(id).delete().catch(()=>{});
+      }
+    }catch(e){console.warn("Não foi possível limpar chunks antigos da competência.",e);}
+    const chunkIds=[];
+    for(let i=0;i<partes.length;i++){
+      const id=`${version}_${String(i).padStart(4,"0")}`;
+      chunkIds.push(id);
+      await docRef.collection("chunks").doc(id).set({index:i,part:partes[i],version});
+    }
+    await docRef.set({fileName:payload.fileName,date:payload.date,signature:payload.signature,competencia,rowsCount:Array.isArray(rows)?rows.length:0,chunkIds,chunksCount:chunkIds.length,version,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:false});
+    return {salvo:true,competencia};
+  }catch(e){
+    console.warn("Não foi possível salvar a competência no Firestore.",e);
+    return {salvo:false,competencia};
+  }
+}
+
+async function encontrarBaseMensalNuvem(key){
+  const fb=inicializarFirebaseIndicadores();
+  if(!fb||!key) return null;
+  try{
+    const docRef=fb.db.collection(FIREBASE_DOC_ULTIMA_BASE.collection).doc(FIREBASE_DOC_ULTIMA_BASE.doc).collection("competencias").doc(key);
+    const doc=await docRef.get();
+    if(!doc.exists) return null;
+    const meta=doc.data()||{};
+    const partes=[];
+    for(const id of (meta.chunkIds||[])){
+      const chunk=await docRef.collection("chunks").doc(id).get();
+      if(chunk.exists) partes.push(chunk.data()?.part||"");
+    }
+    const payload=partes.length?JSON.parse(partes.join("")):meta;
+    const rows=payload?.rows||[];
+    if(!Array.isArray(rows)||!rows.length) return null;
+    return {...payload,rows,origem:"firebase",competencia:payload.competencia||meta.competencia||{key,label:key}};
+  }catch(e){
+    console.warn("Não foi possível carregar a competência no Firestore.",e);
+    return null;
+  }
+}
+
+async function listarCompetenciasNuvem(){
+  const fb=inicializarFirebaseIndicadores();
+  if(!fb) return [];
+  try{
+    const snap=await fb.db.collection(FIREBASE_DOC_ULTIMA_BASE.collection).doc(FIREBASE_DOC_ULTIMA_BASE.doc).collection("competencias").get();
+    return snap.docs.map(doc=>({key:doc.id,label:doc.data()?.competencia?.label||doc.id}));
+  }catch(e){
+    console.warn("Não foi possível listar competências no Firestore.",e);
+    return [];
+  }
+}
+
+async function atualizarSelectCompetencias(){
+  const select=$("historicoCompetencia");
+  if(!select) return;
+  const atual=select.value;
+  const mapa={};
+  Object.entries(await listarBasesMensaisLocais()).forEach(([key,item])=>{mapa[key]=item?.competencia?.label||key;});
+  (await listarCompetenciasNuvem()).forEach(item=>{mapa[item.key]=item.label;});
+  const itens=Object.entries(mapa).sort((a,b)=>b[0].localeCompare(a[0]));
+  select.innerHTML=itens.length?itens.map(([key,label])=>`<option value="${esc(key)}">${esc(label)}</option>`).join(""):'<option value="">Nenhuma competência salva</option>';
+  if(atual&&mapa[atual]) select.value=atual;
+}
+
+async function carregarCompetenciaSelecionada(){
+  const key=$("historicoCompetencia")?.value||"";
+  if(!key){setStatus("⚠️ Nenhuma competência arquivada disponível.");return;}
+  setStatus("⏳ Carregando competência arquivada...");
+  const nuvem=await encontrarBaseMensalNuvem(key);
+  const local=await encontrarBaseMensalLocal(key);
+  const saved=nuvem||(local?{...local,origem:"navegador"}:null);
+  if(!saved){setStatus("⚠️ Não encontrei os dados completos desta competência.");return;}
+  aplicarBaseSalvaEmTela(saved);
 }
 
 async function encontrarUltimaBaseNuvem(){
@@ -4748,6 +4924,7 @@ function salvarHistorico(opcoes={}){
     date:new Date().toLocaleString("pt-BR"),
     fileName:currentFileName||"Base importada",
     signature,
+    competencia:opcoes.competencia||infoCompetenciaBase(rawRows),
     producao:currentSummary.totalProducao,
     revisitas:currentSummary.totalRev,
     revPct:currentSummary.baseLen?currentSummary.totalRev/currentSummary.baseLen*100:0,
@@ -4788,11 +4965,12 @@ function renderHistorico(){
   const hist=lerHistoricoLocal();
   const tbody=$("tabelaHistorico");
   if(!tbody) return;
-  if(!hist.length){tbody.innerHTML='<tr><td colspan="8"><div class="empty">Sem histórico salvo.</div></td></tr>';return}
+  if(!hist.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty">Sem histórico salvo.</div></td></tr>';return}
   tbody.innerHTML=hist.map((h,i)=>{
     const anterior=hist[i+1]||null;
     const duplicado="";
     return `<tr>
+      <td>${esc(h.competencia?.label||h.competencia||"-")}</td>
       <td>${esc(h.date)}</td>
       <td>${esc(h.fileName)}${duplicado}</td>
       <td>${celulaHistorico(h.producao,anterior?.producao,true,v=>esc(v))}</td>
@@ -4828,12 +5006,15 @@ async function carregarBase(){
     lastRenderRows=filtrado;
     renderDashboard(processarResumo(filtrado));
     const signature=salvarUltimaBase(rows,currentFileName);
-    const historicoResultado=salvarHistorico({silencioso:true,signature});
+    const competencia=await salvarBaseMensalLocal(rows,currentFileName,signature);
+    const historicoResultado=salvarHistorico({silencioso:true,signature,competencia});
     const salvaFirebase=await salvarUltimaBaseNuvem(rows,currentFileName,signature);
+    const salvaCompetenciaFirebase=await salvarBaseMensalNuvem(rows,currentFileName,signature);
+    await atualizarSelectCompetencias();
     const z450=currentSummary.arr.find(t=>t.login==="Z450037");
     const avisoRepetida=historicoResultado.repetida?`<br>⚠️ Planilha repetida: já estava no histórico em <strong>${esc(historicoResultado.item.date)}</strong>. Não criei novo registro.`:"";
     const avisoFirebase=firebaseIndicadoresConfigurado()
-      ? (salvaFirebase?`<br>☁️ Última base salva no Firebase/Firestore.`:`<br>⚠️ Base carregada, mas não consegui salvar no Firebase. Verifique config/regras do Firestore.`)
+      ? (salvaFirebase&&salvaCompetenciaFirebase.salvo?`<br>☁️ Base salva no Firebase/Firestore como <strong>${esc(competencia.label)}</strong>.`:`<br>⚠️ Base carregada, mas não consegui salvar todo o histórico no Firebase. Verifique config/regras do Firestore.`)
       : `<br>ℹ️ Firebase ainda não configurado. Salvando apenas neste navegador.`;
     setStatus(`✅ Base carregada.<br>Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${z450.producao}</strong> produção e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}${avisoRepetida}${avisoFirebase}`);
   }catch(err){console.error(err);setStatus("❌ Erro ao carregar: <strong>"+err.message+"</strong>");}
@@ -5796,6 +5977,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   on("filtroPerformanceDataIni","change",reaplicarFiltros);
   on("filtroPerformanceDataFim","change",reaplicarFiltros);
   on("btnLimparHistorico","click",()=>{localStorage.removeItem(STORAGE_HISTORY);renderHistorico();setStatus("🗑️ Histórico local limpo.");});
+  on("btnCarregarCompetencia","click",carregarCompetenciaSelecionada);
+  on("btnAtualizarCompetencias","click",atualizarSelectCompetencias);
   on("cardTecnicos","click",abrirModalTecnicos);
   on("cardBaseTotal","click",abrirModalBaseTotal);
   on("cardRevisitas","click",()=>abrirModalIndicador("revisita"));
@@ -5864,6 +6047,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   inicializarDiasTrabalhados();
   renderHistorico();
+  atualizarSelectCompetencias();
   carregarUltimaBaseFirebaseOuLocal({auto:true});
 });
 </script>
