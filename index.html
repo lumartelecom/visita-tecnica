@@ -5562,18 +5562,26 @@ function contarDiasValidosEquipe(linhas,idx,header,mesInfo){
 function encontrarLinhaCabecalhoDias(matriz){
   return matriz.findIndex(row=>{
     const heads=row.map(head);
-    return heads.includes("TECNICO") && heads.includes("DT") && heads.includes("PD") && heads.some(h=>h==="TOTAL_GERAL"||h==="TOTAL");
+    const dias=heads.filter(h=>/^\d{1,2}$/.test(h)).length;
+    const colunasNomeadas=heads.includes("DT") && heads.includes("PD") && heads.some(h=>h==="TOTAL_GERAL"||h==="TOTAL");
+    // Algumas competências mantêm TOTAL GERAL, DT e PD preenchidos nas linhas,
+    // mas deixam esses três títulos vazios no cabeçalho. A ordem das colunas permanece a mesma.
+    return heads.includes("TECNICO") && dias>=28 && (colunasNomeadas || row.length>=dias+4);
   });
 }
 function indicesCabecalhoDias(header){
   const heads=header.map(head);
   const dayIndices=[];
   heads.forEach((h,i)=>{if(/^\d{1,2}$/.test(h)) dayIndices.push(i);});
+  const aposDias=(dayIndices[dayIndices.length-1]??0)+1;
+  const totalNomeado=heads.findIndex(h=>h==="TOTAL_GERAL"||h==="TOTAL");
+  const dtNomeado=heads.indexOf("DT");
+  const pdNomeado=heads.indexOf("PD");
   return {
     tecnico:heads.indexOf("TECNICO"),
-    total:heads.findIndex(h=>h==="TOTAL_GERAL"||h==="TOTAL"),
-    dt:heads.indexOf("DT"),
-    pd:heads.indexOf("PD"),
+    total:totalNomeado>=0?totalNomeado:aposDias,
+    dt:dtNomeado>=0?dtNomeado:aposDias+1,
+    pd:pdNomeado>=0?pdNomeado:aposDias+2,
     dayIndices
   };
 }
@@ -5710,7 +5718,7 @@ function buscarGvizJSONPDias(item){
       if(finalizado) return;
       limpar();
       reject(new Error("tempo limite ao carregar a planilha pelo Google Visualization"));
-    },15000);
+    },5000);
     window[cb]=(data)=>{
       if(finalizado) return;
       limpar();
@@ -5755,8 +5763,8 @@ function matrizFromOpenSheetRows(rows){
 function nomesAbasDias(mesInfo){
   const nomes=[];
   const add=(n)=>{n=norm(n); if(n && !nomes.includes(n)) nomes.push(n);};
-  (mesInfo.tabs||[]).forEach(add);
   add(`VT ${mesInfo.nome} ${DIAS_SHEET_CONFIG.anoPadrao}`);
+  (mesInfo.tabs||[]).forEach(add);
   add(`VT ${mesInfo.label} ${DIAS_SHEET_CONFIG.anoPadrao}`);
   return nomes;
 }
@@ -5864,6 +5872,7 @@ function mesDiasSelecionado(){
   return DIAS_SHEET_CONFIG.meses.find(m=>m.num===valor)||DIAS_SHEET_CONFIG.meses[4];
 }
 function renderDiasErro(msg){
+  const detalhe=norm(msg)||"Não foi possível ler a aba selecionada.";
   setDiasText("diasFonteLegenda","Planilha online · erro na leitura");
   setDiasText("diasMetaMensal","-");
   setDiasText("diasTotalFeito","-");
@@ -5871,7 +5880,7 @@ function renderDiasErro(msg){
   setDiasText("diasUteisRestantes","-");
   setDiasText("diasMetaDia",String(DIAS_SHEET_CONFIG.loginsAtivos||7));
   setDiasText("diasCompetencia","-");
-  if($("diasTabelaTecnicos")) $("diasTabelaTecnicos").innerHTML='<tr><td colspan="3"><div class="empty">Não foi possível carregar os técnicos da planilha.</div></td></tr>';
+  if($("diasTabelaTecnicos")) $("diasTabelaTecnicos").innerHTML=`<tr><td colspan="3"><div class="empty">Não foi possível carregar os técnicos da planilha.<br><small>${esc(detalhe)}</small></div></td></tr>`;
   const mesInfo=mesDiasSelecionado();
   const tentativas=urlsDiasPlanilha(mesInfo).map(u=>esc(u.nome)).join(", ");
 }
@@ -6000,6 +6009,7 @@ async function atualizarDiasTrabalhados(opcoes={}){
   const selDias=$("diasMes");
   if(selDias&&mesInfo) selDias.value=String(mesInfo.num);
   const painel=$("dias");
+  let atualizouComSucesso=false;
   if(painel) painel.classList.add("dias-loading");
   setDiasText("diasFonteLegenda",`Planilha online · carregando ${mesInfo.nome}`);
   try{
@@ -6007,15 +6017,18 @@ async function atualizarDiasTrabalhados(opcoes={}){
     const matriz=csv.matriz||parseMatrizCSV(csv.text);
     const dados=extrairDadosDias(matriz,mesInfo);
     renderDiasTrabalhados(dados,mesInfo,csv.fonte);
+    atualizouComSucesso=true;
   }catch(e){
     console.warn("Falha ao atualizar Dias Trabalhados",e);
     renderDiasErro(e.message||String(e));
   }finally{
     if(painel) painel.classList.remove("dias-loading");
     diasAtualizacaoEmAndamento=false;
-    if(diasAtualizacaoPendente){
+    if(diasAtualizacaoPendente && atualizouComSucesso){
       diasAtualizacaoPendente=false;
       atualizarDiasTrabalhados();
+    }else{
+      diasAtualizacaoPendente=false;
     }
   }
 }
