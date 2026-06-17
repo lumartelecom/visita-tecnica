@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -2098,6 +2098,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 #consultivo .consultivo-status.instalado{background:#ecfdf3;color:#047857;border-color:#bbf7d0}
 #consultivo .consultivo-status.pendente{background:#fff7ed;color:#b45309;border-color:#fed7aa}
 #consultivo .consultivo-status.cancelado{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+#consultivo .consultivo-status.nao-concluido{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
 #consultivo .consultivo-row-actions{display:flex;flex-direction:column;gap:5px;align-items:stretch}
 #consultivo .consultivo-row-actions button{width:100%;padding:6px 5px;font-size:9px;justify-content:center}
 #consultivo .consultivo-rank-zero{opacity:.68}
@@ -2560,22 +2561,20 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <section class="kpis consultivo-kpis">
       <div class="kpi-card"><div class="kpi-label">Registros</div><div class="kpi-value" id="consultivoKpiRegistros">0</div><div class="kpi-sub">linhas filtradas</div></div>
       <div class="kpi-card"><div class="kpi-label">Indicações</div><div class="kpi-value" id="consultivoKpiIndicacoes">0</div><div class="kpi-sub">quantidade total</div></div>
-      <div class="kpi-card"><div class="kpi-label">Instalados</div><div class="kpi-value" id="consultivoKpiInstalados">0</div><div class="kpi-sub">status instalado</div></div>
+      <div class="kpi-card"><div class="kpi-label">Instalados</div><div class="kpi-value" id="consultivoKpiInstalados">0</div><div class="kpi-sub">quantidade instalada</div></div>
       <div class="kpi-card"><div class="kpi-label">Pendentes</div><div class="kpi-value" id="consultivoKpiPendentes">0</div><div class="kpi-sub">em aberto</div></div>
-      <div class="kpi-card"><div class="kpi-label">Valor</div><div class="kpi-value" id="consultivoKpiValor">R$ 0</div><div class="kpi-sub">soma filtrada</div></div>
-      <div class="kpi-card"><div class="kpi-label">Conversão</div><div class="kpi-value" id="consultivoKpiConversao">0%</div><div class="kpi-sub">instalados / registros</div></div>
+      <div class="kpi-card"><div class="kpi-label">Valor</div><div class="kpi-value" id="consultivoKpiValor">R$ 0</div><div class="kpi-sub">somente instalados</div></div>
+      <div class="kpi-card"><div class="kpi-label">Conversão</div><div class="kpi-value" id="consultivoKpiConversao">0%</div><div class="kpi-sub">qtd. instalada / indicada</div></div>
     </section>
 
     <div class="consultivo-grid">
-      <section class="card"><div class="section-title-line"><h2>Performance por Técnico</h2><span class="section-caption">Quantidade no filtro atual</span></div><div class="consultivo-chart"><canvas id="consultivoChartTecnicos"></canvas></div></section>
-      <section class="card"><div class="section-title-line"><h2>Status dos Contratos</h2><span class="section-caption">Instalados, pendentes e cancelados</span></div><div class="consultivo-chart"><canvas id="consultivoChartStatus"></canvas></div></section>
-      <section class="card"><div class="section-title-line"><h2>Ganhos por Técnico</h2><span class="section-caption">Valores gerados</span></div><div id="consultivoRanking" class="rank-list"><div class="empty">Sem dados.</div></div></section>
+      <section class="card"><div class="section-title-line"><h2>Ganhos por Técnico</h2><span class="section-caption">Valores instalados</span></div><div id="consultivoRanking" class="rank-list"><div class="empty">Sem dados.</div></div></section>
       <section class="card consultivo-cadastro-card"><div class="section-title-line"><h2 id="consultivoFormTitulo">Nova Indicação</h2><span class="section-caption" id="consultivoFormModo">Cadastro diário</span></div><div class="consultivo-form-note" id="consultivoFormNota">Cadastre uma nova indicação preenchendo técnico, contrato, data da indicação, tipo e status. Para alterar um registro, use o botão Editar na tabela.</div>
         <form id="consultivoForm" class="consultivo-form">
           <input id="consultivoId" type="hidden">
           <label class="span-2">Técnico<input id="consultivoTecnico" list="consultivoTecnicosLista" placeholder="Nome do técnico" required></label>
           <label>Contrato<input id="consultivoContrato" inputmode="numeric" placeholder="Nº contrato" required></label>
-          <label>Tipo de serviço<input id="consultivoTipo" list="consultivoTiposLista" placeholder="MIGRAÇÃO" required></label>
+          <label>Tipo de serviço<select id="consultivoTipo" required></select></label>
           <label>Data da indicação<input id="consultivoDataIndicacao" type="date" required></label>
           <label>Data da instalação<input id="consultivoDataInstalacao" type="date"></label>
           <label>Status<select id="consultivoStatus" required></select></label>
@@ -6585,6 +6584,33 @@ document.addEventListener("DOMContentLoaded",()=>{
     const extras=(consultivoState?.tecnicos||[]).map(consultivoNomeDashboard);
     return consultivoUniq([...base,...extras]);
   }
+  function consultivoServicosPadrao(){
+    return [
+      {tipo:"Migração",valor:8.00},
+      {tipo:"Instalação Mesh",valor:54.30},
+      {tipo:"Instalação TV",valor:104.71}
+    ];
+  }
+  function consultivoFormatTipo(tipo){
+    const n=consultivoNorm(tipo);
+    const found=consultivoServicosPadrao().find(item=>consultivoNorm(item.tipo)===n);
+    if(found) return found.tipo;
+    if(n==="migracao"||n==="migraçao") return "Migração";
+    if(n.includes("mesh")) return "Instalação Mesh";
+    if(n.includes("tv")) return "Instalação TV";
+    return String(tipo||"").trim();
+  }
+  function consultivoValorServico(tipo){
+    const formatted=consultivoFormatTipo(tipo);
+    return consultivoServicosPadrao().find(item=>item.tipo===formatted)?.valor||0;
+  }
+  function consultivoAplicarValorServico(forcar=false){
+    const tipoEl=$("consultivoTipo");
+    const valorEl=$("consultivoValor");
+    if(!tipoEl||!valorEl) return;
+    const valor=consultivoValorServico(tipoEl.value);
+    if(valor>0&&(forcar||!Number(valorEl.value))) valorEl.value=valor.toFixed(2);
+  }
   function consultivoStatusPadrao(){
     return [
       "Instalado",
@@ -6624,8 +6650,26 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   function consultivoQty(r){return Number(r.quantidade||0);}
   function consultivoValor(r){return Number(r.valor||0);}
-  function consultivoInstalado(r){return consultivoNorm(r.status).includes("instalado");}
-  function consultivoPendente(r){return consultivoNorm(r.status).includes("pendente");}
+  function consultivoCategoriaStatus(status){
+    const n=consultivoNorm(status);
+    if(!n) return "Sem status";
+    if(n.includes("nao concluida")||n.includes("nao concluido")||n.includes("inviabilidade")||n.includes("cliente ausente")||n.includes("endereco nao localizado")||n.includes("falta de infraestrutura")||n.includes("sem autorizacao")||n.includes("rede indisponivel")) return "Não concluído";
+    if(n.includes("cancel")) return "Cancelado";
+    if(n.includes("instalado")) return "Instalado";
+    if(n.includes("pendente")) return "Pendente";
+    return consultivoFormatStatus(status)||"Sem status";
+  }
+  function consultivoCategoriaClass(status){return consultivoNorm(consultivoCategoriaStatus(status)).replace(/\s+/g,"-");}
+  function consultivoInstalado(r){return consultivoCategoriaStatus(r.status)==="Instalado";}
+  function consultivoNaoConcluido(r){return consultivoCategoriaStatus(r.status)==="Não concluído";}
+  function consultivoPendente(r){return consultivoCategoriaStatus(r.status)==="Pendente";}
+  function consultivoQtyInstalada(r){return consultivoInstalado(r)?consultivoQty(r):0;}
+  function consultivoValorProdutivo(r){return consultivoInstalado(r)?consultivoValor(r):0;}
+  function consultivoStatusDetalhe(r){
+    const status=consultivoFormatStatus(r.status);
+    const categoria=consultivoCategoriaStatus(status);
+    return categoria==="Não concluído" && status!==categoria ? status : "";
+  }
   function consultivoDate(v){
     if(!v) return "";
     if(v instanceof Date&&!isNaN(v)) return v.toISOString().slice(0,10);
@@ -6640,14 +6684,30 @@ document.addEventListener("DOMContentLoaded",()=>{
     return text.slice(0,10);
   }
   function consultivoFmtDate(v){if(!v) return ""; const p=String(v).split("-"); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:consultivoEsc(v);}
+  function consultivoMigrarEstado(s){
+    if(!s||s.__schemaVersion>=3) return s;
+    s.records=(s.records||[]).map(r=>({
+      ...r,
+      status:consultivoFormatStatus(r.status),
+      tipo:consultivoFormatTipo(r.tipo),
+      quantidade:Math.max(0,Number(r.quantidade||0)),
+      valor:Math.max(0,Number(r.valor||consultivoValorServico(r.tipo)))
+    }));
+    s.statuses=consultivoStatusUnicos([...consultivoStatusPadrao(),...(s.statuses||[]),...s.records.map(r=>r.status)]);
+    s.__schemaVersion=3;
+    consultivoState=s;
+    consultivoSave();
+    return s;
+  }
   function consultivoSyncLists(){
-    const s=consultivoLoad();
+    const s=consultivoMigrarEstado(consultivoLoad());
     s.tecnicos=consultivoTecnicosDashboard();
-    s.tipos=consultivoUniq([...(s.tipos||[]),...s.records.map(r=>r.tipo)]);
+    s.tipos=consultivoServicosPadrao().map(item=>item.tipo);
     s.statuses=consultivoStatusUnicos([...consultivoStatusPadrao(),...(s.statuses||[]),...s.records.map(r=>r.status)]);
     consultivoFillSelect("consultivoFiltroTecnico","Todos",s.tecnicos);
     consultivoFillSelect("consultivoFiltroTipo","Todos",s.tipos);
-    consultivoFillSelect("consultivoFiltroStatus","Todos",s.statuses);
+    consultivoFillSelect("consultivoTipo","Selecione",s.tipos);
+    consultivoFillSelect("consultivoFiltroStatus","Todos",["Instalado","Pendente","Não concluído"]);
     consultivoFillSelect("consultivoStatus","Selecione",consultivoStatusFormulario());
     consultivoFillDatalist("consultivoTecnicosLista",s.tecnicos);
     consultivoFillDatalist("consultivoTiposLista",s.tipos);
@@ -6670,7 +6730,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     consultivoFiltrado=s.records.filter(r=>{
       const hay=consultivoNorm([r.tecnico,r.contrato,r.tipo,r.status,r.observacao].join(" "));
       const data=r.dataIndicacao||r.dataInstalacao||"";
-      return (!q||hay.includes(q))&&(!tecnico||consultivoNomeDashboard(r.tecnico)===tecnico)&&(!status||consultivoFormatStatus(r.status)===status)&&(!tipo||r.tipo===tipo)&&(!ini||data>=ini)&&(!fim||data<=fim);
+      return (!q||hay.includes(q))&&(!tecnico||consultivoNomeDashboard(r.tecnico)===tecnico)&&(!status||consultivoCategoriaStatus(r.status)===status)&&(!tipo||r.tipo===tipo)&&(!ini||data>=ini)&&(!fim||data<=fim);
     });
     consultivoRender();
   }
@@ -6684,15 +6744,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   function consultivoRenderKpis(){
     const total=consultivoFiltrado.length;
     const quantidade=consultivoFiltrado.reduce((s,r)=>s+consultivoQty(r),0);
-    const instalados=consultivoFiltrado.filter(consultivoInstalado).length;
+    const quantidadeInstalada=consultivoFiltrado.reduce((s,r)=>s+consultivoQtyInstalada(r),0);
     const pendentes=consultivoFiltrado.filter(consultivoPendente).length;
-    const valor=consultivoFiltrado.reduce((s,r)=>s+consultivoValor(r),0);
+    const valor=consultivoFiltrado.reduce((s,r)=>s+consultivoValorProdutivo(r),0);
     if($("consultivoKpiRegistros")) $("consultivoKpiRegistros").textContent=consultivoInt.format(total);
     if($("consultivoKpiIndicacoes")) $("consultivoKpiIndicacoes").textContent=consultivoInt.format(quantidade);
-    if($("consultivoKpiInstalados")) $("consultivoKpiInstalados").textContent=consultivoInt.format(instalados);
+    if($("consultivoKpiInstalados")) $("consultivoKpiInstalados").textContent=consultivoInt.format(quantidadeInstalada);
     if($("consultivoKpiPendentes")) $("consultivoKpiPendentes").textContent=consultivoInt.format(pendentes);
     if($("consultivoKpiValor")) $("consultivoKpiValor").textContent=consultivoMoney.format(valor);
-    if($("consultivoKpiConversao")) $("consultivoKpiConversao").textContent=total?`${Math.round(instalados/total*100)}%`:"0%";
+    if($("consultivoKpiConversao")) $("consultivoKpiConversao").textContent=quantidade?`${Math.round(quantidadeInstalada/quantidade*100)}%`:"0%";
     if($("consultivoTotalTabela")) $("consultivoTotalTabela").textContent=consultivoInt.format(total);
   }
   function consultivoRenderTabela(){
@@ -6701,8 +6761,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     body.innerHTML=consultivoFiltrado.map(r=>`<tr>
       <td><strong class="tech-name">${consultivoEsc(consultivoNomeDashboard(r.tecnico))}</strong></td>
       <td>${consultivoEsc(r.contrato)}</td><td>${consultivoFmtDate(r.dataIndicacao)}</td><td>${consultivoFmtDate(r.dataInstalacao)}</td>
-      <td>${consultivoEsc(r.tipo)}</td><td><span class="consultivo-status ${consultivoNorm(consultivoFormatStatus(r.status))}">${consultivoEsc(consultivoFormatStatus(r.status))}</span></td>
-      <td>${consultivoInt.format(consultivoQty(r))}</td><td>${consultivoMoney.format(consultivoValor(r))}</td><td>${consultivoEsc(r.observacao)}</td>
+      <td>${consultivoEsc(r.tipo)}</td><td><span class="consultivo-status ${consultivoCategoriaClass(r.status)}" title="${consultivoEsc(consultivoStatusDetalhe(r))}">${consultivoEsc(consultivoCategoriaStatus(r.status))}</span></td>
+      <td>${consultivoInt.format(consultivoQty(r))}</td><td>${consultivoMoney.format(consultivoValor(r))}</td><td>${consultivoEsc([consultivoStatusDetalhe(r),r.observacao].filter(Boolean).join(" · "))}</td>
       <td><div class="consultivo-row-actions"><button class="secondary" type="button" onclick="consultivoEditar('${r.id}')">Editar</button><button class="danger" type="button" onclick="consultivoExcluir('${r.id}')">Excluir</button></div></td>
     </tr>`).join("");
   }
@@ -6712,36 +6772,34 @@ document.addEventListener("DOMContentLoaded",()=>{
       consultivoLoad().tecnicos.forEach(nome=>map.set(nome,0));
     }
     consultivoFiltrado.forEach(r=>{
-      const nome=key==="tecnico"?consultivoNomeDashboard(r[key]):(key==="status"?consultivoFormatStatus(r[key]):(r[key]||"Sem informação"));
+      const nome=key==="tecnico"?consultivoNomeDashboard(r[key]):(key==="status"?consultivoCategoriaStatus(r[key]):(r[key]||"Sem informação"));
       map.set(nome,(map.get(nome)||0)+(consultivoQty(r)||1));
     });
     return [...map.entries()].sort((a,b)=>b[1]-a[1]||String(a[0]).localeCompare(String(b[0]),"pt-BR"));
   }
   function consultivoTecnicoMetricas(){
     const map=new Map();
-    consultivoLoad().tecnicos.forEach(nome=>map.set(consultivoNomeDashboard(nome),{nome:consultivoNomeDashboard(nome),qtd:0,valor:0}));
+    consultivoLoad().tecnicos.forEach(nome=>map.set(consultivoNomeDashboard(nome),{nome:consultivoNomeDashboard(nome),qtd:0,instaladas:0,valor:0}));
     consultivoFiltrado.forEach(r=>{
       const nome=consultivoNomeDashboard(r.tecnico);
-      if(!map.has(nome)) map.set(nome,{nome,qtd:0,valor:0});
+      if(!map.has(nome)) map.set(nome,{nome,qtd:0,instaladas:0,valor:0});
       const item=map.get(nome);
       item.qtd+=consultivoQty(r)||1;
-      item.valor+=consultivoValor(r);
+      item.instaladas+=consultivoQtyInstalada(r);
+      item.valor+=consultivoValorProdutivo(r);
     });
-    return [...map.values()].sort((a,b)=>b.qtd-a.qtd||b.valor-a.valor||String(a.nome).localeCompare(String(b.nome),"pt-BR"));
+    return [...map.values()].sort((a,b)=>b.instaladas-a.instaladas||b.valor-a.valor||b.qtd-a.qtd||String(a.nome).localeCompare(String(b.nome),"pt-BR"));
   }
   function consultivoRenderRanking(){
     const el=$("consultivoRanking"); if(!el) return;
     const data=consultivoTecnicoMetricas();
-    el.innerHTML=data.length?data.map((d,i)=>`<div class="rank-item ${d.qtd===0?"consultivo-rank-zero":""}"><span class="rank-pos">${i+1}</span><div><strong>${consultivoEsc(d.nome)}</strong><small>${consultivoInt.format(d.qtd)} indicação(ões) · ${consultivoMoney.format(d.valor)}</small></div></div>`).join(""):'<div class="empty">Sem técnicos cadastrados.</div>';
+    el.innerHTML=data.length?data.map((d,i)=>`<div class="rank-item ${d.instaladas===0?"consultivo-rank-zero":""}"><span class="rank-pos">${i+1}</span><div><strong>${consultivoEsc(d.nome)}</strong><small>${consultivoInt.format(d.instaladas)} instaladas / ${consultivoInt.format(d.qtd)} indicações · ${consultivoMoney.format(d.valor)}</small></div></div>`).join(""):'<div class="empty">Sem técnicos cadastrados.</div>';
   }
   function consultivoCanvas(id){
     const c=$(id); if(!c) return null; const box=c.getBoundingClientRect(); const w=Math.max(320,box.width||320), h=Math.max(220,box.height||220), dpr=window.devicePixelRatio||1;
     c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return {ctx,w,h};
   }
-  function consultivoDrawCharts(){
-    consultivoDrawBar("consultivoChartTecnicos",consultivoTecnicoMetricas().map(d=>[d.nome,d.qtd]),"#155fc4");
-    consultivoDrawDonut("consultivoChartStatus",consultivoGroup("status"),["#19a976","#f59e0b","#dc2626","#155fc4"]);
-  }
+  function consultivoDrawCharts(){}
   function consultivoDrawBar(id,data,color){
     const cv=consultivoCanvas(id); if(!cv) return; const {ctx,w,h}=cv; if(!data.length){consultivoNoData(ctx,w,h);return;}
     const pad=24;
@@ -6785,7 +6843,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   function consultivoResetForm(){
     ["consultivoId","consultivoTecnico","consultivoContrato","consultivoDataInstalacao","consultivoObservacao"].forEach(id=>{if($(id)) $(id).value="";});
     if($("consultivoDataIndicacao")) $("consultivoDataIndicacao").value=new Date().toISOString().slice(0,10);
-    if($("consultivoTipo")) $("consultivoTipo").value="MIGRAÇÃO";
+    if($("consultivoTipo")) $("consultivoTipo").value="Migração";
+    consultivoAplicarValorServico(true);
     if($("consultivoStatus")) $("consultivoStatus").value="Pendente";
     if($("consultivoQuantidade")) $("consultivoQuantidade").value=1;
     if($("consultivoValor")) $("consultivoValor").value=8;
@@ -6793,7 +6852,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   window.consultivoEditar=function(id){
     const r=consultivoLoad().records.find(item=>item.id===id); if(!r) return;
-    Object.entries({consultivoId:r.id,consultivoTecnico:r.tecnico,consultivoContrato:r.contrato,consultivoTipo:r.tipo,consultivoDataIndicacao:r.dataIndicacao,consultivoDataInstalacao:r.dataInstalacao,consultivoStatus:consultivoFormatStatus(r.status),consultivoQuantidade:r.quantidade,consultivoValor:r.valor,consultivoObservacao:r.observacao}).forEach(([id,v])=>{if($(id)) $(id).value=v??"";});
+    Object.entries({consultivoId:r.id,consultivoTecnico:r.tecnico,consultivoContrato:r.contrato,consultivoTipo:consultivoFormatTipo(r.tipo),consultivoDataIndicacao:r.dataIndicacao,consultivoDataInstalacao:r.dataInstalacao,consultivoStatus:consultivoFormatStatus(r.status),consultivoQuantidade:r.quantidade,consultivoValor:r.valor,consultivoObservacao:r.observacao}).forEach(([id,v])=>{if($(id)) $(id).value=v??"";});
     consultivoSetModoEdicao(true,r);
     $("consultivoForm")?.scrollIntoView({behavior:"smooth",block:"center"});
     setTimeout(()=>$("consultivoTecnico")?.focus(),180);
@@ -6820,14 +6879,141 @@ document.addEventListener("DOMContentLoaded",()=>{
       "Observação":r.observacao||""
     }));
   }
+  function consultivoExcelDate(v){
+    if(!v) return "";
+    const p=String(v).slice(0,10).split("-").map(Number);
+    if(p.length===3&&p.every(Boolean)) return new Date(p[0],p[1]-1,p[2]);
+    return v;
+  }
+  function consultivoTipoExcel(tipo){return consultivoFormatTipo(tipo).toLocaleUpperCase("pt-BR");}
+  function consultivoStatusExcel(status){return consultivoCategoriaStatus(status).toLocaleUpperCase("pt-BR");}
+  function consultivoCellStyle(fill="#FFFFFF",bold=false,color="#18324A",align="center"){
+    return {
+      fill:{fgColor:{rgb:fill.replace("#","")}},
+      font:{name:"Verdana",sz:10,bold,color:{rgb:color.replace("#","")}},
+      alignment:{horizontal:align,vertical:"center",wrapText:true},
+      border:{top:{style:"thin",color:{rgb:"D9E2EE"}},bottom:{style:"thin",color:{rgb:"D9E2EE"}},left:{style:"thin",color:{rgb:"D9E2EE"}},right:{style:"thin",color:{rgb:"D9E2EE"}}}
+    };
+  }
+  function consultivoSetCell(ws,addr,value,style,numFmt){
+    ws[addr]=ws[addr]||{};
+    if(value&&typeof value==="object"&&Object.prototype.hasOwnProperty.call(value,"f")) ws[addr].f=value.f;
+    else{
+      ws[addr].v=value;
+      if(value instanceof Date) ws[addr].t="d";
+      else if(typeof value==="number") ws[addr].t="n";
+      else ws[addr].t="s";
+    }
+    if(style) ws[addr].s=style;
+    if(numFmt) ws[addr].z=numFmt;
+  }
   function consultivoExportExcel(){
     if(!window.XLSX){alert("Biblioteca de Excel não carregada. Tente novamente com internet ativa.");return;}
-    const rows=consultivoRowsExport(consultivoLoad().records);
-    const ws=XLSX.utils.json_to_sheet(rows);
-    ws["!cols"]=[{wch:24},{wch:14},{wch:16},{wch:16},{wch:18},{wch:42},{wch:10},{wch:12},{wch:34}];
     const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"Lançamentos");
-    XLSX.writeFile(wb,`controle-consultivo-${new Date().toISOString().slice(0,10)}.xlsx`);
+    const records=consultivoLoad().records||[];
+    const tecnicos=consultivoTecnicosDashboard();
+    const servicos=consultivoServicosPadrao().map(s=>consultivoTipoExcel(s.tipo));
+    const statuses=["PENDENTE","INSTALADO","NÃO CONCLUÍDO"];
+    const maxRow=504;
+    const dark="#0B1F3A", light="#EAF3FF", stripe="#F4F7FA";
+    const titleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center");
+    const noteStyle=consultivoCellStyle(light,false,"#18324A","center");
+    const headerStyle=consultivoCellStyle(dark,true,"#FFFFFF","center");
+    const bodyStyle=(even=false,align="center")=>consultivoCellStyle(even?stripe:"#FFFFFF",false,"#18324A",align);
+    const moneyFmt='\\R\\$\\ #,##0.00';
+    const dateFmt="mm-dd-yy";
+
+    const lanc=XLSX.utils.aoa_to_sheet([]);
+    lanc["!merges"]=[{s:{r:0,c:0},e:{r:0,c:8}},{s:{r:1,c:0},e:{r:1,c:8}}];
+    lanc["!cols"]=[{wch:35.75},{wch:11.33},{wch:21.41},{wch:22.66},{wch:9.41},{wch:18},{wch:13.91},{wch:12.16},{wch:13.83}];
+    lanc["!rows"]=[{hpt:24},{hpt:22},null,{hpt:36}];
+    consultivoSetCell(lanc,"A1","CONTROLE DE QUANTIDADE — INDICAÇÕES E SERVIÇOS",titleStyle);
+    consultivoSetCell(lanc,"A2","Preencha uma linha por contrato. Ao informar o contrato, a quantidade será contabilizada automaticamente como 1.",noteStyle);
+    ["TÉCNICO","CONTRATO","DATA DA INDICAÇÃO","DATA DA INSTALAÇÃO","VALOR","TIPO DE SERVIÇO","QUANTIDADE","STATUS","OBSERVAÇÃO"].forEach((h,i)=>{
+      consultivoSetCell(lanc,XLSX.utils.encode_cell({r:3,c:i}),h,headerStyle);
+    });
+    for(let r=5;r<=maxRow;r++){
+      const rec=records[r-5];
+      const even=r%2===0;
+      if(rec){
+        const values=[
+          String(rec.tecnico||"").trim(),
+          rec.contrato?Number(rec.contrato)||String(rec.contrato):"",
+          consultivoExcelDate(rec.dataIndicacao),
+          consultivoExcelDate(rec.dataInstalacao),
+          consultivoValor(rec)||consultivoValorServico(rec.tipo),
+          consultivoTipoExcel(rec.tipo),
+          {f:`IF(B${r}<>"",1,0)`},
+          consultivoStatusExcel(rec.status),
+          rec.observacao||""
+        ];
+        values.forEach((v,i)=>{
+          const addr=XLSX.utils.encode_cell({r:r-1,c:i});
+          const fmt=i===2||i===3?dateFmt:(i===4?moneyFmt:(i===6?"0":undefined));
+          consultivoSetCell(lanc,addr,v,bodyStyle(even,i===0?"left":"center"),fmt);
+        });
+      }else{
+        for(let i=0;i<9;i++){
+          const addr=XLSX.utils.encode_cell({r:r-1,c:i});
+          const value=i===6?{f:`IF(B${r}<>"",1,0)`}:"";
+          consultivoSetCell(lanc,addr,value,bodyStyle(even,i===0?"left":"center"),i===6?"0":undefined);
+        }
+      }
+    }
+    lanc["!ref"]="A1:I504";
+    XLSX.utils.book_append_sheet(wb,lanc,"Lançamentos");
+
+    const resumo=XLSX.utils.aoa_to_sheet([]);
+    resumo["!merges"]=[
+      {s:{r:0,c:0},e:{r:0,c:11}},
+      {s:{r:2,c:0},e:{r:2,c:1}},{s:{r:3,c:0},e:{r:4,c:1}},
+      {s:{r:2,c:2},e:{r:2,c:3}},{s:{r:3,c:2},e:{r:4,c:3}},
+      {s:{r:2,c:4},e:{r:2,c:5}},{s:{r:3,c:4},e:{r:4,c:5}},
+      {s:{r:2,c:6},e:{r:2,c:7}},{s:{r:3,c:6},e:{r:4,c:7}},
+      {s:{r:2,c:8},e:{r:2,c:9}},{s:{r:3,c:8},e:{r:4,c:9}},
+      {s:{r:2,c:10},e:{r:2,c:11}},{s:{r:3,c:10},e:{r:4,c:11}}
+    ];
+    resumo["!cols"]=[{wch:36},{wch:15},{wch:15},{wch:15},{wch:15},{wch:18},{wch:15},{wch:4},{wch:4},{wch:23},{wch:15},{wch:18}];
+    consultivoSetCell(resumo,"A1","PAINEL DE CONTROLE DE QUANTIDADE",titleStyle);
+    [["A3","TOTAL DE REGISTROS"],["C3","INDICAÇÕES"],["E3","INSTALAÇÕES"],["G3","CANCELADOS"],["I3","VALOR TOTAL"],["K3","CONVERSÃO"]].forEach(([a,v])=>consultivoSetCell(resumo,a,v,headerStyle));
+    [["A4",'COUNTIF(Lançamentos!$B$5:$B$504,"<>")',"0"],["C4","COUNT(Lançamentos!$C$5:$C$504)","0"],["E4","COUNT(Lançamentos!$D$5:$D$504)","0"],["G4",'COUNTIF(Lançamentos!$H$5:$H$504,"CANCELADO")',"0"],["I4","SUM(Lançamentos!$E$5:$E$504)",moneyFmt],["K4","IFERROR(COUNT(Lançamentos!$D$5:$D$504)/COUNT(Lançamentos!$C$5:$C$504),0)","0.0%"]].forEach(([a,f,z])=>consultivoSetCell(resumo,a,{f},noteStyle,z));
+    ["TÉCNICO","INDICAÇÕES","INSTALAÇÕES","PENDENTES","QUANTIDADE","VALOR TOTAL","CONVERSÃO"].forEach((h,i)=>consultivoSetCell(resumo,XLSX.utils.encode_cell({r:6,c:i}),h,headerStyle));
+    ["TIPO DE SERVIÇO","QUANTIDADE","VALOR TOTAL"].forEach((h,i)=>consultivoSetCell(resumo,XLSX.utils.encode_cell({r:6,c:i+9}),h,headerStyle));
+    tecnicos.forEach((tec,idx)=>{
+      const row=8+idx, rr=row-1, even=row%2===0;
+      consultivoSetCell(resumo,`A${row}`,tec,bodyStyle(even,"left"));
+      consultivoSetCell(resumo,`B${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$C$5:$C$504,"<>")`},bodyStyle(even),"0");
+      consultivoSetCell(resumo,`C${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$D$5:$D$504,"<>")`},bodyStyle(even),"0");
+      consultivoSetCell(resumo,`D${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$H$5:$H$504,"PENDENTE")`},bodyStyle(even),"0");
+      consultivoSetCell(resumo,`E${row}`,{f:`SUMIFS(Lançamentos!$G$5:$G$504,Lançamentos!$A$5:$A$504,$A${row})`},bodyStyle(even),"0");
+      consultivoSetCell(resumo,`F${row}`,{f:`SUMIFS(Lançamentos!$E$5:$E$504,Lançamentos!$A$5:$A$504,$A${row})`},bodyStyle(even),moneyFmt);
+      consultivoSetCell(resumo,`G${row}`,{f:`IFERROR(C${row}/B${row},0)`},bodyStyle(even),"0.0%");
+    });
+    servicos.forEach((serv,idx)=>{
+      const row=8+idx, even=row%2===0;
+      consultivoSetCell(resumo,`J${row}`,serv,bodyStyle(even,"left"));
+      consultivoSetCell(resumo,`K${row}`,{f:`COUNTIFS(Lançamentos!$F$5:$F$504,J${row},Lançamentos!$B$5:$B$504,"<>")`},bodyStyle(even),"0");
+      consultivoSetCell(resumo,`L${row}`,{f:`SUMIFS(Lançamentos!$E$5:$E$504,Lançamentos!$F$5:$F$504,J${row})`},bodyStyle(even),moneyFmt);
+    });
+    resumo["!ref"]=`A1:L${Math.max(13,7+tecnicos.length)}`;
+    XLSX.utils.book_append_sheet(wb,resumo,"Resumo");
+
+    const cad=XLSX.utils.aoa_to_sheet([]);
+    cad["!merges"]=[{s:{r:0,c:0},e:{r:0,c:2}}];
+    cad["!cols"]=[{wch:38},{wch:24},{wch:20}];
+    consultivoSetCell(cad,"A1","CADASTROS EDITÁVEIS",titleStyle);
+    ["TÉCNICOS","TIPOS DE SERVIÇO","STATUS"].forEach((h,i)=>consultivoSetCell(cad,XLSX.utils.encode_cell({r:2,c:i}),h,headerStyle));
+    const maxCad=Math.max(tecnicos.length,servicos.length,statuses.length);
+    for(let i=0;i<maxCad;i++){
+      const row=4+i, even=row%2===0;
+      consultivoSetCell(cad,`A${row}`,tecnicos[i]||"",bodyStyle(even,"left"));
+      consultivoSetCell(cad,`B${row}`,servicos[i]||"",bodyStyle(even,"left"));
+      consultivoSetCell(cad,`C${row}`,statuses[i]||"",bodyStyle(even,"left"));
+    }
+    cad["!ref"]=`A1:C${Math.max(9,3+maxCad)}`;
+    XLSX.utils.book_append_sheet(wb,cad,"Cadastros");
+
+    XLSX.writeFile(wb,`controle-consultivo-${new Date().toISOString().slice(0,10)}.xlsx`,{cellStyles:true});
   }
   function consultivoDownload(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),900);}
   function consultivoImportRows(rows){
@@ -6837,8 +7023,8 @@ document.addEventListener("DOMContentLoaded",()=>{
       contrato:String(r.contrato||r["CONTRATO"]||"").trim(),
       dataIndicacao:consultivoDate(r.dataIndicacao||r["DATA DA INDICAÇÃO"]||r["DATA INDICACAO"]||""),
       dataInstalacao:consultivoDate(r.dataInstalacao||r["DATA DA INSTALAÇÃO"]||r["DATA INSTALACAO"]||""),
-      valor:Number(String(r.valor??r["VALOR"]??0).replace(",","."))||0,
-      tipo:String(r.tipo||r["TIPO DE SERVIÇO"]||r["TIPO DE SERVICO"]||"").trim(),
+      valor:Number(String(r.valor??r["VALOR"]??consultivoValorServico(r.tipo||r["TIPO DE SERVIÇO"]||r["TIPO DE SERVICO"]||"")).replace(",","."))||0,
+      tipo:consultivoFormatTipo(String(r.tipo||r["TIPO DE SERVIÇO"]||r["TIPO DE SERVICO"]||"").trim()),
       quantidade:Number(String(r.quantidade??r["QUANTIDADE"]??1).replace(",","."))||0,
       status:consultivoFormatStatus(String(r.status||r["STATUS"]||"").trim()),
       observacao:String(r.observacao||r["OBSERVAÇÃO"]||r["OBSERVACAO"]||"").trim()
@@ -6868,9 +7054,26 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(!$("consultivo")) return;
     consultivoLoad(); consultivoSyncLists(); consultivoResetForm();
     ["consultivoBusca","consultivoFiltroTecnico","consultivoFiltroStatus","consultivoFiltroTipo","consultivoDataInicio","consultivoDataFim"].forEach(id=>$(id)?.addEventListener("input",consultivoAplicarFiltros));
+    $("consultivoTipo")?.addEventListener("change",()=>consultivoAplicarValorServico(true));
+    $("consultivoDataInstalacao")?.addEventListener("change",()=>{
+      const statusEl=$("consultivoStatus");
+      if($("consultivoDataInstalacao")?.value&&statusEl&&consultivoCategoriaStatus(statusEl.value)==="Pendente") statusEl.value="Instalado";
+    });
     $("consultivoForm")?.addEventListener("submit",e=>{
       e.preventDefault(); const s=consultivoLoad(); const id=$("consultivoId")?.value||`c${Date.now()}`;
-      const record={id,tecnico:$("consultivoTecnico").value.trim(),contrato:$("consultivoContrato").value.trim(),tipo:$("consultivoTipo").value.trim(),dataIndicacao:$("consultivoDataIndicacao").value,dataInstalacao:$("consultivoDataInstalacao").value,status:consultivoFormatStatus($("consultivoStatus").value.trim()),quantidade:Number($("consultivoQuantidade").value||0),valor:Number($("consultivoValor").value||0),observacao:$("consultivoObservacao").value.trim()};
+      const status=consultivoFormatStatus($("consultivoStatus").value.trim());
+      const dataInstalacao=$("consultivoDataInstalacao").value;
+      if(consultivoCategoriaStatus(status)==="Instalado"&&!dataInstalacao){
+        alert("Informe a data da instalação para salvar como Instalado.");
+        $("consultivoDataInstalacao")?.focus();
+        return;
+      }
+      if(dataInstalacao&&consultivoCategoriaStatus(status)!=="Instalado"){
+        const usarInstalado=confirm("Este lançamento tem data de instalação. Deseja alterar o status para Instalado?");
+        if(usarInstalado) $("consultivoStatus").value="Instalado";
+      }
+      const statusFinal=consultivoFormatStatus($("consultivoStatus").value.trim());
+      const record={id,tecnico:$("consultivoTecnico").value.trim(),contrato:$("consultivoContrato").value.trim(),tipo:consultivoFormatTipo($("consultivoTipo").value.trim()),dataIndicacao:$("consultivoDataIndicacao").value,dataInstalacao,status:statusFinal,quantidade:Number($("consultivoQuantidade").value||0),valor:Number($("consultivoValor").value||consultivoValorServico($("consultivoTipo").value)),observacao:$("consultivoObservacao").value.trim()};
       const idx=s.records.findIndex(r=>r.id===id); const editando=idx>=0; editando?s.records.splice(idx,1,record):s.records.push(record);
       consultivoSave(); consultivoSyncLists(); consultivoResetForm(); consultivoAplicarFiltros();
     });
@@ -6880,7 +7083,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     $("consultivoBackupJson")?.addEventListener("click",()=>consultivoDownload("controle-consultivo-backup.json",JSON.stringify(consultivoLoad(),null,2),"application/json;charset=utf-8"));
     $("consultivoRestore")?.addEventListener("click",()=>{if(confirm("Limpar alterações locais e restaurar a base inicial do Consultivo?")){localStorage.removeItem(CONSULTIVO_STORAGE_KEY);consultivoState=null;consultivoLoad();consultivoSyncLists();consultivoResetForm();consultivoAplicarFiltros();}});
     $("consultivoImportFile")?.addEventListener("change",async e=>{await consultivoHandleImport(e.target.files?.[0]); e.target.value="";});
-    window.addEventListener("resize",()=>{if($("consultivo")?.classList.contains("active")) consultivoDrawCharts();});
     consultivoAplicarFiltros();
   }
 
