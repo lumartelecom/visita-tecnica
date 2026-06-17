@@ -2079,15 +2079,27 @@ button:hover,.btn:hover{transform:translateY(-1px)}
 #consultivo .consultivo-form input::placeholder,#consultivo .consultivo-form textarea::placeholder{color:#94a3b8;font-weight:600}
 #consultivo .consultivo-form input:focus,#consultivo .consultivo-form select:focus,#consultivo .consultivo-form textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(21,95,196,.11)}
 #consultivo .consultivo-form-actions{display:flex;gap:8px;justify-content:flex-end;align-items:end}
-#consultivo .consultivo-table table{min-width:1060px;font-size:12px}
-#consultivo .consultivo-table th{font-size:9px}
-#consultivo .consultivo-table td{vertical-align:middle}
-#consultivo .consultivo-status{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;border:1px solid #d9e2ee;background:#eef5ff;color:#17375f;white-space:nowrap}
+#consultivo .consultivo-table .section-title-line{gap:12px;flex-wrap:wrap}
+#consultivo .consultivo-table .table-wrap{overflow-x:hidden}
+#consultivo .consultivo-table table{width:100%;min-width:0!important;table-layout:fixed;font-size:11px}
+#consultivo .consultivo-table th:nth-child(1),#consultivo .consultivo-table td:nth-child(1){width:13%}
+#consultivo .consultivo-table th:nth-child(2),#consultivo .consultivo-table td:nth-child(2){width:8%}
+#consultivo .consultivo-table th:nth-child(3),#consultivo .consultivo-table td:nth-child(3){width:9%}
+#consultivo .consultivo-table th:nth-child(4),#consultivo .consultivo-table td:nth-child(4){width:9%}
+#consultivo .consultivo-table th:nth-child(5),#consultivo .consultivo-table td:nth-child(5){width:10%}
+#consultivo .consultivo-table th:nth-child(6),#consultivo .consultivo-table td:nth-child(6){width:18%}
+#consultivo .consultivo-table th:nth-child(7),#consultivo .consultivo-table td:nth-child(7){width:6%}
+#consultivo .consultivo-table th:nth-child(8),#consultivo .consultivo-table td:nth-child(8){width:8%}
+#consultivo .consultivo-table th:nth-child(9),#consultivo .consultivo-table td:nth-child(9){width:13%}
+#consultivo .consultivo-table th:nth-child(10),#consultivo .consultivo-table td:nth-child(10){width:6%}
+#consultivo .consultivo-table th{font-size:8.4px;padding:8px 5px;white-space:normal;line-height:1.15}
+#consultivo .consultivo-table td{vertical-align:middle;padding:8px 5px;white-space:normal;overflow-wrap:anywhere;line-height:1.22}
+#consultivo .consultivo-status{display:inline-flex;align-items:center;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:900;border:1px solid #d9e2ee;background:#eef5ff;color:#17375f;white-space:normal;line-height:1.15}
 #consultivo .consultivo-status.instalado{background:#ecfdf3;color:#047857;border-color:#bbf7d0}
 #consultivo .consultivo-status.pendente{background:#fff7ed;color:#b45309;border-color:#fed7aa}
 #consultivo .consultivo-status.cancelado{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
-#consultivo .consultivo-row-actions{display:flex;gap:6px;flex-wrap:wrap}
-#consultivo .consultivo-row-actions button{padding:6px 8px;font-size:10px}
+#consultivo .consultivo-row-actions{display:flex;flex-direction:column;gap:5px;align-items:stretch}
+#consultivo .consultivo-row-actions button{width:100%;padding:6px 5px;font-size:9px;justify-content:center}
 #consultivo .consultivo-rank-zero{opacity:.68}
 #consultivo .consultivo-rank-zero .rank-pos{background:#f1f5f9;color:#64748b}
 #consultivo .consultivo-rank-zero small{color:#94a3b8!important}
@@ -2557,7 +2569,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     <div class="consultivo-grid">
       <section class="card"><div class="section-title-line"><h2>Performance por Técnico</h2><span class="section-caption">Quantidade no filtro atual</span></div><div class="consultivo-chart"><canvas id="consultivoChartTecnicos"></canvas></div></section>
       <section class="card"><div class="section-title-line"><h2>Status dos Contratos</h2><span class="section-caption">Instalados, pendentes e cancelados</span></div><div class="consultivo-chart"><canvas id="consultivoChartStatus"></canvas></div></section>
-      <section class="card"><div class="section-title-line"><h2>Ranking Operacional</h2><span class="section-caption">Melhores resultados</span></div><div id="consultivoRanking" class="rank-list"><div class="empty">Sem dados.</div></div></section>
+      <section class="card"><div class="section-title-line"><h2>Ganhos por Técnico</h2><span class="section-caption">Valores gerados</span></div><div id="consultivoRanking" class="rank-list"><div class="empty">Sem dados.</div></div></section>
       <section class="card consultivo-cadastro-card"><div class="section-title-line"><h2 id="consultivoFormTitulo">Nova Indicação</h2><span class="section-caption" id="consultivoFormModo">Cadastro diário</span></div><div class="consultivo-form-note" id="consultivoFormNota">Cadastre uma nova indicação preenchendo técnico, contrato, data da indicação, tipo e status. Para alterar um registro, use o botão Editar na tabela.</div>
         <form id="consultivoForm" class="consultivo-form">
           <input id="consultivoId" type="hidden">
@@ -2576,7 +2588,7 @@ button:hover,.btn:hover{transform:translateY(-1px)}
     </div>
 
     <section class="card consultivo-table">
-      <div class="section-title-line"><h2>Lançamentos</h2><span class="section-caption"><span id="consultivoTotalTabela">0</span> registros exibidos</span></div>
+      <div class="section-title-line"><h2>Lançamentos</h2><span class="section-caption"><span id="consultivoTotalTabela">0</span> registros exibidos</span><button id="consultivoExportExcel" class="secondary" type="button">Exportar Excel</button></div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Técnico</th><th>Contrato</th><th>Indicação</th><th>Instalação</th><th>Serviço</th><th>Status</th><th>Qtd.</th><th>Valor</th><th>Observação</th><th>Ações</th></tr></thead>
@@ -6687,7 +6699,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     const body=$("consultivoTabela"); if(!body) return;
     if(!consultivoFiltrado.length){body.innerHTML='<tr><td colspan="10"><div class="empty">Nenhum lançamento encontrado.</div></td></tr>';return;}
     body.innerHTML=consultivoFiltrado.map(r=>`<tr>
-      <td><strong class="tech-name">${consultivoEsc(r.tecnico)}</strong></td>
+      <td><strong class="tech-name">${consultivoEsc(consultivoNomeDashboard(r.tecnico))}</strong></td>
       <td>${consultivoEsc(r.contrato)}</td><td>${consultivoFmtDate(r.dataIndicacao)}</td><td>${consultivoFmtDate(r.dataInstalacao)}</td>
       <td>${consultivoEsc(r.tipo)}</td><td><span class="consultivo-status ${consultivoNorm(consultivoFormatStatus(r.status))}">${consultivoEsc(consultivoFormatStatus(r.status))}</span></td>
       <td>${consultivoInt.format(consultivoQty(r))}</td><td>${consultivoMoney.format(consultivoValor(r))}</td><td>${consultivoEsc(r.observacao)}</td>
@@ -6705,17 +6717,29 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
     return [...map.entries()].sort((a,b)=>b[1]-a[1]||String(a[0]).localeCompare(String(b[0]),"pt-BR"));
   }
+  function consultivoTecnicoMetricas(){
+    const map=new Map();
+    consultivoLoad().tecnicos.forEach(nome=>map.set(consultivoNomeDashboard(nome),{nome:consultivoNomeDashboard(nome),qtd:0,valor:0}));
+    consultivoFiltrado.forEach(r=>{
+      const nome=consultivoNomeDashboard(r.tecnico);
+      if(!map.has(nome)) map.set(nome,{nome,qtd:0,valor:0});
+      const item=map.get(nome);
+      item.qtd+=consultivoQty(r)||1;
+      item.valor+=consultivoValor(r);
+    });
+    return [...map.values()].sort((a,b)=>b.qtd-a.qtd||b.valor-a.valor||String(a.nome).localeCompare(String(b.nome),"pt-BR"));
+  }
   function consultivoRenderRanking(){
     const el=$("consultivoRanking"); if(!el) return;
-    const data=consultivoGroup("tecnico");
-    el.innerHTML=data.length?data.map((d,i)=>`<div class="rank-item ${d[1]===0?"consultivo-rank-zero":""}"><span class="rank-pos">${i+1}</span><div><strong>${consultivoEsc(d[0])}</strong><small>${consultivoInt.format(d[1])} indicação(ões)</small></div></div>`).join(""):'<div class="empty">Sem técnicos cadastrados.</div>';
+    const data=consultivoTecnicoMetricas();
+    el.innerHTML=data.length?data.map((d,i)=>`<div class="rank-item ${d.qtd===0?"consultivo-rank-zero":""}"><span class="rank-pos">${i+1}</span><div><strong>${consultivoEsc(d.nome)}</strong><small>${consultivoInt.format(d.qtd)} indicação(ões) · ${consultivoMoney.format(d.valor)}</small></div></div>`).join(""):'<div class="empty">Sem técnicos cadastrados.</div>';
   }
   function consultivoCanvas(id){
     const c=$(id); if(!c) return null; const box=c.getBoundingClientRect(); const w=Math.max(320,box.width||320), h=Math.max(220,box.height||220), dpr=window.devicePixelRatio||1;
     c.width=Math.floor(w*dpr); c.height=Math.floor(h*dpr); const ctx=c.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return {ctx,w,h};
   }
   function consultivoDrawCharts(){
-    consultivoDrawBar("consultivoChartTecnicos",consultivoGroup("tecnico"),"#155fc4");
+    consultivoDrawBar("consultivoChartTecnicos",consultivoTecnicoMetricas().map(d=>[d.nome,d.qtd]),"#155fc4");
     consultivoDrawDonut("consultivoChartStatus",consultivoGroup("status"),["#19a976","#f59e0b","#dc2626","#155fc4"]);
   }
   function consultivoDrawBar(id,data,color){
@@ -6738,7 +6762,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       ctx.fillStyle=d[1]===0?"#d8e2ee":color;
       ctx.fillRect(labelW,center-bh/2,bw,bh);
       ctx.fillStyle=d[1]===0?"#94a3b8":"#10213a";
-      ctx.fillText(consultivoInt.format(d[1]),labelW+bw+8,center);
+      ctx.fillText(d.length>2?`${consultivoInt.format(d[1])} · ${consultivoMoney.format(d[2])}`:consultivoInt.format(d[1]),labelW+bw+8,center);
     });
     ctx.textBaseline="alphabetic";
   }
@@ -6782,6 +6806,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   function consultivoToCsv(rows){
     const cols=["tecnico","contrato","dataIndicacao","dataInstalacao","valor","tipo","quantidade","status","observacao"];
     return [cols.join(";"),...rows.map(r=>cols.map(c=>`"${String(r[c]??"").replace(/"/g,'""')}"`).join(";"))].join("\n");
+  }
+  function consultivoRowsExport(rows){
+    return rows.map(r=>({
+      "Técnico":consultivoNomeDashboard(r.tecnico),
+      "Contrato":r.contrato||"",
+      "Data da Indicação":consultivoFmtDate(r.dataIndicacao),
+      "Data da Instalação":consultivoFmtDate(r.dataInstalacao),
+      "Tipo de Serviço":r.tipo||"",
+      "Status":consultivoFormatStatus(r.status),
+      "Quantidade":consultivoQty(r),
+      "Valor":consultivoValor(r),
+      "Observação":r.observacao||""
+    }));
+  }
+  function consultivoExportExcel(){
+    if(!window.XLSX){alert("Biblioteca de Excel não carregada. Tente novamente com internet ativa.");return;}
+    const rows=consultivoRowsExport(consultivoLoad().records);
+    const ws=XLSX.utils.json_to_sheet(rows);
+    ws["!cols"]=[{wch:24},{wch:14},{wch:16},{wch:16},{wch:18},{wch:42},{wch:10},{wch:12},{wch:34}];
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,ws,"Lançamentos");
+    XLSX.writeFile(wb,`controle-consultivo-${new Date().toISOString().slice(0,10)}.xlsx`);
   }
   function consultivoDownload(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),900);}
   function consultivoImportRows(rows){
@@ -6829,6 +6875,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       consultivoSave(); consultivoSyncLists(); consultivoResetForm(); consultivoAplicarFiltros();
     });
     $("consultivoCancelarEdicao")?.addEventListener("click",consultivoResetForm);
+        $("consultivoExportExcel")?.addEventListener("click",consultivoExportExcel);
     $("consultivoExportCsv")?.addEventListener("click",()=>consultivoDownload("controle-consultivo.csv",consultivoToCsv(consultivoLoad().records),"text/csv;charset=utf-8"));
     $("consultivoBackupJson")?.addEventListener("click",()=>consultivoDownload("controle-consultivo-backup.json",JSON.stringify(consultivoLoad(),null,2),"application/json;charset=utf-8"));
     $("consultivoRestore")?.addEventListener("click",()=>{if(confirm("Limpar alterações locais e restaurar a base inicial do Consultivo?")){localStorage.removeItem(CONSULTIVO_STORAGE_KEY);consultivoState=null;consultivoLoad();consultivoSyncLists();consultivoResetForm();consultivoAplicarFiltros();}});
@@ -8419,6 +8466,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 </body>
 </html>
+
+
 
 
 
