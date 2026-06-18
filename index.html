@@ -6578,6 +6578,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   function consultivoEsc(v){return String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));}
   function consultivoNorm(v){return String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
   function consultivoUniq(arr){return [...new Set(arr.filter(Boolean).map(v=>String(v).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));}
+  function consultivoTituloTexto(v){
+    return String(v||"").trim().toLocaleLowerCase("pt-BR").replace(/(^|[\s'/-])([\p{L}])/gu,(m,p,c)=>p+c.toLocaleUpperCase("pt-BR"));
+  }
   function consultivoNomeDashboard(nome){
     const n=consultivoNorm(nome);
     if(n.includes("apolinario")||n.includes("kleyton")) return "Apolinario";
@@ -6587,10 +6590,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(n.includes("alex")||n.includes("emidio")) return "Alex Emidio";
     if(n.includes("mateus")&&n.includes("reis")) return "Mateus Reis";
     if(n.includes("jose")||n.includes("francisco")) return "José Francisco";
-    return String(nome||"").trim();
+    return consultivoTituloTexto(nome);
   }
   function consultivoTecnicosDashboard(){
-    const base=(typeof TECNICOS_NOMES==="object"&&TECNICOS_NOMES)?Object.values(TECNICOS_NOMES):[];
+    const base=(typeof TECNICOS_NOMES==="object"&&TECNICOS_NOMES)?Object.values(TECNICOS_NOMES).map(consultivoNomeDashboard):[];
     const extras=(consultivoState?.tecnicos||[]).map(consultivoNomeDashboard);
     return consultivoUniq([...base,...extras]);
   }
@@ -6902,7 +6905,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(p.length===3&&p.every(Boolean)) return new Date(p[0],p[1]-1,p[2]);
     return v;
   }
-  function consultivoTipoExcel(tipo){return consultivoFormatTipo(tipo).toLocaleUpperCase("pt-BR");}
+  function consultivoTipoExcel(tipo){return consultivoTituloTexto(consultivoFormatTipo(tipo));}
   function consultivoStatusExcel(status){return consultivoCategoriaStatus(status).toLocaleUpperCase("pt-BR");}
   function consultivoCellStyle(fill="#FFFFFF",bold=false,color="#18324A",align="center",size=10,fontName="Verdana",wrap=true){
     return {
@@ -6931,27 +6934,81 @@ document.addEventListener("DOMContentLoaded",()=>{
     const tecnicos=consultivoTecnicosDashboard();
     const servicos=consultivoServicosPadrao().map(s=>consultivoTipoExcel(s.tipo));
     const statuses=["PENDENTE","INSTALADO","CANCELADO"];
-    const maxRow=504;
+    const dataEndRow=Math.max(5,4+records.length);
+    const maxRow=dataEndRow;
+    const lr=col=>`Lançamentos!$${col}$5:$${col}$${dataEndRow}`;
     const dark="#0B1F3A", blue="#146CFF", light="#EAF3FF", stripe="#F4F7FA";
-    const titleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center");
-    const noteStyle=consultivoCellStyle(light,false,"#18324A","center");
-    const headerStyle=consultivoCellStyle(dark,true,"#FFFFFF","center");
+    const titleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",12,"Verdana",false);
+    const noteStyle=consultivoCellStyle(light,false,"#18324A","center",10,"Verdana",false);
+    const headerStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",10,"Verdana",true);
     const bodyStyle=(even=false,align="center")=>consultivoCellStyle(even?stripe:"#FFFFFF",false,"#18324A",align);
+    const statusStyle=(status,even=false)=>{
+      const cat=consultivoCategoriaStatus(status);
+      if(cat==="Instalado") return consultivoCellStyle("#DCFCE7",true,"#166534","center",10,"Verdana",true);
+      if(cat==="Pendente") return consultivoCellStyle("#FEF3C7",true,"#92400E","center",10,"Verdana",true);
+      if(cat==="Não concluído") return consultivoCellStyle("#FEE2E2",true,"#991B1B","center",10,"Verdana",true);
+      if(cat==="Cancelado") return consultivoCellStyle("#E5E7EB",true,"#374151","center",10,"Verdana",true);
+      return bodyStyle(even,"center");
+    };
     const resumoTitleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",16,"Carlito",false);
     const resumoKpiHeaderStyle=consultivoCellStyle(blue,true,"#FFFFFF","center",10,"Carlito",true);
     const resumoKpiValueStyle=consultivoCellStyle(light,true,"#0B1F3A","center",18,"Carlito",true);
     const resumoHeaderStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",11,"Carlito",true);
     const resumoBodyStyle=(even=false,align="left")=>consultivoCellStyle("#FFFFFF",false,"#18324A",align,11,"Carlito",true);
+    const resumoBarStyle=consultivoCellStyle("#FFFFFF",true,"#146CFF","left",11,"Carlito",false);
     const cadTitleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",15,"Carlito",false);
     const cadHeaderStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",11,"Carlito",true);
     const cadBodyStyle=(even=false,align="left")=>consultivoCellStyle("#FFFFFF",false,"#18324A",align,11,"Carlito",true);
+    const dashTitleStyle=consultivoCellStyle(dark,true,"#FFFFFF","center",18,"Carlito",false);
+    const dashCardLabelStyle=consultivoCellStyle(blue,true,"#FFFFFF","center",10,"Carlito",true);
+    const dashCardValueStyle=consultivoCellStyle(light,true,"#0B1F3A","center",20,"Carlito",true);
+    const dashSectionStyle=consultivoCellStyle(dark,true,"#FFFFFF","left",12,"Carlito",false);
+    const dashBodyStyle=(fill="#FFFFFF",align="left")=>consultivoCellStyle(fill,false,"#18324A",align,11,"Carlito",true);
     const moneyFmt='\\R\\$\\ #,##0.00';
     const dateFmt="mm-dd-yy";
 
+    const dash=XLSX.utils.aoa_to_sheet([]);
+    dash["!merges"]=[
+      {s:{r:0,c:0},e:{r:0,c:7}},
+      {s:{r:2,c:0},e:{r:2,c:1}},{s:{r:3,c:0},e:{r:4,c:1}},
+      {s:{r:2,c:2},e:{r:2,c:3}},{s:{r:3,c:2},e:{r:4,c:3}},
+      {s:{r:2,c:4},e:{r:2,c:5}},{s:{r:3,c:4},e:{r:4,c:5}},
+      {s:{r:2,c:6},e:{r:2,c:7}},{s:{r:3,c:6},e:{r:4,c:7}},
+      {s:{r:6,c:0},e:{r:6,c:1}},{s:{r:7,c:0},e:{r:8,c:1}},
+      {s:{r:6,c:2},e:{r:6,c:3}},{s:{r:7,c:2},e:{r:8,c:3}},
+      {s:{r:10,c:0},e:{r:10,c:3}},
+      {s:{r:10,c:4},e:{r:10,c:7}}
+    ];
+    dash["!cols"]=[{wch:20},{wch:16},{wch:18},{wch:16},{wch:26},{wch:14},{wch:14},{wch:22}];
+    dash["!rows"]=[{hpt:28},null,{hpt:22},{hpt:28},{hpt:28},null,{hpt:22},{hpt:28},{hpt:28},null,{hpt:24}];
+    consultivoSetCell(dash,"A1","DASHBOARD CONSULTIVO",dashTitleStyle);
+    [["A3","TOTAL"],["C3","INSTALADOS"],["E3","PENDENTES"],["G3","NÃO CONCLUÍDOS"],["A7","VALOR TOTAL"],["C7","CONVERSÃO"]].forEach(([a,v])=>consultivoSetCell(dash,a,v,dashCardLabelStyle));
+    [["A4",`COUNTIF(${lr("B")},"<>")`,"0"],["C4",`COUNTIFS(${lr("H")},"INSTALADO",${lr("B")},"<>")`,"0"],["E4",`COUNTIFS(${lr("H")},"PENDENTE",${lr("B")},"<>")`,"0"],["G4",`COUNTIFS(${lr("H")},"NÃO CONCLUÍDO",${lr("B")},"<>")`,"0"],["A8",`SUM(${lr("E")})`,moneyFmt],["C8","IFERROR(C4/A4,0)","0.0%"]].forEach(([a,f,z])=>consultivoSetCell(dash,a,{f},dashCardValueStyle,z));
+    consultivoSetCell(dash,"A11","STATUS GERAL",dashSectionStyle);
+    consultivoSetCell(dash,"E11","RANKING POR TÉCNICO",dashSectionStyle);
+    ["Status","Qtd.","Participação","Barra"].forEach((v,i)=>consultivoSetCell(dash,XLSX.utils.encode_cell({r:11,c:i}),v,dashCardLabelStyle));
+    ["Técnico","Instalações","Conversão","Desempenho"].forEach((v,i)=>consultivoSetCell(dash,XLSX.utils.encode_cell({r:11,c:i+4}),v,dashCardLabelStyle));
+    [["INSTALADO","#DCFCE7"],["PENDENTE","#FEF3C7"],["NÃO CONCLUÍDO","#FEE2E2"],["CANCELADO","#E5E7EB"]].forEach(([status,fill],idx)=>{
+      const row=13+idx;
+      consultivoSetCell(dash,`A${row}`,status,dashBodyStyle(fill,"left"));
+      consultivoSetCell(dash,`B${row}`,{f:`COUNTIFS(${lr("H")},A${row},${lr("B")},"<>")`},dashBodyStyle(fill,"center"),"0");
+      consultivoSetCell(dash,`C${row}`,{f:`IFERROR(B${row}/$A$4,0)`},dashBodyStyle(fill,"center"),"0.0%");
+      consultivoSetCell(dash,`D${row}`,{f:`IF(C${row}>0,REPT("█",ROUND(C${row}*20,0)),"")`},consultivoCellStyle(fill,true,"#146CFF","left",11,"Carlito",false));
+    });
+    tecnicos.slice(0,10).forEach((tec,idx)=>{
+      const row=13+idx;
+      consultivoSetCell(dash,`E${row}`,tec,dashBodyStyle("#FFFFFF","left"));
+      consultivoSetCell(dash,`F${row}`,{f:`COUNTIFS(${lr("A")},E${row},${lr("H")},"INSTALADO")`},dashBodyStyle("#FFFFFF","center"),"0");
+      consultivoSetCell(dash,`G${row}`,{f:`IFERROR(COUNTIFS(${lr("A")},E${row},${lr("D")},"<>")/COUNTIFS(${lr("A")},E${row},${lr("C")},"<>"),0)`},dashBodyStyle("#FFFFFF","center"),"0.0%");
+      consultivoSetCell(dash,`H${row}`,{f:`IF(G${row}>0,REPT("█",ROUND(G${row}*20,0)),"")`},consultivoCellStyle("#FFFFFF",true,"#146CFF","left",11,"Carlito",false));
+    });
+    dash["!ref"]=`A1:H${Math.max(17,12+Math.min(10,tecnicos.length))}`;
+    XLSX.utils.book_append_sheet(wb,dash,"Dashboard");
+
     const lanc=XLSX.utils.aoa_to_sheet([]);
     lanc["!merges"]=[{s:{r:0,c:0},e:{r:0,c:8}},{s:{r:1,c:0},e:{r:1,c:8}}];
-    lanc["!cols"]=[{wch:35.75},{wch:11.33},{wch:21.41},{wch:22.66},{wch:9.41},{wch:18},{wch:13.91},{wch:12.16},{wch:13.83}];
-    lanc["!rows"]=[{hpt:22.65},{hpt:17.4},null,{hpt:22.65}];
+    lanc["!cols"]=[{wch:38},{wch:13},{wch:18},{wch:18},{wch:12},{wch:24},{wch:15},{wch:18},{wch:32}];
+    lanc["!rows"]=[{hpt:26},{hpt:21},{hpt:6},{hpt:31}];
     consultivoSetCell(lanc,"A1","CONTROLE DE QUANTIDADE — INDICAÇÕES E SERVIÇOS",titleStyle);
     consultivoSetCell(lanc,"A2","Preencha uma linha por contrato. Ao informar o contrato, a quantidade será contabilizada automaticamente como 1.",noteStyle);
     ["TÉCNICO","CONTRATO","DATA DA INDICAÇÃO","DATA DA INSTALAÇÃO","VALOR","TIPO DE SERVIÇO","QUANTIDADE","STATUS","OBSERVAÇÃO"].forEach((h,i)=>{
@@ -6962,30 +7019,33 @@ document.addEventListener("DOMContentLoaded",()=>{
       const even=r%2===0;
       if(rec){
         const values=[
-          String(rec.tecnico||"").trim(),
+          consultivoNomeDashboard(rec.tecnico),
           rec.contrato?Number(rec.contrato)||String(rec.contrato):"",
           consultivoExcelDate(rec.dataIndicacao),
           consultivoExcelDate(rec.dataInstalacao),
           consultivoValor(rec)||consultivoValorServico(rec.tipo),
           consultivoTipoExcel(rec.tipo),
-          {f:`IF(B${r}<>"",1,0)`},
+          {f:`IF(B${r}<>"",1,"")`},
           consultivoStatusExcel(rec.status),
           rec.observacao||""
         ];
         values.forEach((v,i)=>{
           const addr=XLSX.utils.encode_cell({r:r-1,c:i});
           const fmt=i===2||i===3?dateFmt:(i===4?moneyFmt:(i===6?"0":undefined));
-          consultivoSetCell(lanc,addr,v,bodyStyle(even,i===0?"left":"center"),fmt);
+          const style=i===7?statusStyle(rec.status,even):bodyStyle(even,i===0||i===8?"left":"center");
+          consultivoSetCell(lanc,addr,v,style,fmt);
         });
       }else{
         for(let i=0;i<9;i++){
           const addr=XLSX.utils.encode_cell({r:r-1,c:i});
-          const value=i===6?{f:`IF(B${r}<>"",1,0)`}:"";
-          consultivoSetCell(lanc,addr,value,bodyStyle(even,i===0?"left":"center"),i===6?"0":undefined);
+          const value=i===6?{f:`IF(B${r}<>"",1,"")`}:"";
+          consultivoSetCell(lanc,addr,value,bodyStyle(even,i===0||i===8?"left":"center"),i===6?"0":undefined);
         }
       }
     }
-    lanc["!ref"]="A1:I504";
+    lanc["!ref"]=`A1:I${maxRow}`;
+    lanc["!autofilter"]={ref:`A4:I${maxRow}`};
+    lanc["!freeze"]={xSplit:0,ySplit:4,topLeftCell:"A5",activePane:"bottomLeft",state:"frozen"};
     XLSX.utils.book_append_sheet(wb,lanc,"Lançamentos");
 
     const resumo=XLSX.utils.aoa_to_sheet([]);
@@ -6998,46 +7058,43 @@ document.addEventListener("DOMContentLoaded",()=>{
       {s:{r:2,c:8},e:{r:2,c:9}},{s:{r:3,c:8},e:{r:4,c:9}},
       {s:{r:2,c:10},e:{r:2,c:11}},{s:{r:3,c:10},e:{r:4,c:11}}
     ];
-    resumo["!cols"]=[{wch:36},{wch:15},{wch:15},{wch:15},{wch:15},{wch:18},{wch:15},{wch:4},{wch:4},{wch:23},{wch:15},{wch:18}];
+    resumo["!cols"]=[{wch:36},{wch:15},{wch:15},{wch:15},{wch:15},{wch:18},{wch:15},{wch:20},{wch:4},{wch:23},{wch:15},{wch:18}];
     consultivoSetCell(resumo,"A1","PAINEL DE CONTROLE DE QUANTIDADE",resumoTitleStyle);
     [["A3","TOTAL DE REGISTROS"],["C3","INDICAÇÕES"],["E3","INSTALAÇÕES"],["G3","CANCELADOS"],["I3","VALOR TOTAL"],["K3","CONVERSÃO"]].forEach(([a,v])=>consultivoSetCell(resumo,a,v,resumoKpiHeaderStyle));
-    [["A4",'COUNTIF(Lançamentos!$B$5:$B$504,"<>")',"0"],["C4","COUNT(Lançamentos!$C$5:$C$504)","0"],["E4","COUNT(Lançamentos!$D$5:$D$504)","0"],["G4",'COUNTIF(Lançamentos!$H$5:$H$504,"CANCELADO")',"0"],["I4","SUM(Lançamentos!$E$5:$E$504)",moneyFmt],["K4","IFERROR(COUNT(Lançamentos!$D$5:$D$504)/COUNT(Lançamentos!$C$5:$C$504),0)","0.0%"]].forEach(([a,f,z])=>consultivoSetCell(resumo,a,{f},resumoKpiValueStyle,z));
-    ["TÉCNICO","INDICAÇÕES","INSTALAÇÕES","PENDENTES","QUANTIDADE","VALOR TOTAL","CONVERSÃO"].forEach((h,i)=>consultivoSetCell(resumo,XLSX.utils.encode_cell({r:6,c:i}),h,resumoHeaderStyle));
-    ["TIPO DE SERVIÇO","QUANTIDADE","VALOR TOTAL"].forEach((h,i)=>consultivoSetCell(resumo,XLSX.utils.encode_cell({r:6,c:i+9}),h,resumoHeaderStyle));
+    [["A4",`COUNTIF(${lr("B")},"<>")`,"0"],["C4",`COUNT(${lr("C")})`,"0"],["E4",`COUNT(${lr("D")})`,"0"],["G4",`COUNTIF(${lr("H")},"CANCELADO")`,"0"],["I4",`SUM(${lr("E")})`,moneyFmt],["K4",`IFERROR(COUNT(${lr("D")})/COUNT(${lr("C")}),0)`,"0.0%"]].forEach(([a,f,z])=>consultivoSetCell(resumo,a,{f},resumoKpiValueStyle,z));
+    ["TÉCNICO","INDICAÇÕES","INSTALAÇÕES","PENDENTES","QUANTIDADE","VALOR TOTAL","CONVERSÃO","DESEMPENHO"].forEach((h,i)=>consultivoSetCell(resumo,XLSX.utils.encode_cell({r:6,c:i}),h,resumoHeaderStyle));
     tecnicos.forEach((tec,idx)=>{
       const row=8+idx, rr=row-1, even=row%2===0;
       consultivoSetCell(resumo,`A${row}`,tec,resumoBodyStyle(even,"left"));
-      consultivoSetCell(resumo,`B${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$C$5:$C$504,"<>")`},resumoBodyStyle(even),"0");
-      consultivoSetCell(resumo,`C${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$D$5:$D$504,"<>")`},resumoBodyStyle(even),"0");
-      consultivoSetCell(resumo,`D${row}`,{f:`COUNTIFS(Lançamentos!$A$5:$A$504,$A${row},Lançamentos!$H$5:$H$504,"PENDENTE")`},resumoBodyStyle(even),"0");
-      consultivoSetCell(resumo,`E${row}`,{f:`SUMIFS(Lançamentos!$G$5:$G$504,Lançamentos!$A$5:$A$504,$A${row})`},resumoBodyStyle(even),"0");
-      consultivoSetCell(resumo,`F${row}`,{f:`SUMIFS(Lançamentos!$E$5:$E$504,Lançamentos!$A$5:$A$504,$A${row})`},resumoBodyStyle(even),moneyFmt);
+      consultivoSetCell(resumo,`B${row}`,{f:`COUNTIFS(${lr("A")},$A${row},${lr("C")},"<>")`},resumoBodyStyle(even),"0");
+      consultivoSetCell(resumo,`C${row}`,{f:`COUNTIFS(${lr("A")},$A${row},${lr("D")},"<>")`},resumoBodyStyle(even),"0");
+      consultivoSetCell(resumo,`D${row}`,{f:`COUNTIFS(${lr("A")},$A${row},${lr("H")},"PENDENTE")`},resumoBodyStyle(even),"0");
+      consultivoSetCell(resumo,`E${row}`,{f:`SUMIFS(${lr("G")},${lr("A")},$A${row})`},resumoBodyStyle(even),"0");
+      consultivoSetCell(resumo,`F${row}`,{f:`SUMIFS(${lr("E")},${lr("A")},$A${row})`},resumoBodyStyle(even),moneyFmt);
       consultivoSetCell(resumo,`G${row}`,{f:`IFERROR(C${row}/B${row},0)`},resumoBodyStyle(even),"0.0%");
-    });
-    servicos.forEach((serv,idx)=>{
-      const row=8+idx, even=row%2===0;
-      consultivoSetCell(resumo,`J${row}`,serv,resumoBodyStyle(even,"left"));
-      consultivoSetCell(resumo,`K${row}`,{f:`COUNTIFS(Lançamentos!$F$5:$F$504,J${row},Lançamentos!$B$5:$B$504,"<>")`},resumoBodyStyle(even),"0");
-      consultivoSetCell(resumo,`L${row}`,{f:`SUMIFS(Lançamentos!$E$5:$E$504,Lançamentos!$F$5:$F$504,J${row})`},resumoBodyStyle(even),moneyFmt);
+      consultivoSetCell(resumo,`H${row}`,{f:`IF(G${row}>0,REPT("█",ROUND(G${row}*20,0)),"")`},resumoBarStyle);
     });
     resumo["!ref"]=`A1:L${Math.max(13,7+tecnicos.length)}`;
     XLSX.utils.book_append_sheet(wb,resumo,"Resumo");
 
-    const cad=XLSX.utils.aoa_to_sheet([]);
-    cad["!merges"]=[{s:{r:0,c:0},e:{r:0,c:2}}];
-    cad["!cols"]=[{wch:38},{wch:24},{wch:20}];
-    cad["!rows"]=[{hpt:20}];
-    consultivoSetCell(cad,"A1","CADASTROS EDITÁVEIS",cadTitleStyle);
-    ["TÉCNICOS","TIPOS DE SERVIÇO","STATUS"].forEach((h,i)=>consultivoSetCell(cad,XLSX.utils.encode_cell({r:2,c:i}),h,cadHeaderStyle));
-    const maxCad=Math.max(tecnicos.length,servicos.length,statuses.length);
-    for(let i=0;i<maxCad;i++){
-      const row=4+i, even=row%2===0;
-      consultivoSetCell(cad,`A${row}`,tecnicos[i]||"",cadBodyStyle(even,"left"));
-      consultivoSetCell(cad,`B${row}`,servicos[i]||"",cadBodyStyle(even,"left"));
-      consultivoSetCell(cad,`C${row}`,statuses[i]||"",cadBodyStyle(even,"left"));
-    }
-    cad["!ref"]=`A1:C${Math.max(9,3+maxCad)}`;
-    XLSX.utils.book_append_sheet(wb,cad,"Cadastros");
+    const produtos=XLSX.utils.aoa_to_sheet([]);
+    produtos["!merges"]=[{s:{r:0,c:0},e:{r:0,c:5}}];
+    produtos["!cols"]=[{wch:28},{wch:14},{wch:16},{wch:16},{wch:18},{wch:24}];
+    produtos["!rows"]=[{hpt:26},null,{hpt:24}];
+    consultivoSetCell(produtos,"A1","PRODUTOS / SERVIÇOS",resumoTitleStyle);
+    ["Produto","Quantidade","Valor Total","Participação","Ticket Médio","Desempenho"].forEach((h,i)=>consultivoSetCell(produtos,XLSX.utils.encode_cell({r:2,c:i}),h,resumoHeaderStyle));
+    servicos.forEach((serv,idx)=>{
+      const row=4+idx;
+      consultivoSetCell(produtos,`A${row}`,serv,resumoBodyStyle(false,"left"));
+      consultivoSetCell(produtos,`B${row}`,{f:`COUNTIFS(${lr("F")},A${row},${lr("B")},"<>")`},resumoBodyStyle(false,"center"),"0");
+      consultivoSetCell(produtos,`C${row}`,{f:`SUMIFS(${lr("E")},${lr("F")},A${row})`},resumoBodyStyle(false,"center"),moneyFmt);
+      consultivoSetCell(produtos,`D${row}`,{f:`IFERROR(B${row}/SUM($B$4:$B$${3+servicos.length}),0)`},resumoBodyStyle(false,"center"),"0.0%");
+      consultivoSetCell(produtos,`E${row}`,{f:`IFERROR(C${row}/B${row},0)`},resumoBodyStyle(false,"center"),moneyFmt);
+      consultivoSetCell(produtos,`F${row}`,{f:`IF(D${row}>0,REPT("█",ROUND(D${row}*20,0)),"")`},resumoBarStyle);
+    });
+    produtos["!ref"]=`A1:F${Math.max(8,3+servicos.length)}`;
+    produtos["!autofilter"]={ref:`A3:F${Math.max(4,3+servicos.length)}`};
+    XLSX.utils.book_append_sheet(wb,produtos,"Produtos");
 
     XLSX.writeFile(wb,`controle-consultivo-${new Date().toISOString().slice(0,10)}.xlsx`,{cellStyles:true});
   }
