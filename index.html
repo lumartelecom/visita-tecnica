@@ -3015,7 +3015,7 @@ const STORAGE_HISTORY="lumar_dashboard_history_v1";
 const STORAGE_MONTHLY="lumar_dashboard_monthly_datasets_v1";
 const DB_MONTHLY="lumar_dashboard_bases_mensais_v1";
 // A produção do dashboard é calculada exclusivamente com a base importada.
-// Fórmula: SOMA(QTD_TOTAL_OS_TEC1) ÷ quantidade de DATA_AGENDA distintas.
+// Fórmula: atendimentos executados ÷ quantidade de DATA_AGENDA distintas.
 /*
   FIREBASE - ÚLTIMA BASE NA NUVEM / SOMENTE CLOUD FIRESTORE
 
@@ -3540,7 +3540,7 @@ function campoPrimeiroValor(row,grupos){
 function valoresLista(v){
   const s=norm(v).replace(/^\[|\]$/g,"").replace(/^"|"$/g,"");
   if(!s) return [];
-  return s.split(/\s*(?:;|\||,|\r?\n)\s*/).map(item=>norm(item).replace(/^['"]|['"]$/g,"")).filter(Boolean);
+  return s.split(/\s*(?:;|\||,|\+|\r?\n)\s*/).map(item=>norm(item).replace(/^['"]|['"]$/g,"")).filter(Boolean);
 }
 function dataParaOrdem(data){
   const s=norm(data);
@@ -3814,6 +3814,7 @@ function validarBase(rows){
     ["NM_MUNICIPIO","NM MUNICIPIO","MUNICIPIO"],
     ["UNIDADE_NEGOCIO","UNIDADE NEGOCIO"],["GRUPO_ORDEM_SERVICO","GRUPO ORDEM SERVICO"],
     ["FG_DIA_PRODUTIVO","FG DIA PRODUTIVO"],["DATA_AGENDA","DATA AGENDA"],
+    ["STATUS_JOB","STATUS JOB"],
     ["LOGIN_TECNICO","LOGIN TECNICO","TECNICO"],["CONTRATO"],["QT_REVISITA","QT REVISITA"],
     ["NODE"],["TOTAL_OS_TEC1_PADRAO","TOTAL OS TEC1 PADRAO"],["QTD_TOTAL_OS_TEC1","QTD TOTAL OS TEC1"],
     ["TIPO_SERVICO","TIPO SERVICO","TIPO_OS","TIPO OS"]
@@ -3828,7 +3829,7 @@ function renderValidacao(validation,baseLen){
   const items=[];
   if(validation.ok) items.push(`<div class="alert greenline">✅ Todas as colunas principais foram encontradas.</div>`);
   else items.push(`<div class="alert redline">Colunas ausentes: <strong>${validation.faltando.join(", ")}</strong>.</div>`);
-  items.push(`<div class="alert blueline">Linhas TERESINA / TSA-LUMAR_VT / MANUTENÇÃO encontradas: <strong>${baseLen}</strong>.</div>`);
+  items.push(`<div class="alert blueline">Linhas TERESINA / TSA-LUMAR_VT / MANUTENÇÃO / STATUS complete encontradas: <strong>${baseLen}</strong>.</div>`);
   items.push(`<div class="alert blueline">Colunas lidas: ${validation.cols.length}.</div>`);
   el.innerHTML=items.join("");
 }
@@ -3879,13 +3880,12 @@ function processarResumo(rows){
     if(!tec[login]) tec[login]={login,nome:nomeTecnico(login),producao:0,revisitas:0,total:0,tecOk:0,tecFora:0,tecBase:0,dias:new Set()};
     tec[login].total++;
 
-    // Produção oficial: soma das unidades de QTD_TOTAL_OS_TEC1.
+    // Produção oficial: conta todos os atendimentos executados pelo login.
     // O denominador considera apenas DATA_AGENDA distintas marcadas como dia produtivo.
     const diaProdutivo=head(getField(r,["FG_DIA_PRODUTIVO","FG DIA PRODUTIVO"]))==="S";
     const diaAgenda=dataAgendaPrincipal(r);
-    const qtdProducao=parseNumber(getField(r,["QTD_TOTAL_OS_TEC1","QTD TOTAL OS TEC1"]));
     if(diaProdutivo){
-      tec[login].producao+=Math.max(0,qtdProducao);
+      tec[login].producao+=1;
       if(diaAgenda) tec[login].dias.add(diaAgenda);
     }
 
@@ -3916,7 +3916,7 @@ function processarResumo(rows){
     const diasAtendimento=t.dias?.size||0;
     const contratosExecutados=t.total;
     const mediaProducaoExata=diasAtendimento?t.producao/diasAtendimento:0;
-    const resumo={...t,contratosExecutados,diasAtendimento,mediaContratos:mediaProducaoExata,mediaProducaoExata,producaoFonte:"Base importada: QTD_TOTAL_OS_TEC1 ÷ dias distintos",revPct:t.total?t.revisitas/t.total*100:0,tec1Pct:t.tecBase?t.tecOk/t.tecBase*100:0};
+    const resumo={...t,contratosExecutados,diasAtendimento,mediaContratos:mediaProducaoExata,mediaProducaoExata,producaoFonte:"Base importada: atendimentos executados ÷ dias distintos",revPct:t.total?t.revisitas/t.total*100:0,tec1Pct:t.tecBase?t.tecOk/t.tecBase*100:0};
     delete resumo.dias;
     resumo.vtMetaRevisita=vtParaMetaRevisita(resumo);
     resumo.vtMetaTec1=vtParaMetaTec1(resumo);
@@ -4933,7 +4933,8 @@ function filtrarBasePrincipal(rows){
     const municipio=head(getField(r,["NM_MUNICIPIO","NM MUNICIPIO","MUNICIPIO"]));
     const unidade=head(getField(r,["UNIDADE_NEGOCIO","UNIDADE NEGOCIO"]));
     const grupo=head(getField(r,["GRUPO_ORDEM_SERVICO","GRUPO ORDEM SERVICO"]));
-    return municipio==="TERESINA"&&unidade==="TSA-LUMAR_VT"&&["MANUTENCAO","MANUTENÇÃO"].includes(grupo);
+    const status=head(getField(r,["STATUS_JOB","STATUS JOB"]));
+    return municipio==="TERESINA"&&unidade==="TSA-LUMAR_VT"&&["MANUTENCAO","MANUTENÇÃO"].includes(grupo)&&(!status||status==="COMPLETE");
   });
 }
 
@@ -5737,7 +5738,7 @@ async function carregarBase(){
     const validation=validarBase(rows);
     processedRows=filtrarBasePrincipal(rows);
     renderValidacao(validation,processedRows.length);
-    if(!processedRows.length){setStatus("Não encontrei linhas com NM_MUNICIPIO = TERESINA, UNIDADE_NEGOCIO = TSA-LUMAR_VT e GRUPO_ORDEM_SERVICO = MANUTENÇÃO.");return;}
+    if(!processedRows.length){setStatus("Não encontrei linhas com NM_MUNICIPIO = TERESINA, UNIDADE_NEGOCIO = TSA-LUMAR_VT, GRUPO_ORDEM_SERVICO = MANUTENÇÃO e STATUS_JOB = complete.");return;}
     preencherFiltros(processedRows);
     const filtrado=aplicarFiltros(processedRows);
     lastRenderRows=filtrado;
@@ -5753,7 +5754,7 @@ async function carregarBase(){
     const avisoFirebase=firebaseIndicadoresConfigurado()
       ? (salvaFirebase&&salvaCompetenciaFirebase.salvo?`<br>Base salva no Firebase/Firestore como <strong>${esc(competencia.label)}</strong>.`:`<br>Base carregada, mas não consegui salvar todo o histórico no Firebase. Verifique config/regras do Firestore.`)
       : `<br>Firebase ainda não configurado. Salvando apenas neste navegador.`;
-    const detalheProducaoZ450=z450?`${num3(z450.producao)} unidades ÷ ${z450.diasAtendimento} dias distintos`:"";
+    const detalheProducaoZ450=z450?`${num3(z450.producao)} atendimentos ÷ ${z450.diasAtendimento} dias distintos`:"";
     setStatus(`✅ Base carregada.<br>Base manutenção: <strong>${processedRows.length}</strong> | Revisitas 10d: <strong>${currentSummary.totalRev}</strong>${z450?`<br>Conferência ${z450.nome}: <strong>${num3(z450.mediaContratos)}</strong> produção/dia (${detalheProducaoZ450}) e <strong>${z450.revisitas}</strong> revisitas 10d.`:""}${avisoRepetida}${avisoFirebase}`);
   }catch(err){console.error(err);setStatus("Erro ao carregar: <strong>"+err.message+"</strong>");}
 }
